@@ -271,7 +271,7 @@ public class DanmakuView extends View {
     }
 
     private void sendStart() {
-        if (drawHandler != null) {
+        if (drawHandler != null && mHandlerThread != null) {
             drawHandler.removeMessages(HANDLER_WHAT_START_DRAW);
             drawHandler.removeMessages(HANDLER_WHAT_STOP_DRAW);
             drawHandler.sendEmptyMessageDelayed(HANDLER_WHAT_START_DRAW, REFRESH_TIME);
@@ -279,7 +279,7 @@ public class DanmakuView extends View {
     }
 
     private void sendStop() {
-        if (drawHandler != null) {
+        if (drawHandler != null && mHandlerThread != null) {
             drawHandler.removeMessages(HANDLER_WHAT_START_DRAW);
             drawHandler.removeMessages(HANDLER_WHAT_STOP_DRAW);
             drawHandler.sendEmptyMessage(HANDLER_WHAT_STOP_DRAW);
