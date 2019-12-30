@@ -1,0 +1,2 @@
+include ':app', ':danmaku'
+rootProject.name='DanmuDemo'

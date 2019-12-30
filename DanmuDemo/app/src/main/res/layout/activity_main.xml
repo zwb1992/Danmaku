@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <master.flame.danmaku.ui.widget.DanmakuView
+            android:id="@+id/danmu"
+            android:layout_width="match_parent"
+            android:layout_height="200dp" />
+
+        <Button
+            android:id="@+id/btAdd"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="添加弹幕" />
+
+
+        <com.zwb.danmaku.DanmakuView
+            android:id="@+id/danmu2"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:layout_marginTop="10dp"
+            android:background="@color/colorPrimary"
+            app:danmaku_speed="2"
+            app:danmaku_textColor="@color/white"
+            app:danmaku_textShadowColor="@color/gray"
+            app:danmaku_textShadowWidth="1dp"
+            app:danmaku_textSize="21sp"
+            app:danmaku_trajectoryCount="2"
+            app:danmaku_trajectoryMargin="14dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/btAdd2"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="添加弹幕" />
+
+            <Button
+                android:id="@+id/btStart2"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="启动弹幕" />
+
+            <Button
+                android:id="@+id/btStop2"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="停止弹幕" />
+
+            <Button
+                android:id="@+id/btClear2"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="清空弹幕" />
+        </LinearLayout>
+
+        <com.zwb.danmaku.DanmakuView
+            android:id="@+id/danmu3"
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:layout_marginTop="10dp"
+            android:background="@color/colorPrimary"
+            app:danmaku_speed="2"
+            app:danmaku_textColor="@color/white"
+            app:danmaku_textShadowColor="@color/gray"
+            app:danmaku_textShadowWidth="1dp"
+            app:danmaku_textSize="21sp"
+            app:danmaku_trajectoryCount="3"
+            app:danmaku_trajectoryMargin="14dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/btAdd3"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="添加弹幕" />
+
+            <Button
+                android:id="@+id/btData3"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="弹幕list" />
+
+            <Button
+                android:id="@+id/btStart3"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="启动弹幕" />
+
+            <Button
+                android:id="@+id/btStop3"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="停止弹幕" />
+
+            <Button
+                android:id="@+id/btClear3"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="清空弹幕" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1800dp" />
+    </LinearLayout>
+
+
+</ScrollView>
