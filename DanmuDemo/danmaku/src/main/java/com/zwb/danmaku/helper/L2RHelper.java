@@ -15,9 +15,9 @@ import java.util.Random;
 /**
  * @ author : zhouweibin
  * @ time: 2019/12/27 11:21.
- * @ desc: 从右到左
+ * @ desc: 从左到右
  **/
-public class R2LHelper implements IDrawHelper, IScrollerDrawHelper {
+public class L2RHelper implements IDrawHelper, IScrollerDrawHelper {
 
     private int canvasWidth;                                            // 画布高度
     private int canvasHeight;                                           // 画布高度
@@ -50,10 +50,10 @@ public class R2LHelper implements IDrawHelper, IScrollerDrawHelper {
                     }
                     danmaku.initTextSize(textPaint);
                     danmaku.setScrollY(trajectoryInfo.getTop()).setOriginScrollY(trajectoryInfo.getTop());
-                    if (trajectoryInfo.getRight() < canvasWidth) {
-                        danmaku.setScrollX(canvasWidth + danmaku.getOffset()).setOriginScrollX(canvasWidth + danmaku.getOffset());
+                    if (trajectoryInfo.getLeft() > 0) {
+                        danmaku.setScrollX(-danmaku.getOffset() - danmaku.getWidth()).setOriginScrollX(-danmaku.getOffset() - danmaku.getWidth());
                     } else {
-                        danmaku.setScrollX(trajectoryInfo.getRight() + danmaku.getOffset()).setOriginScrollX(trajectoryInfo.getRight() + danmaku.getOffset());
+                        danmaku.setScrollX(trajectoryInfo.getLeft() - danmaku.getOffset() - danmaku.getWidth()).setOriginScrollX(trajectoryInfo.getLeft() - danmaku.getOffset() - danmaku.getWidth());
                     }
                     danmaku.setInit(true);
                     danmaku.setShowState(BaseDanmaku.ShowState.STATE_NEVER_SHOWED);
@@ -76,19 +76,19 @@ public class R2LHelper implements IDrawHelper, IScrollerDrawHelper {
     }
 
     @Override
-    public R2LHelper setSpeed(float speed) {
+    public L2RHelper setSpeed(float speed) {
         this.speed = speed;
         return this;
     }
 
     @Override
-    public R2LHelper setOffScreenLimit(int offScreenLimit) {
+    public L2RHelper setOffScreenLimit(int offScreenLimit) {
         this.offScreenLimit = offScreenLimit;
         return this;
     }
 
     @Override
-    public R2LHelper setDen(float den) {
+    public L2RHelper setDen(float den) {
         this.den = den;
         return this;
     }
@@ -110,13 +110,13 @@ public class R2LHelper implements IDrawHelper, IScrollerDrawHelper {
     }
 
     @Override
-    public R2LHelper setTrajectoryMargin(float mTrajectoryMargin) {
+    public L2RHelper setTrajectoryMargin(float mTrajectoryMargin) {
         this.mTrajectoryMargin = mTrajectoryMargin;
         return this;
     }
 
     @Override
-    public R2LHelper setMaxTrajectoryCount(int maxTrajectoryCount) {
+    public L2RHelper setMaxTrajectoryCount(int maxTrajectoryCount) {
         if (maxTrajectoryCount > 0) {
             this.maxTrajectoryCount = maxTrajectoryCount;
         }
@@ -145,7 +145,7 @@ public class R2LHelper implements IDrawHelper, IScrollerDrawHelper {
                 return null;
             } else {
                 TrajectoryInfo trajectoryInfo = new TrajectoryInfo();
-                trajectoryInfo.setRight(canvasWidth + mTrajectoryInfos.size() % 3 * den * new Random().nextInt(100));// 初始化弹道的宽度是从右边的屏幕外开始的+偏移量
+                trajectoryInfo.setLeft(- mTrajectoryInfos.size() % 3 * den * new Random().nextInt(100));// 初始化弹道的宽度是从右边的屏幕外开始的+偏移量
                 trajectoryInfo.setTop(lastBottom + (mTrajectoryInfos.isEmpty() ? 0 : mTrajectoryMargin)).setNum(mTrajectoryInfos.size());
                 mTrajectoryInfos.add(trajectoryInfo);
                 return trajectoryInfo;
@@ -249,16 +249,16 @@ public class R2LHelper implements IDrawHelper, IScrollerDrawHelper {
         TrajectoryInfo trajectoryInfo = list.get(0);
         calculateTrajectorySize(trajectoryInfo);
         int index = 0;
-        float right = trajectoryInfo.getRight();
+        float left = trajectoryInfo.getLeft();
         for (int i = 1; i < list.size(); i++) {
             trajectoryInfo = list.get(i);
             calculateTrajectorySize(trajectoryInfo);
-            if (right > trajectoryInfo.getRight()) {
-                right = trajectoryInfo.getRight();
+            if (left < trajectoryInfo.getLeft()) {
+                left = trajectoryInfo.getLeft();
                 index = i;
             }
         }
-        // 找出当前right最小的弹道--并重新计算Y轴偏移量
+        // 找出当前left最大的弹道--并重新计算Y轴偏移量
         if (trajectoryInfo.getTop() <= 0 && index != 0) {
             float size[] = getTrajectorySize(index - 1);
             trajectoryInfo = list.get(index);
@@ -266,4 +266,5 @@ public class R2LHelper implements IDrawHelper, IScrollerDrawHelper {
         }
         return list.get(index);
     }
+
 }

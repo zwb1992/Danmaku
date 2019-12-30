@@ -10,47 +10,67 @@ import java.util.List;
  * @ desc: 弹道数据
  **/
 public class TrajectoryInfo {
-    private float width;
-    private float height;
-    private float scrollY;
-    private float scrollX;
+    /**
+     * 正在显示或即将显示的弹幕的边缘
+     */
+    private float left;             // 轨道的left
+    private float right;            // 轨道的right
+    private float top;              // 轨道的top
+    private float bottom;           // 轨道的bottom
     private int num = 0;// 标号
     private List<BaseDanmaku> showingDanmakus = new ArrayList<>();      // 正在显示或即将显示的弹幕
     private List<BaseDanmaku> goneDanmakus = new ArrayList<>();         // 已经显示过的弹幕（不再显示）
 
     public float getWidth() {
-        return width;
+        return right - left;
     }
 
-    public TrajectoryInfo setWidth(float width) {
-        this.width = width;
-        return this;
-    }
 
     public float getHeight() {
-        return height;
+        return bottom - top;
     }
 
-    public TrajectoryInfo setHeight(float height) {
-        this.height = height;
+    public float getLeft() {
+        return left;
+    }
+
+    public TrajectoryInfo setLeft(float left) {
+        this.left = left;
         return this;
     }
 
-    public float getScrollY() {
-        return scrollY;
-    }
-
-    public TrajectoryInfo setScrollY(float scrollY) {
-        this.scrollY = scrollY;
+    public TrajectoryInfo setBounds(float left,float top,float right,float bottom) {
+        this.left = left;
+        this.top = top;
+        this.right = right;
+        this.bottom = bottom;
         return this;
     }
 
-    public float getScrollX() {
-        return scrollY;
+    public float getRight() {
+        return right;
     }
 
-    public TrajectoryInfo setScrollX(float scrollX) {
-        this.scrollX = scrollX;
+    public TrajectoryInfo setRight(float right) {
+        this.right = right;
+        return this;
+    }
+
+    public float getTop() {
+        return top;
+    }
+
+    public TrajectoryInfo setTop(float top) {
+        this.top = top;
+        return this;
+    }
+
+    public float getBottom() {
+        return bottom;
+    }
+
+    public TrajectoryInfo setBottom(float bottom) {
+        this.bottom = bottom;
         return this;
     }
 
@@ -65,9 +85,10 @@ public class TrajectoryInfo {
     @Override
     public String toString() {
         return "TrajectoryInfo{" +
-                "width=" + width +
-                ", height=" + height +
-                ", scrollY=" + scrollY +
+                ", left=" + left +
+                ", right=" + right +
+                ", top=" + top +
+                ", bottom=" + bottom +
                 ", num=" + num +
                 ", showingDanmakus=" + showingDanmakus +
                 ", goneDanmakus=" + goneDanmakus +
