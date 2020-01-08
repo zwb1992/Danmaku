@@ -9,19 +9,19 @@ import java.util.Random;
 /**
  * @ author : zhouweibin
  * @ time: 2019/12/27 11:21.
- * @ desc: 从上到下
+ * @ desc: 从下到上
  **/
-public class T2BHelper extends BaseScrollerDrawHelper {
+public class B2THelper extends BaseScrollerDrawHelper {
 
 
     @Override
     protected void initPosition(BaseDanmaku danmaku, TrajectoryInfo trajectoryInfo, int canvasWidth, int canvasHeight) {
         danmaku.setScrollX(trajectoryInfo.getLeft()).setOriginScrollX(trajectoryInfo.getLeft());
-        if (trajectoryInfo.getTop() > 0) {
-            danmaku.setScrollY(-danmaku.getOffset() - danmaku.getHeight()).setOriginScrollY(-danmaku.getOffset() - danmaku.getHeight());
+        if (trajectoryInfo.getBottom() < canvasHeight) {
+            danmaku.setScrollY(canvasHeight + danmaku.getOffset()).setOriginScrollY(canvasHeight + danmaku.getOffset());
         } else {
-            danmaku.setScrollY(trajectoryInfo.getTop() - danmaku.getOffset() - danmaku.getHeight())
-                    .setOriginScrollY(trajectoryInfo.getTop() - danmaku.getOffset() - danmaku.getHeight());
+            danmaku.setScrollY(trajectoryInfo.getBottom() + danmaku.getOffset())
+                    .setOriginScrollY(trajectoryInfo.getBottom() + danmaku.getOffset());
         }
     }
 
@@ -38,7 +38,7 @@ public class T2BHelper extends BaseScrollerDrawHelper {
             return null;
         } else {
             TrajectoryInfo trajectoryInfo = new TrajectoryInfo();
-            trajectoryInfo.setTop(-mTrajectoryInfos.size() % 3 * den * new Random().nextInt(100));// 初始化弹道的top是从屏幕外开始的+偏移量
+            trajectoryInfo.setTop(canvasHeight + mTrajectoryInfos.size() % 3 * den * new Random().nextInt(100));// 初始化弹道的top是从屏幕外开始的+偏移量
             trajectoryInfo.setLeft(lastRight + (mTrajectoryInfos.isEmpty() ? 0 : mTrajectoryMargin)).setNum(mTrajectoryInfos.size());
             mTrajectoryInfos.add(trajectoryInfo);
             return trajectoryInfo;
@@ -55,26 +55,26 @@ public class T2BHelper extends BaseScrollerDrawHelper {
         TrajectoryInfo target = list.get(0);
         calculateTrajectorySize(target);
         // 找到top和bottom都为0的，return
-        if(target.getTop() == 0 && target.getBottom() == 0){
+        if (target.getTop() == 0 && target.getBottom() == 0) {
             return target;
         }
         int index = 0;
-        float top = target.getTop();
+        float bottom = target.getBottom();
         for (int i = 1; i < list.size(); i++) {
             TrajectoryInfo trajectoryInfo = list.get(i);
             calculateTrajectorySize(trajectoryInfo);
             // 找到top和bottom都为0的，return
-            if(trajectoryInfo.getTop() == 0 && trajectoryInfo.getBottom() == 0){
+            if (trajectoryInfo.getTop() == 0 && trajectoryInfo.getBottom() == 0) {
                 index = i;
                 break;
             }
-            if (top < trajectoryInfo.getTop()) {
-                top = trajectoryInfo.getTop();
+            if (bottom > trajectoryInfo.getBottom()) {
+                bottom = trajectoryInfo.getBottom();
                 index = i;
             }
         }
         target = list.get(index);
-        // 找出当前top最大的弹道--并重新计算X轴偏移量
+        // 找出当前bottom最小的弹道--并重新计算X轴偏移量
         if (target.getLeft() <= 0 && index != 0) {
             target.setLeft(getTrajectorySize(index - 1)[2] + mTrajectoryMargin);
         }

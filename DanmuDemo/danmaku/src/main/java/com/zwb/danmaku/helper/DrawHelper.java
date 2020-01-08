@@ -19,8 +19,9 @@ public class DrawHelper implements IDrawHelper, IScrollerDrawHelper {
     private R2LHelper r2LHelper;
     private L2RHelper l2RHelper;
     private T2BHelper t2BHelper;
+    private B2THelper b2THelper;
 
-    private static final int DEFAULT_OFF_SCREEN_LIMIT = 2; // 允许离屏初始化2两个弹幕 （针对每一条轨道）
+    private static final int DEFAULT_OFF_SCREEN_LIMIT = 2; // 允许离屏初始化两个弹幕 （针对每一条轨道）
 
     private int offScreenLimit = DEFAULT_OFF_SCREEN_LIMIT;
 
@@ -28,6 +29,7 @@ public class DrawHelper implements IDrawHelper, IScrollerDrawHelper {
         getR2LHelper().setOffScreenLimit(offScreenLimit);
         getL2RHelper().setOffScreenLimit(offScreenLimit);
         getT2BHelper().setOffScreenLimit(offScreenLimit);
+        getB2THelper().setOffScreenLimit(offScreenLimit);
     }
 
     @Override
@@ -35,6 +37,7 @@ public class DrawHelper implements IDrawHelper, IScrollerDrawHelper {
         getR2LHelper().onDrawPrepared(textPaint, shadowPaint, canvasWidth, canvasHeight);
         getL2RHelper().onDrawPrepared(textPaint, shadowPaint, canvasWidth, canvasHeight);
         getT2BHelper().onDrawPrepared(textPaint, shadowPaint, canvasWidth, canvasHeight);
+        getB2THelper().onDrawPrepared(textPaint, shadowPaint, canvasWidth, canvasHeight);
     }
 
     @Override
@@ -42,6 +45,7 @@ public class DrawHelper implements IDrawHelper, IScrollerDrawHelper {
         getR2LHelper().onDraw(canvas, textPaint, shadowPaint, canvasWidth, canvasHeight);
         getL2RHelper().onDraw(canvas, textPaint, shadowPaint, canvasWidth, canvasHeight);
         getT2BHelper().onDraw(canvas, textPaint, shadowPaint, canvasWidth, canvasHeight);
+        getB2THelper().onDraw(canvas, textPaint, shadowPaint, canvasWidth, canvasHeight);
     }
 
     @Override
@@ -49,6 +53,7 @@ public class DrawHelper implements IDrawHelper, IScrollerDrawHelper {
         getR2LHelper().setSpeed(speed);
         getL2RHelper().setSpeed(speed);
         getT2BHelper().setSpeed(speed);
+        getB2THelper().setSpeed(speed);
         return this;
     }
 
@@ -57,6 +62,7 @@ public class DrawHelper implements IDrawHelper, IScrollerDrawHelper {
         getR2LHelper().setDen(den);
         getL2RHelper().setDen(den);
         getT2BHelper().setDen(den);
+        getB2THelper().setDen(den);
         return this;
     }
 
@@ -85,6 +91,14 @@ public class DrawHelper implements IDrawHelper, IScrollerDrawHelper {
             }
         }
         getT2BHelper().setDanmakus(t2BList);
+
+        List<BaseDanmaku> b2TList = new ArrayList<>();
+        for (BaseDanmaku danmaku : danmakus) {
+            if (danmaku.getType() == BaseDanmaku.DanmakuType.TYPE_SCROLL_BT) {
+                b2TList.add(danmaku);
+            }
+        }
+        getB2THelper().setDanmakus(b2TList);
     }
 
     @Override
@@ -95,6 +109,8 @@ public class DrawHelper implements IDrawHelper, IScrollerDrawHelper {
             getL2RHelper().addDanmaku(danmaku);
         } else if (danmaku.getType() == BaseDanmaku.DanmakuType.TYPE_SCROLL_TB) {
             getT2BHelper().addDanmaku(danmaku);
+        }else if (danmaku.getType() == BaseDanmaku.DanmakuType.TYPE_SCROLL_BT) {
+            getB2THelper().addDanmaku(danmaku);
         }
     }
 
@@ -123,6 +139,14 @@ public class DrawHelper implements IDrawHelper, IScrollerDrawHelper {
             }
         }
         getT2BHelper().addDanmakus(t2BList);
+
+        List<BaseDanmaku> b2TList = new ArrayList<>();
+        for (BaseDanmaku danmaku : danmakus) {
+            if (danmaku.getType() == BaseDanmaku.DanmakuType.TYPE_SCROLL_BT) {
+                b2TList.add(danmaku);
+            }
+        }
+        getB2THelper().addDanmakus(b2TList);
     }
 
     @Override
@@ -132,6 +156,7 @@ public class DrawHelper implements IDrawHelper, IScrollerDrawHelper {
             getR2LHelper().setOffScreenLimit(offScreenLimit);
             getL2RHelper().setOffScreenLimit(offScreenLimit);
             getT2BHelper().setOffScreenLimit(offScreenLimit);
+            getB2THelper().setOffScreenLimit(offScreenLimit);
         }
         return this;
     }
@@ -141,6 +166,7 @@ public class DrawHelper implements IDrawHelper, IScrollerDrawHelper {
         getR2LHelper().setTrajectoryMargin(mTrajectoryMargin);
         getL2RHelper().setTrajectoryMargin(mTrajectoryMargin);
         getT2BHelper().setTrajectoryMargin(mTrajectoryMargin);
+        getB2THelper().setTrajectoryMargin(mTrajectoryMargin);
         return this;
     }
 
@@ -149,6 +175,7 @@ public class DrawHelper implements IDrawHelper, IScrollerDrawHelper {
         getR2LHelper().setMaxTrajectoryCount(maxTrajectoryCount);
         getL2RHelper().setMaxTrajectoryCount(maxTrajectoryCount);
         getT2BHelper().setMaxTrajectoryCount(maxTrajectoryCount);
+        getB2THelper().setMaxTrajectoryCount(maxTrajectoryCount);
         return this;
     }
 
@@ -157,6 +184,7 @@ public class DrawHelper implements IDrawHelper, IScrollerDrawHelper {
         getR2LHelper().clear();
         getL2RHelper().clear();
         getT2BHelper().clear();
+        getB2THelper().clear();
     }
 
     private R2LHelper getR2LHelper() {
@@ -178,5 +206,12 @@ public class DrawHelper implements IDrawHelper, IScrollerDrawHelper {
             t2BHelper = new T2BHelper();
         }
         return t2BHelper;
+    }
+
+    private B2THelper getB2THelper() {
+        if (b2THelper == null) {
+            b2THelper = new B2THelper();
+        }
+        return b2THelper;
     }
 }

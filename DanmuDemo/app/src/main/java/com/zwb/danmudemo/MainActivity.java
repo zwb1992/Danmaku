@@ -97,7 +97,7 @@ public class MainActivity extends AppCompatActivity {
         btAdd3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                com.zwb.danmaku.model.BaseDanmaku info = DanmakuFactory.create(com.zwb.danmaku.model.BaseDanmaku.DanmakuType.TYPE_SCROLL_TB);
+                com.zwb.danmaku.model.BaseDanmaku info = DanmakuFactory.create(com.zwb.danmaku.model.BaseDanmaku.DanmakuType.TYPE_SCROLL_BT);
                 info.setText("霸气霸气")
                         .setOffset((10 + new Random().nextInt(30)) * getResources().getDisplayMetrics().density)
                         .setTextSize(getResources().getDisplayMetrics().density * 26)
@@ -311,7 +311,7 @@ public class MainActivity extends AppCompatActivity {
     private void initDanmu3() {
         List<com.zwb.danmaku.model.BaseDanmaku> list = new ArrayList<>();
         for (int i = 0; i < 25; i++) {
-            com.zwb.danmaku.model.BaseDanmaku info = DanmakuFactory.create(com.zwb.danmaku.model.BaseDanmaku.DanmakuType.TYPE_SCROLL_TB);
+            com.zwb.danmaku.model.BaseDanmaku info = DanmakuFactory.create(com.zwb.danmaku.model.BaseDanmaku.DanmakuType.TYPE_SCROLL_BT);
             info.setText("太好看了, 喜欢")
                     .setOffset((10 + new Random().nextInt(30)) * getResources().getDisplayMetrics().density)
                     .setTextSize(getResources().getDisplayMetrics().density * 20)
