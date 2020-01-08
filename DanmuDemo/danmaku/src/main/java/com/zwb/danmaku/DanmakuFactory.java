@@ -3,6 +3,7 @@ package com.zwb.danmaku;
 import com.zwb.danmaku.model.BaseDanmaku;
 import com.zwb.danmaku.model.L2RDanmaku;
 import com.zwb.danmaku.model.R2LDanmaku;
+import com.zwb.danmaku.model.T2BDanmaku;
 
 /**
  * @ author : zhouweibin
@@ -15,6 +16,8 @@ public class DanmakuFactory {
         switch (type) {
             case TYPE_SCROLL_LR:
                 return new L2RDanmaku();
+            case TYPE_SCROLL_TB:
+                return new T2BDanmaku();
             case TYPE_SCROLL_RL:
             default:
                 return new R2LDanmaku();

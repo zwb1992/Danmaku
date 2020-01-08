@@ -30,7 +30,7 @@ public class L2RDanmaku extends BaseDanmaku {
             setShowState(ShowState.STATE_NEVER_SHOWED);
         } else if (getScrollX() >= canvasWidth
                 || getScrollY() + getHeight() <= 0
-                || getScrollY() + getHeight() >= canvasHeight) {
+                || getScrollY() >= canvasHeight) {
             setShowState(ShowState.STATE_GONE);
         } else {
             setShowState(ShowState.STATE_SHOWING);

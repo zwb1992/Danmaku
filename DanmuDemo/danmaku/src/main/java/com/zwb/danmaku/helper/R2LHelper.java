@@ -43,31 +43,38 @@ public class R2LHelper extends BaseScrollerDrawHelper {
         }
     }
 
-    /**
-     * 获取最短的弹道
-     */
     @Override
     protected TrajectoryInfo getMatchingTrajectory(List<TrajectoryInfo> list) {
         if (list == null || list.isEmpty()) {
             return null;
         }
         // 已经达到弹道的上限/高度已经超过控件的高度(如果弹幕已经全部显示完毕，轨道大小会被重置，所以需要重新计算轨道的位置)
-        TrajectoryInfo trajectoryInfo = list.get(0);
-        calculateTrajectorySize(trajectoryInfo);
+
+        TrajectoryInfo target = list.get(0);
+        calculateTrajectorySize(target);
+        // 找到left和right都为0的，return
+        if (target.getLeft() == 0 && target.getRight() == 0) {
+            return target;
+        }
         int index = 0;
-        float right = trajectoryInfo.getRight();
+        float right = target.getRight();
         for (int i = 1; i < list.size(); i++) {
-            trajectoryInfo = list.get(i);
+            TrajectoryInfo trajectoryInfo = list.get(i);
             calculateTrajectorySize(trajectoryInfo);
+            // 找到left和right都为0的，return
+            if (trajectoryInfo.getLeft() == 0 && trajectoryInfo.getRight() == 0) {
+                index = i;
+                break;
+            }
             if (right > trajectoryInfo.getRight()) {
                 right = trajectoryInfo.getRight();
                 index = i;
             }
         }
+        target = list.get(index);
         // 找出当前right最小的弹道--并重新计算Y轴偏移量
-        if (trajectoryInfo.getTop() <= 0 && index != 0) {
-            trajectoryInfo = list.get(index);
-            trajectoryInfo.setTop(getTrajectorySize(index - 1)[3] + mTrajectoryMargin);
+        if (target.getTop() <= 0 && index != 0) {
+            target.setTop(getTrajectorySize(index - 1)[3] + mTrajectoryMargin);
         }
         return list.get(index);
     }

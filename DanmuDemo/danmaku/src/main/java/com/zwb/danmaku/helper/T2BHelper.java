@@ -1,0 +1,84 @@
+package com.zwb.danmaku.helper;
+
+import com.zwb.danmaku.model.BaseDanmaku;
+import com.zwb.danmaku.model.TrajectoryInfo;
+
+import java.util.List;
+import java.util.Random;
+
+/**
+ * @ author : zhouweibin
+ * @ time: 2019/12/27 11:21.
+ * @ desc: 从上到下
+ **/
+public class T2BHelper extends BaseScrollerDrawHelper {
+
+
+    @Override
+    protected void initPosition(BaseDanmaku danmaku, TrajectoryInfo trajectoryInfo, int canvasWidth, int canvasHeight) {
+        danmaku.setScrollX(trajectoryInfo.getLeft()).setOriginScrollX(trajectoryInfo.getLeft());
+        if (trajectoryInfo.getTop() > 0) {
+            danmaku.setScrollY(-danmaku.getOffset() - danmaku.getHeight()).setOriginScrollY(-danmaku.getOffset() - danmaku.getHeight());
+        } else {
+            danmaku.setScrollY(trajectoryInfo.getTop() - danmaku.getOffset() - danmaku.getHeight())
+                    .setOriginScrollY(trajectoryInfo.getTop() - danmaku.getOffset() - danmaku.getHeight());
+        }
+    }
+
+    /**
+     * 创建新的轨道
+     *
+     * @return null
+     */
+    @Override
+    protected TrajectoryInfo getNewTrajectory(float[] lastTrajectoryPos) {
+        // 超过控件的宽度(上一条轨道的右边+轨道之间的距离)
+        float lastRight = lastTrajectoryPos[2];
+        if (lastRight + mTrajectoryMargin > canvasWidth) {
+            return null;
+        } else {
+            TrajectoryInfo trajectoryInfo = new TrajectoryInfo();
+            trajectoryInfo.setTop(-mTrajectoryInfos.size() % 3 * den * new Random().nextInt(100));// 初始化弹道的top是从屏幕外开始的+偏移量
+            trajectoryInfo.setLeft(lastRight + (mTrajectoryInfos.isEmpty() ? 0 : mTrajectoryMargin)).setNum(mTrajectoryInfos.size());
+            mTrajectoryInfos.add(trajectoryInfo);
+            return trajectoryInfo;
+        }
+    }
+
+
+    @Override
+    protected TrajectoryInfo getMatchingTrajectory(List<TrajectoryInfo> list) {
+        if (list == null || list.isEmpty()) {
+            return null;
+        }
+        // 已经达到弹道的上限/宽度已经超过控件的高度(如果弹幕已经全部显示完毕，轨道大小会被重置，所以需要重新计算轨道的位置)
+        TrajectoryInfo target = list.get(0);
+        calculateTrajectorySize(target);
+        // 找到top和bottom都为0的，return
+        if(target.getTop() == 0 && target.getBottom() == 0){
+            return target;
+        }
+        int index = 0;
+        float top = target.getTop();
+        for (int i = 1; i < list.size(); i++) {
+            TrajectoryInfo trajectoryInfo = list.get(i);
+            calculateTrajectorySize(trajectoryInfo);
+            // 找到top和bottom都为0的，return
+            if(trajectoryInfo.getTop() == 0 && trajectoryInfo.getBottom() == 0){
+                index = i;
+                break;
+            }
+            if (top < trajectoryInfo.getTop()) {
+                top = trajectoryInfo.getTop();
+                index = i;
+            }
+        }
+        target = list.get(index);
+        // 找出当前top最小的弹道--并重新计算Y轴偏移量
+        if (target.getLeft() <= 0 && index != 0) {
+            target.setLeft(getTrajectorySize(index - 1)[2] + mTrajectoryMargin);
+        }
+        return target;
+    }
+
+}

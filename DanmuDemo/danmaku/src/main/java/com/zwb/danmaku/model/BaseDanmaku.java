@@ -18,7 +18,9 @@ public abstract class BaseDanmaku {
      */
     public enum DanmakuType {
         TYPE_SCROLL_RL,         // 从右向左
-        TYPE_SCROLL_LR          // 从左向右
+        TYPE_SCROLL_LR,         // 从左向右
+        TYPE_SCROLL_TB,         // 从上向下
+        TYPE_SCROLL_BT          // 从下向上
     }
 
     /**
