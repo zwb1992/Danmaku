@@ -81,4 +81,25 @@ public class T2BHelper extends BaseScrollerDrawHelper {
         return target;
     }
 
+    @Override
+    protected TrajectoryInfo getEmptyTrajectory() {
+        TrajectoryInfo target = null;
+        int index = -1;
+        for (int i = 0; i < mTrajectoryInfos.size(); i++){
+            TrajectoryInfo trajectoryInfo = mTrajectoryInfos.get(i);
+            if(trajectoryInfo.getShowingDanmakus().isEmpty()){
+                index = i;
+                break;
+            }
+        }
+        if(index != -1){
+            target = mTrajectoryInfos.get(index);
+            calculateTrajectorySize(target);
+            // 找出当前top最大的弹道--并重新计算X轴偏移量
+            if (target.getLeft() <= 0 && index != 0) {
+                target.setLeft(getTrajectorySize(index - 1)[2] + mTrajectoryMargin);
+            }
+        }
+        return target;
+    }
 }

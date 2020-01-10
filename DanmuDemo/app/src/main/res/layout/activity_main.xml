@@ -83,6 +83,7 @@
             app:danmaku_textShadowWidth="1dp"
             app:danmaku_textSize="21sp"
             app:danmaku_trajectoryCount="3"
+            app:danmaku_repeatCount="0"
             app:danmaku_trajectoryMargin="14dp" />
 
         <LinearLayout

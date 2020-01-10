@@ -83,4 +83,25 @@ public class L2RHelper extends BaseScrollerDrawHelper {
         }
         return target;
     }
+
+    @Override
+    protected TrajectoryInfo getEmptyTrajectory() {
+        TrajectoryInfo target = null;
+        int index = -1;
+        for (int i = 0; i < mTrajectoryInfos.size(); i++){
+            TrajectoryInfo trajectoryInfo = mTrajectoryInfos.get(i);
+            if(trajectoryInfo.getShowingDanmakus().isEmpty()){
+                index = i;
+                break;
+            }
+        }
+        if(index != -1){
+            target = mTrajectoryInfos.get(index);
+            calculateTrajectorySize(target);
+            if (target.getTop() <= 0 && index != 0) {
+                target.setTop(getTrajectorySize(index - 1)[3] + mTrajectoryMargin);
+            }
+        }
+        return target;
+    }
 }

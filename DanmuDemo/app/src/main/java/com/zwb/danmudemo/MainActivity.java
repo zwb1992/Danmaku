@@ -97,7 +97,7 @@ public class MainActivity extends AppCompatActivity {
         btAdd3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                com.zwb.danmaku.model.BaseDanmaku info = DanmakuFactory.create(com.zwb.danmaku.model.BaseDanmaku.DanmakuType.TYPE_SCROLL_BT);
+                com.zwb.danmaku.model.BaseDanmaku info = DanmakuFactory.create(com.zwb.danmaku.model.BaseDanmaku.DanmakuType.TYPE_SCROLL_RL);
                 info.setText("霸气霸气")
                         .setOffset((10 + new Random().nextInt(30)) * getResources().getDisplayMetrics().density)
                         .setTextSize(getResources().getDisplayMetrics().density * 26)
@@ -266,7 +266,7 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
         //弹幕显示的文字
-        danmaku.text = "这是一条弹幕" + System.nanoTime();
+        danmaku.text = "这是一条/n弹幕" + System.nanoTime();
         //设置相应的边距，这个设置的是四周的边距
         danmaku.padding = 5;
         // 可能会被各种过滤器过滤并隐藏显示，若果是本机发送的弹幕，建议设置成1；

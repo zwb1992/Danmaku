@@ -66,6 +66,13 @@ public abstract class BaseScrollerDrawHelper implements IDrawHelper, IScrollerDr
      * @return null
      */
     private TrajectoryInfo getMatchingTrajectory() {
+        if(!mTrajectoryInfos.isEmpty()){
+            // 取出已经为空轨道
+            TrajectoryInfo trajectoryInfo = getEmptyTrajectory();
+            if(trajectoryInfo != null){
+                return trajectoryInfo;
+            }
+        }
         // 弹道数量小于最大弹道数量，生成一个新的
         if (mTrajectoryInfos.size() < maxTrajectoryCount) {
             float[] size = getTrajectorySize(mTrajectoryInfos.size() - 1);
@@ -89,6 +96,11 @@ public abstract class BaseScrollerDrawHelper implements IDrawHelper, IScrollerDr
     protected abstract TrajectoryInfo getMatchingTrajectory(List<TrajectoryInfo> list);
 
     /**
+     * 获取空的弹道
+     */
+    protected abstract TrajectoryInfo getEmptyTrajectory();
+
+    /**
      * 初始化弹幕的位置
      *
      * @param danmaku        弹幕
@@ -107,6 +119,8 @@ public abstract class BaseScrollerDrawHelper implements IDrawHelper, IScrollerDr
             for (BaseDanmaku info : trajectoryInfo.getShowingDanmakus()) {
                 info.startDraw(canvas, textPaint, shadowPaint, canvasWidth, canvasHeight);
             }
+            // 这行是为了确保剔除getShowingDanmakus不可显示的弹幕
+            trajectoryInfo.checkedGoneDanmaku();
         }
     }
 

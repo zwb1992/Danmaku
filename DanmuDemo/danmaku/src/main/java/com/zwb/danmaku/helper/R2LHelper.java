@@ -78,4 +78,26 @@ public class R2LHelper extends BaseScrollerDrawHelper {
         }
         return list.get(index);
     }
+
+    @Override
+    protected TrajectoryInfo getEmptyTrajectory() {
+        TrajectoryInfo target = null;
+        int index = -1;
+        for (int i = 0; i < mTrajectoryInfos.size(); i++){
+            TrajectoryInfo trajectoryInfo = mTrajectoryInfos.get(i);
+            if(trajectoryInfo.getShowingDanmakus().isEmpty()){
+                index = i;
+                break;
+            }
+        }
+        if(index != -1){
+            target = mTrajectoryInfos.get(index);
+            calculateTrajectorySize(target);
+            // 找出当前right最小的弹道--并重新计算Y轴偏移量
+            if (target.getTop() <= 0 && index != 0) {
+                target.setTop(getTrajectorySize(index - 1)[3] + mTrajectoryMargin);
+            }
+        }
+        return target;
+    }
 }
