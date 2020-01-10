@@ -134,6 +134,16 @@ public class DanmakuView extends View {
     }
 
     /**
+     * 设置最大重试次数
+     *
+     * @param maxRepeatCount
+     */
+    public DanmakuView setMaxRepeatCount(int maxRepeatCount) {
+        this.maxRepeatCount = maxRepeatCount;
+        return this;
+    }
+
+    /**
      * 设置需要展示的弹幕
      *
      * @param danmukus 弹幕列表
