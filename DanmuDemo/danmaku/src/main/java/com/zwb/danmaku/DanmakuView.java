@@ -38,6 +38,8 @@ public class DanmakuView extends View {
     private DanmakuState mCurrentState = DanmakuState.STOP;             // 弹幕当前状态
     private float speed = 2;                                            // 弹幕变化速度
     private int maxTrajectoryCount = Integer.MAX_VALUE;                 // 最大弹道数量
+    private int maxRepeatCount = -1;                                    // 最大重试次数 -1 表示无限循环
+    private int repeatCount = 0;                                    // 最大重试次数 -1 表示无限循环
     private float mTrajectoryMargin = 20;                               // 轨道直接的间距
     private static final long REFRESH_TIME = 20;                        // 每20毫秒刷新一次布局
     private float den;                                                  // 像素密度
@@ -88,6 +90,7 @@ public class DanmakuView extends View {
             mTextShadowWidth = a.getDimensionPixelOffset(R.styleable.DanmakuView_danmaku_textShadowWidth, (int) (mTextShadowWidth * den));
             mTrajectoryMargin = a.getDimensionPixelOffset(R.styleable.DanmakuView_danmaku_trajectoryMargin, (int) (mTrajectoryMargin * den));
             maxTrajectoryCount = a.getInteger(R.styleable.DanmakuView_danmaku_trajectoryCount, 2);// 先默认只有两个弹道
+            maxRepeatCount = a.getInteger(R.styleable.DanmakuView_danmaku_repeatCount, -1);// -1表示无限循环
             speed = a.getFloat(R.styleable.DanmakuView_danmaku_speed, speed * den);
         } finally {
             a.recycle();
@@ -138,6 +141,7 @@ public class DanmakuView extends View {
     public void setDanmukus(List<BaseDanmaku> danmukus) {
         if (danmukus != null) {
             mDanmukus.clear();
+            repeatCount = 0;
             mDanmukus.addAll(danmukus);
             getDrawHelper().setDanmakus(danmukus);
         }
@@ -187,6 +191,7 @@ public class DanmakuView extends View {
     }
 
     public void clear() {
+        repeatCount = 0;
         mPendingState = DanmakuState.STOP;
         mCurrentState = DanmakuState.STOP;
         stop();
@@ -258,8 +263,20 @@ public class DanmakuView extends View {
                         if (mCurrentState == DanmakuState.START
                                 && mTextPaint != null && mTextShadowPaint != null
                                 && getMeasuredHeight() != 0 && getMeasuredWidth() != 0) {
-                            getDrawHelper().onDrawPrepared(mTextPaint, mTextShadowPaint, getMeasuredWidth(), getMeasuredHeight());
-                            postInvalidate();
+                            if (!isAllGone()) {
+                                getDrawHelper().onDrawPrepared(mTextPaint, mTextShadowPaint, getMeasuredWidth(), getMeasuredHeight());
+                                postInvalidate();
+                            } else {
+                                if (maxRepeatCount < 0) {
+                                    // 无限循环 重置显示状态
+                                    rePlay();
+                                } else {
+                                    repeatCount++;
+                                    if (repeatCount <= maxRepeatCount) {
+                                        rePlay();
+                                    }
+                                }
+                            }
                         }
                         sendStart();
                         break;
@@ -268,6 +285,28 @@ public class DanmakuView extends View {
                 }
             }
         };
+    }
+
+    private boolean isAllGone() {
+        boolean flag = true;
+        if (mDanmukus.isEmpty()) {
+            return false;
+        }
+        for (BaseDanmaku danmaku : mDanmukus) {
+            if (danmaku.getShowState() != BaseDanmaku.ShowState.STATE_GONE) {
+                flag = false;
+                break;
+            }
+        }
+        return flag;
+    }
+
+    private void rePlay() {
+        getDrawHelper().clear();
+        for (BaseDanmaku danmaku : mDanmukus) {
+            danmaku.setShowState(BaseDanmaku.ShowState.STATE_NEVER_SHOWED);
+        }
+        getDrawHelper().setDanmakus(mDanmukus);
     }
 
     private void sendStart() {

@@ -47,7 +47,10 @@ public abstract class BaseScrollerDrawHelper implements IDrawHelper, IScrollerDr
                     if (danmaku.getSpeed() <= 0 && speed > 0) {
                         danmaku.setSpeed(speed);
                     }
-                    danmaku.initTextSize(textPaint);
+                    // 循环显示的时候可不再执行
+                    if(!danmaku.isInit()) {
+                        danmaku.initTextSize(textPaint);
+                    }
                     initPosition(danmaku, trajectoryInfo, canvasWidth, canvasHeight);
                     danmaku.setInit(true);
                     danmaku.setShowState(BaseDanmaku.ShowState.STATE_NEVER_SHOWED);
