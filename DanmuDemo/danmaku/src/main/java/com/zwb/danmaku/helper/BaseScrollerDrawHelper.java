@@ -115,7 +115,6 @@ public abstract class BaseScrollerDrawHelper implements IDrawHelper, IScrollerDr
         this.canvasHeight = canvasHeight;
         this.canvasWidth = canvasWidth;
         for (TrajectoryInfo trajectoryInfo : mTrajectoryInfos) {
-            trajectoryInfo.checkedGoneDanmaku();
             for (BaseDanmaku info : trajectoryInfo.getShowingDanmakus()) {
                 info.startDraw(canvas, textPaint, shadowPaint, canvasWidth, canvasHeight);
             }
