@@ -20,7 +20,8 @@ public abstract class BaseDanmaku {
         TYPE_SCROLL_RL,         // 从右向左
         TYPE_SCROLL_LR,         // 从左向右
         TYPE_SCROLL_TB,         // 从上向下
-        TYPE_SCROLL_BT          // 从下向上
+        TYPE_SCROLL_BT,         // 从下向上
+        TYPE_SPECIAL            // 特殊弹幕
     }
 
     /**
@@ -87,6 +88,8 @@ public abstract class BaseDanmaku {
             if (getShadowColor() != 0) {
                 shadowPaint.setColor(getShadowColor());
             }
+            textPaint.setAlpha(getAlpha());
+            shadowPaint.setAlpha(getAlpha());
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -108,11 +111,11 @@ public abstract class BaseDanmaku {
 
     private float speed = 0;                    // 移动的速度（渐变速度）
 
-    private int textHeight;                         // 弹幕的高
+    private int textHeight;                     // 弹幕文字的高
 
-    private int textWidth;                          // 弹幕的宽
+    private int textWidth;                      // 弹幕文字的宽
 
-    private float offset = 10;                  // 初始位置的偏移量
+    private float offset = 0;                  // 初始位置的偏移量
 
     private float shadowWidth;                  // 阴影的宽度
 
@@ -129,6 +132,14 @@ public abstract class BaseDanmaku {
     private boolean isInit;                     // 是否初始化完成
 
     private ShowState showState = ShowState.STATE_NEVER_SHOWED;
+
+    private int alpha = AlphaValue.MAX;                    // 透明度
+
+    /**
+     * 针对定点弹幕
+     */
+    private long duration;                      // 在屏幕显示停留的时间
+    private long disappearDuration;             // 从显示到消失的时间--方便做动画   0的话就是直接消失
 
     public String getText() {
         return text;
@@ -221,7 +232,7 @@ public abstract class BaseDanmaku {
     }
 
     public float getHeight() {
-        return getTextHeight() + getPaddingBottom() + getPaddingTop() + + getShadowWidth() * 2;
+        return getTextHeight() + getPaddingBottom() + getPaddingTop() + +getShadowWidth() * 2;
     }
 
 
@@ -326,11 +337,38 @@ public abstract class BaseDanmaku {
         if (TextUtils.isEmpty(getText()) || paint == null) {
             return;
         }
-        if(getTextSize() > 0) {
+        if (getTextSize() > 0) {
             paint.setTextSize(getTextSize());
         }
         Rect rect = new Rect();
         paint.getTextBounds(getText(), 0, getText().length(), rect);
         setTextWidth(rect.width()).setTextHeight(rect.height());
+    }
+
+    public long getDuration() {
+        return duration;
+    }
+
+    public BaseDanmaku setDuration(long duration) {
+        this.duration = duration;
+        return this;
+    }
+
+    public long getDisappearDuration() {
+        return disappearDuration;
+    }
+
+    public BaseDanmaku setDisappearDuration(long disappearDuration) {
+        this.disappearDuration = disappearDuration;
+        return this;
+    }
+
+    public int getAlpha() {
+        return alpha;
+    }
+
+    public BaseDanmaku setAlpha(int alpha) {
+        this.alpha = alpha;
+        return this;
     }
 }

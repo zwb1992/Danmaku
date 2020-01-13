@@ -39,11 +39,15 @@ public class DanmakuView extends View {
     private float speed = 2;                                            // 弹幕变化速度
     private int maxTrajectoryCount = Integer.MAX_VALUE;                 // 最大弹道数量
     private int maxRepeatCount = -1;                                    // 最大重试次数 -1 表示无限循环
-    private int repeatCount = 0;                                    // 最大重试次数 -1 表示无限循环
+    private int repeatCount = 0;                                        // 最大重试次数 -1 表示无限循环
     private float mTrajectoryMargin = 20;                               // 轨道直接的间距
-    private static final long REFRESH_TIME = 20;                        // 每20毫秒刷新一次布局
+    public static final long REFRESH_TIME = 20;                         // 每20毫秒刷新一次布局
     private float den;                                                  // 像素密度
     private List<BaseDanmaku> mDanmukus = new ArrayList<>();            // 数据源
+
+    // 特殊弹幕
+    private long interval = 1000;                                       // 显示的时间间隔
+    private int countLimit = 10;                                        // 显示的弹幕数量
 
     private boolean isAttach;                                           // 是否关联窗口
     private boolean isVisible;                                          // 是否可见
@@ -91,6 +95,8 @@ public class DanmakuView extends View {
             mTrajectoryMargin = a.getDimensionPixelOffset(R.styleable.DanmakuView_danmaku_trajectoryMargin, (int) (mTrajectoryMargin * den));
             maxTrajectoryCount = a.getInteger(R.styleable.DanmakuView_danmaku_trajectoryCount, 2);// 先默认只有两个弹道
             maxRepeatCount = a.getInteger(R.styleable.DanmakuView_danmaku_repeatCount, -1);// -1表示无限循环
+            interval = a.getInteger(R.styleable.DanmakuView_danmaku_interval, 1000);// 下一个特殊弹幕显示的间隔时间
+            countLimit = a.getInteger(R.styleable.DanmakuView_danmaku_countLimit, 10);// 特殊弹幕允许在屏幕上显示的总数量
             speed = a.getFloat(R.styleable.DanmakuView_danmaku_speed, speed * den);
         } finally {
             a.recycle();
@@ -107,7 +113,9 @@ public class DanmakuView extends View {
         mTextShadowPaint.setStyle(Paint.Style.STROKE);
         mTextShadowPaint.setStrokeWidth(mTextShadowWidth);
 
-        getDrawHelper().setSpeed(speed).setTrajectoryMargin(mTrajectoryMargin).setMaxTrajectoryCount(maxTrajectoryCount).setDen(den);
+        getDrawHelper().setSpeed(speed).setTrajectoryMargin(mTrajectoryMargin)
+                .setMaxTrajectoryCount(maxTrajectoryCount).setDen(den)
+                .setInterval(interval).setCountLimit(countLimit);
     }
 
     @Override
@@ -143,12 +151,28 @@ public class DanmakuView extends View {
         return this;
     }
 
+    public DanmakuView setInterval(long interval) {
+        if (interval > 0) {
+            this.interval = interval;
+            getDrawHelper().setInterval(interval);
+        }
+        return this;
+    }
+
+    public DanmakuView setCountLimit(int countLimit) {
+        if (countLimit > 0) {
+            this.countLimit = countLimit;
+            getDrawHelper().setCountLimit(countLimit);
+        }
+        return this;
+    }
+
     /**
      * 设置需要展示的弹幕
      *
      * @param danmukus 弹幕列表
      */
-    public void setDanmukus(List<BaseDanmaku> danmukus) {
+    public synchronized void setDanmukus(List<BaseDanmaku> danmukus) {
         if (danmukus != null) {
             mDanmukus.clear();
             repeatCount = 0;
@@ -157,14 +181,14 @@ public class DanmakuView extends View {
         }
     }
 
-    public void addDanmuku(BaseDanmaku info) {
+    public synchronized void addDanmuku(BaseDanmaku info) {
         if (info != null) {
             mDanmukus.add(info);
             getDrawHelper().addDanmaku(info);
         }
     }
 
-    public void addDanmukus(List<BaseDanmaku> danmukus) {
+    public synchronized void addDanmukus(List<BaseDanmaku> danmukus) {
         if (danmukus != null && !danmukus.isEmpty()) {
             mDanmukus.addAll(danmukus);
             getDrawHelper().addDanmakus(danmukus);
@@ -200,7 +224,7 @@ public class DanmakuView extends View {
         }
     }
 
-    public void clear() {
+    public synchronized void clear() {
         repeatCount = 0;
         mPendingState = DanmakuState.STOP;
         mCurrentState = DanmakuState.STOP;
@@ -274,8 +298,10 @@ public class DanmakuView extends View {
                                 && mTextPaint != null && mTextShadowPaint != null
                                 && getMeasuredHeight() != 0 && getMeasuredWidth() != 0) {
                             if (!isAllGone()) {
-                                getDrawHelper().onDrawPrepared(mTextPaint, mTextShadowPaint, getMeasuredWidth(), getMeasuredHeight());
-                                postInvalidate();
+                                if(!mDanmukus.isEmpty()) {
+                                    getDrawHelper().onDrawPrepared(mTextPaint, mTextShadowPaint, getMeasuredWidth(), getMeasuredHeight());
+                                    postInvalidate();
+                                }
                             } else {
                                 if (maxRepeatCount < 0) {
                                     // 无限循环 重置显示状态
@@ -297,7 +323,7 @@ public class DanmakuView extends View {
         };
     }
 
-    private boolean isAllGone() {
+    private synchronized boolean isAllGone() {
         boolean flag = true;
         if (mDanmukus.isEmpty()) {
             return false;
@@ -311,7 +337,7 @@ public class DanmakuView extends View {
         return flag;
     }
 
-    private void rePlay() {
+    private synchronized void rePlay() {
         getDrawHelper().clear();
         for (BaseDanmaku danmaku : mDanmukus) {
             danmaku.setShowState(BaseDanmaku.ShowState.STATE_NEVER_SHOWED);

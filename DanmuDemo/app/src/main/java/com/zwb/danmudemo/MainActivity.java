@@ -26,9 +26,11 @@ public class MainActivity extends AppCompatActivity {
     private DanmakuView mDanmakuView;
     private DanmakuContext mContext;
     private Button btAdd, btAdd2, btStart2, btStop2, btClear2, btAdd3, btStart3, btStop3, btClear3, btData3;
+    private Button btAdd4, btStart4, btStop4, btClear4, btData4;
 
     private com.zwb.danmaku.DanmakuView danmu;
     private com.zwb.danmaku.DanmakuView danmu3;
+    private com.zwb.danmaku.DanmakuView danmu4;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +39,7 @@ public class MainActivity extends AppCompatActivity {
         mDanmakuView = findViewById(R.id.danmu);
         danmu = findViewById(R.id.danmu2);
         danmu3 = findViewById(R.id.danmu3);
+        danmu4 = findViewById(R.id.danmu4);
         btAdd = findViewById(R.id.btAdd);
         btAdd2 = findViewById(R.id.btAdd2);
         btStart2 = findViewById(R.id.btStart2);
@@ -48,6 +51,13 @@ public class MainActivity extends AppCompatActivity {
         btStop3 = findViewById(R.id.btStop3);
         btClear3 = findViewById(R.id.btClear3);
         btData3 = findViewById(R.id.btData3);
+
+        btAdd4 = findViewById(R.id.btAdd4);
+        btStart4 = findViewById(R.id.btStart4);
+        btStop4 = findViewById(R.id.btStop4);
+        btClear4 = findViewById(R.id.btClear4);
+        btData4 = findViewById(R.id.btData4);
+
         btAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -134,6 +144,47 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 danmu3.clear();
+            }
+        });
+
+        btAdd4.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                com.zwb.danmaku.model.BaseDanmaku info = DanmakuFactory.create(com.zwb.danmaku.model.BaseDanmaku.DanmakuType.TYPE_SPECIAL);
+                info.setText("霸气霸气")
+                        .setTextSize(getResources().getDisplayMetrics().density * 16)
+                        .setTextColor(Color.RED)
+                        .setShadowColor(Color.YELLOW)
+                        .setShadowWidth(3 * getResources().getDisplayMetrics().density)
+                        .setScrollX(new Random().nextInt((int) (getResources().getDisplayMetrics().widthPixels - getResources().getDisplayMetrics().density * 100)))
+                        .setScrollY(new Random().nextInt((int) (getResources().getDisplayMetrics().density * 250)))
+                        .setDisappearDuration(600)
+                        .setDuration(4000);// 显示4秒钟
+                danmu4.addDanmuku(info);
+            }
+        });
+        btData4.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                initDanmu4();
+            }
+        });
+        btStart4.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                danmu4.start();
+            }
+        });
+        btStop4.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                danmu4.stop();
+            }
+        });
+        btClear4.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                danmu4.clear();
             }
         });
         initDanmu();
@@ -295,7 +346,7 @@ public class MainActivity extends AppCompatActivity {
             info.setText("太好看了, 喜欢")
                     .setOffset((10 + new Random().nextInt(30)) * getResources().getDisplayMetrics().density)
                     .setTextSize(getResources().getDisplayMetrics().density * 20)
-                    .setTextColor(Color.argb(255,new Random().nextInt(255),new Random().nextInt(255),new Random().nextInt(255)))
+                    .setTextColor(Color.argb(255, new Random().nextInt(255), new Random().nextInt(255), new Random().nextInt(255)))
                     .setSpeed(2 * getResources().getDisplayMetrics().density)
                     .setShadowColor(Color.YELLOW)
                     .setShadowWidth(3 * getResources().getDisplayMetrics().density)
@@ -326,5 +377,23 @@ public class MainActivity extends AppCompatActivity {
             list.add(info);
         }
         danmu3.setDanmukus(list);
+    }
+
+    private void initDanmu4() {
+        List<com.zwb.danmaku.model.BaseDanmaku> list = new ArrayList<>();
+        for (int i = 0; i < 250; i++) {
+            com.zwb.danmaku.model.BaseDanmaku info = DanmakuFactory.create(com.zwb.danmaku.model.BaseDanmaku.DanmakuType.TYPE_SPECIAL);
+            info.setText("太好看了, 喜欢")
+                    .setTextSize(getResources().getDisplayMetrics().density * 16)
+                    .setTextColor(Color.RED)
+                    .setShadowColor(Color.YELLOW)
+                    .setShadowWidth(3 * getResources().getDisplayMetrics().density)
+                    .setScrollX(new Random().nextInt((int) (getResources().getDisplayMetrics().widthPixels - getResources().getDisplayMetrics().density * 100)))
+                    .setScrollY(new Random().nextInt((int) (getResources().getDisplayMetrics().density * 250)))
+                    .setDisappearDuration(600)
+                    .setDuration(4000);// 显示4秒钟
+            list.add(info);
+        }
+        danmu4.setDanmukus(list);
     }
 }

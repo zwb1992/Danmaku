@@ -18,12 +18,12 @@ import java.util.List;
  **/
 public abstract class BaseScrollerDrawHelper implements IDrawHelper, IScrollerDrawHelper {
 
-    int canvasWidth;                                            // 画布高度
-    int canvasHeight;                                           // 画布高度
+    int canvasWidth;                                                    // 画布高度
+    int canvasHeight;                                                   // 画布高度
     private int maxTrajectoryCount = Integer.MAX_VALUE;                 // 最大弹道数量
     private float speed;                                                // 默认速度
-    float den;                                                // 默认速度
-    float mTrajectoryMargin;                                    // 轨道之间的间距
+    float den;                                                          // 默认速度
+    float mTrajectoryMargin;                                            // 轨道之间的间距
     private int offScreenLimit = Integer.MAX_VALUE;                     // 允许离屏初始化的弹幕数量
 
     private List<BaseDanmaku> penddingDanmakus = new ArrayList<>();     // 待处理的弹幕

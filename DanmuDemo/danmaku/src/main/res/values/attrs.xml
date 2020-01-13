@@ -9,6 +9,8 @@
         <attr name="danmaku_trajectoryCount" format="integer" />
         <attr name="danmaku_repeatCount" format="integer" />
         <attr name="danmaku_speed" format="float" />
+        <attr name="danmaku_interval" format="integer" />
+        <attr name="danmaku_countLimit" format="integer" />
 
     </declare-styleable>
 
