@@ -28,11 +28,10 @@ import java.util.List;
 public class DanmakuView extends View {
 
     private Paint mTextPaint;                                           // 文字画笔
-    private Paint mTextShadowPaint;                                     // 文字阴影画笔
     private int mTextSize = 24;                                         // 默认文字大小
     private int mTextColor = Color.WHITE;                               // 默认文字颜色
-    private int mTextShadowColor = Color.BLACK;                         // 默认阴影颜色
-    private int mTextShadowWidth = 1;                                   // 默认阴影宽度
+    private int mTextShadowColor = Color.TRANSPARENT;                   // 默认阴影颜色
+    private int mTextShadowWidth = 0;                                   // 默认阴影宽度
 
     private DanmakuState mPendingState = DanmakuState.STOP;             // 弹幕预状态
     private DanmakuState mCurrentState = DanmakuState.STOP;             // 弹幕当前状态
@@ -107,11 +106,7 @@ public class DanmakuView extends View {
         mTextPaint.setAntiAlias(true);
         mTextPaint.setColor(mTextColor);//默认颜色白色
         mTextPaint.setTextSize(mTextSize);
-
-        mTextShadowPaint = new Paint(mTextPaint);
-        mTextShadowPaint.setColor(mTextShadowColor);//默认颜色白色
-        mTextShadowPaint.setStyle(Paint.Style.STROKE);
-        mTextShadowPaint.setStrokeWidth(mTextShadowWidth);
+        mTextPaint.setShadowLayer(mTextShadowWidth, 0, 0, mTextShadowColor);
 
         getDrawHelper().setSpeed(speed).setTrajectoryMargin(mTrajectoryMargin)
                 .setMaxTrajectoryCount(maxTrajectoryCount).setDen(den)
@@ -122,7 +117,7 @@ public class DanmakuView extends View {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
         if (getMeasuredHeight() != 0 && getMeasuredWidth() != 0) {
-            getDrawHelper().onDraw(canvas, mTextPaint, mTextShadowPaint, getMeasuredWidth(), getMeasuredHeight());
+            getDrawHelper().onDraw(canvas, mTextPaint, getMeasuredWidth(), getMeasuredHeight());
         }
     }
 
@@ -294,12 +289,11 @@ public class DanmakuView extends View {
                             }
                         }
                         sendStart();
-                        if (mCurrentState == DanmakuState.START
-                                && mTextPaint != null && mTextShadowPaint != null
+                        if (mCurrentState == DanmakuState.START && mTextPaint != null
                                 && getMeasuredHeight() != 0 && getMeasuredWidth() != 0) {
                             if (!isAllGone()) {
-                                if(!mDanmukus.isEmpty()) {
-                                    getDrawHelper().onDrawPrepared(mTextPaint, mTextShadowPaint, getMeasuredWidth(), getMeasuredHeight());
+                                if (!mDanmukus.isEmpty()) {
+                                    getDrawHelper().onDrawPrepared(mTextPaint, getMeasuredWidth(), getMeasuredHeight());
                                     postInvalidate();
                                 }
                             } else {

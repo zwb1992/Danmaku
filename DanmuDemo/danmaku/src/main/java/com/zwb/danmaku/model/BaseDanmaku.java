@@ -35,7 +35,7 @@ public abstract class BaseDanmaku {
 
     public abstract DanmakuType getType();
 
-    public void startDraw(@NonNull Canvas canvas, @NonNull Paint textPaint, @NonNull Paint shadowPaint, int canvasWidth, int canvasHeight) {
+    public void startDraw(@NonNull Canvas canvas, @NonNull Paint textPaint, int canvasWidth, int canvasHeight) {
         if (!isInit()) {
             return;
         }
@@ -43,19 +43,18 @@ public abstract class BaseDanmaku {
         updateShowType(canvasWidth, canvasHeight);
         // 只绘制可见的
         if (isVisible()) {
-            updatePaint(textPaint, shadowPaint);
-            onDraw(canvas, textPaint, shadowPaint, canvasWidth, canvasHeight);
+            updatePaint(textPaint);
+            onDraw(canvas, textPaint, canvasWidth, canvasHeight);
         }
     }
 
     /**
      * @param canvas       画布
      * @param textPaint    文字画笔
-     * @param shadowPaint  阴影画笔
      * @param canvasWidth  画布宽度
      * @param canvasHeight 画布高度
      */
-    public abstract void onDraw(@NonNull Canvas canvas, @NonNull Paint textPaint, @NonNull Paint shadowPaint, int canvasWidth, int canvasHeight);
+    public abstract void onDraw(@NonNull Canvas canvas, @NonNull Paint textPaint, int canvasWidth, int canvasHeight);
 
     /**
      * 更新位置状态信息
@@ -70,26 +69,21 @@ public abstract class BaseDanmaku {
      */
     public abstract void updateShowType(int canvasWidth, int canvasHeight);
 
-    private void updatePaint(@NonNull Paint textPaint, @NonNull Paint shadowPaint) {
+    private void updatePaint(@NonNull Paint textPaint) {
         try {
             if (getTextSize() > 0) {
                 textPaint.setTextSize(getTextSize());
-                shadowPaint.setTextSize(getTextSize());
             }
-
-            if (getShadowWidth() > 0) {
-                shadowPaint.setStrokeWidth(getShadowWidth());
-            }
-
             if (getTextColor() != 0) {
                 textPaint.setColor(getTextColor());
             }
 
-            if (getShadowColor() != 0) {
-                shadowPaint.setColor(getShadowColor());
+            if (getShadowWidth() > 0 && getShadowColor() != 0) {
+                textPaint.setShadowLayer(getShadowWidth(), 0, 0, getShadowColor());
+            } else {
+                textPaint.clearShadowLayer();
             }
             textPaint.setAlpha(getAlpha());
-            shadowPaint.setAlpha(getAlpha());
         } catch (Exception e) {
             e.printStackTrace();
         }
