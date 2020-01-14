@@ -14,7 +14,7 @@ import com.zwb.danmaku.DanmakuView;
  * 此类弹幕的速度只与显示时间有关，不要通过外部设置速度
  **/
 public class SpecialDanmaku extends BaseDanmaku {
-    private long firstShowTime;      //第一次显示的时间
+    private long totalShowTime;      //总显示的时间
 
     @Override
     public DanmakuType getType() {
@@ -25,9 +25,6 @@ public class SpecialDanmaku extends BaseDanmaku {
     public void updatePosition() {
         // 已经显示过的不需要更新位置
         if (getShowState() != ShowState.STATE_GONE) {
-            if (firstShowTime == 0) {
-                firstShowTime = System.currentTimeMillis();
-            }
             checkSpeed();
             setAlpha((int) (getAlpha() - getSpeed()));
         }
@@ -41,9 +38,10 @@ public class SpecialDanmaku extends BaseDanmaku {
                 || getScrollY() >= canvasHeight
                 || getAlpha() <= AlphaValue.TRANSPARENT) {
             setShowState(ShowState.STATE_GONE);
-            firstShowTime = 0;
+            totalShowTime = 0;
         } else {
             setShowState(ShowState.STATE_SHOWING);
+            totalShowTime += DanmakuView.REFRESH_TIME;
         }
     }
 
@@ -55,7 +53,7 @@ public class SpecialDanmaku extends BaseDanmaku {
     }
 
     private void checkSpeed() {
-        if (firstShowTime != 0 && System.currentTimeMillis() - firstShowTime >= getDuration() && getSpeed() == 0) {
+        if (totalShowTime >= getDuration() && getSpeed() == 0) {
             if (getDuration() > 0 && getDisappearDuration() > 0) {
                 // 显示时间一过，设置600毫秒之内消失
                 setSpeed((AlphaValue.MAX * 1.0f * DanmakuView.REFRESH_TIME / getDisappearDuration()));

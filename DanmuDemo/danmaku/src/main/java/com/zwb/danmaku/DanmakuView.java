@@ -122,7 +122,6 @@ public class DanmakuView extends View {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
         if (getMeasuredHeight() != 0 && getMeasuredWidth() != 0) {
-            getDrawHelper().onDrawPrepared(mTextPaint, mTextShadowPaint, getMeasuredWidth(), getMeasuredHeight());
             getDrawHelper().onDraw(canvas, mTextPaint, mTextShadowPaint, getMeasuredWidth(), getMeasuredHeight());
         }
     }
