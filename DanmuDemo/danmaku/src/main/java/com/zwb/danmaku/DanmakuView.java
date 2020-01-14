@@ -41,7 +41,7 @@ public class DanmakuView extends View {
     private int maxRepeatCount = -1;                                    // 最大重试次数 -1 表示无限循环
     private int repeatCount = 0;                                        // 最大重试次数 -1 表示无限循环
     private float mTrajectoryMargin = 20;                               // 轨道直接的间距
-    public static final long REFRESH_TIME = 20;                         // 每20毫秒刷新一次布局
+    public static final long REFRESH_TIME = 10;                         // 每10毫秒刷新一次布局
     private float den;                                                  // 像素密度
     private List<BaseDanmaku> mDanmukus = new ArrayList<>();            // 数据源
 
@@ -293,6 +293,7 @@ public class DanmakuView extends View {
                                 return;
                             }
                         }
+                        sendStart();
                         if (mCurrentState == DanmakuState.START
                                 && mTextPaint != null && mTextShadowPaint != null
                                 && getMeasuredHeight() != 0 && getMeasuredWidth() != 0) {
@@ -313,7 +314,6 @@ public class DanmakuView extends View {
                                 }
                             }
                         }
-                        sendStart();
                         break;
                     case HANDLER_WHAT_STOP_DRAW:
                         break;
