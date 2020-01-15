@@ -11,6 +11,10 @@
         <attr name="danmaku_speed" format="float" />
         <attr name="danmaku_interval" format="integer" />
         <attr name="danmaku_countLimit" format="integer" />
+        <attr name="danmaku_shadowStyle" format="enum">
+            <enum name="layer" value="1" />
+            <enum name="stroke" value="2" />
+        </attr>
 
     </declare-styleable>
 

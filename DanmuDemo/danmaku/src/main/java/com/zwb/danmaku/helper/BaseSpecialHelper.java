@@ -23,13 +23,17 @@ public class BaseSpecialHelper implements IDrawHelper, ISpecialDrawHelper {
     private int mCountLimit = 10;                                       // 显示的弹幕数量
 
     private long lastAddTime = 0;                                       // 上一次添加弹幕的时间
+    BaseConfig baseConfig;                                              // 弹幕基本配置
 
     @Override
-    public synchronized void onDrawPrepared(@NonNull Paint textPaint, int canvasWidth, int canvasHeight) {
+    public synchronized void onDrawPrepared(@NonNull Paint textPaint, @NonNull Paint mTextShadowPaint, int canvasWidth, int canvasHeight) {
         // 符合间隔时间且待处理的弹幕不为空且显示的弹幕未达到上限
         if (System.currentTimeMillis() - lastAddTime > mInterval && !penddingDanmakus.isEmpty() && showingDanmakus.size() < mCountLimit) {
             BaseDanmaku danmaku = penddingDanmakus.remove(0);
             if (!danmaku.isInit()) {
+                if (baseConfig != null) {
+                    baseConfig.checkDanmakuConfig(danmaku, true);
+                }
                 danmaku.initTextSize(textPaint);
             }
             danmaku.setInit(true);
@@ -39,9 +43,9 @@ public class BaseSpecialHelper implements IDrawHelper, ISpecialDrawHelper {
     }
 
     @Override
-    public synchronized void onDraw(@NonNull Canvas canvas, @NonNull Paint textPaint, int canvasWidth, int canvasHeight) {
+    public synchronized void onDraw(@NonNull Canvas canvas, @NonNull Paint textPaint, @NonNull Paint mTextShadowPaint, int canvasWidth, int canvasHeight) {
         for (BaseDanmaku info : showingDanmakus) {
-            info.startDraw(canvas, textPaint, canvasWidth, canvasHeight);
+            info.startDraw(canvas, textPaint, mTextShadowPaint, canvasWidth, canvasHeight);
         }
         // 这行是为了确保剔除getShowingDanmakus不可显示的弹幕
         checkedGoneDanmaku();
@@ -49,6 +53,12 @@ public class BaseSpecialHelper implements IDrawHelper, ISpecialDrawHelper {
 
     @Override
     public IDrawHelper setSpeed(float speed) {
+        return this;
+    }
+
+    @Override
+    public BaseSpecialHelper setBaseConfig(BaseConfig baseConfig) {
+        this.baseConfig = baseConfig;
         return this;
     }
 

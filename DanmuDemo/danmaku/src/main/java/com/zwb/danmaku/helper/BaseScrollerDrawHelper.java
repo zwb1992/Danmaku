@@ -21,16 +21,17 @@ public abstract class BaseScrollerDrawHelper implements IDrawHelper, IScrollerDr
     int canvasWidth;                                                    // 画布高度
     int canvasHeight;                                                   // 画布高度
     private int maxTrajectoryCount = Integer.MAX_VALUE;                 // 最大弹道数量
-    private float speed;                                                // 默认速度
     float den;                                                          // 默认速度
     float mTrajectoryMargin;                                            // 轨道之间的间距
     private int offScreenLimit = Integer.MAX_VALUE;                     // 允许离屏初始化的弹幕数量
 
     private List<BaseDanmaku> penddingDanmakus = new ArrayList<>();     // 待处理的弹幕
-    List<TrajectoryInfo> mTrajectoryInfos = new ArrayList<>();  // 需要展示的弹道
+    List<TrajectoryInfo> mTrajectoryInfos = new ArrayList<>();          // 需要展示的弹道
+
+    private BaseConfig baseConfig;                                      // 弹幕基本配置
 
     @Override
-    public synchronized void onDrawPrepared(@NonNull Paint textPaint, int canvasWidth, int canvasHeight) {
+    public synchronized void onDrawPrepared(@NonNull Paint textPaint, @NonNull Paint mTextShadowPaint, int canvasWidth, int canvasHeight) {
         this.canvasHeight = canvasHeight;
         this.canvasWidth = canvasWidth;
         // 还有待处理的弹幕，准备加入轨道
@@ -44,11 +45,11 @@ public abstract class BaseScrollerDrawHelper implements IDrawHelper, IScrollerDr
                 } else {
                     BaseDanmaku danmaku = iterator.next();
                     iterator.remove();
-                    if (danmaku.getSpeed() <= 0 && speed > 0) {
-                        danmaku.setSpeed(speed);
-                    }
                     // 循环显示的时候可不再执行
                     if (!danmaku.isInit()) {
+                        if (baseConfig != null) {
+                            baseConfig.checkDanmakuConfig(danmaku, false);
+                        }
                         danmaku.initTextSize(textPaint);
                     }
                     initPosition(danmaku, trajectoryInfo, canvasWidth, canvasHeight);
@@ -59,6 +60,7 @@ public abstract class BaseScrollerDrawHelper implements IDrawHelper, IScrollerDr
             }
         }
     }
+
 
     /**
      * 获取最匹配的弹道
@@ -111,12 +113,12 @@ public abstract class BaseScrollerDrawHelper implements IDrawHelper, IScrollerDr
     protected abstract void initPosition(BaseDanmaku danmaku, TrajectoryInfo trajectoryInfo, int canvasWidth, int canvasHeight);
 
     @Override
-    public synchronized void onDraw(@NonNull Canvas canvas, @NonNull Paint textPaint, int canvasWidth, int canvasHeight) {
+    public synchronized void onDraw(@NonNull Canvas canvas, @NonNull Paint textPaint, @NonNull Paint mTextShadowPaint, int canvasWidth, int canvasHeight) {
         this.canvasHeight = canvasHeight;
         this.canvasWidth = canvasWidth;
         for (TrajectoryInfo trajectoryInfo : mTrajectoryInfos) {
             for (BaseDanmaku info : trajectoryInfo.getShowingDanmakus()) {
-                info.startDraw(canvas, textPaint, canvasWidth, canvasHeight);
+                info.startDraw(canvas, textPaint, mTextShadowPaint, canvasWidth, canvasHeight);
             }
             // 这行是为了确保剔除getShowingDanmakus不可显示的弹幕
             trajectoryInfo.checkedGoneDanmaku();
@@ -125,7 +127,15 @@ public abstract class BaseScrollerDrawHelper implements IDrawHelper, IScrollerDr
 
     @Override
     public BaseScrollerDrawHelper setSpeed(float speed) {
-        this.speed = speed;
+        if (baseConfig != null) {
+            baseConfig.setSpeed(speed);
+        }
+        return this;
+    }
+
+    @Override
+    public BaseScrollerDrawHelper setBaseConfig(BaseConfig baseConfig) {
+        this.baseConfig = baseConfig;
         return this;
     }
 

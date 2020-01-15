@@ -77,13 +77,14 @@
             android:layout_height="150dp"
             android:layout_marginTop="10dp"
             android:background="@color/white"
+            app:danmaku_shadowStyle="stroke"
             app:danmaku_speed="2"
             app:danmaku_textColor="@color/white"
             app:danmaku_textShadowColor="@color/gray"
             app:danmaku_textShadowWidth="1dp"
             app:danmaku_textSize="21sp"
             app:danmaku_trajectoryCount="3"
-            app:danmaku_repeatCount="0"
+            app:danmaku_repeatCount="-1"
             app:danmaku_trajectoryMargin="14dp" />
 
         <LinearLayout
@@ -133,15 +134,12 @@
             android:layout_height="300dp"
             android:layout_marginTop="10dp"
             android:background="@color/white"
-            app:danmaku_speed="2"
             app:danmaku_textColor="@color/white"
             app:danmaku_textShadowColor="@color/gray"
             app:danmaku_textShadowWidth="1dp"
             app:danmaku_textSize="21sp"
             app:danmaku_interval="920"
-            app:danmaku_countLimit="5"
-            app:danmaku_repeatCount="0"
-            app:danmaku_trajectoryMargin="14dp" />
+            app:danmaku_countLimit="5"/>
 
         <LinearLayout
             android:layout_width="match_parent"

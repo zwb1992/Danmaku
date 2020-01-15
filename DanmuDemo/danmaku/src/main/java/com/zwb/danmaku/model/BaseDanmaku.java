@@ -33,9 +33,12 @@ public abstract class BaseDanmaku {
         STATE_GONE           // 已经显示过
     }
 
+    public static final int SHADOW_STYLE_LAYER = 1;             // 阴影类型--paint ShadowLayer
+    public static final int SHADOW_STYLE_STROKE = 2;            // 阴影类型--paint Stroke
+
     public abstract DanmakuType getType();
 
-    public void startDraw(@NonNull Canvas canvas, @NonNull Paint textPaint, int canvasWidth, int canvasHeight) {
+    public void startDraw(@NonNull Canvas canvas, @NonNull Paint textPaint, @NonNull Paint mTextShadowPaint, int canvasWidth, int canvasHeight) {
         if (!isInit()) {
             return;
         }
@@ -43,8 +46,11 @@ public abstract class BaseDanmaku {
         updateShowType(canvasWidth, canvasHeight);
         // 只绘制可见的
         if (isVisible()) {
-            updatePaint(textPaint);
-            onDraw(canvas, textPaint, canvasWidth, canvasHeight);
+            updatePaint(textPaint, mTextShadowPaint);
+            if (shadowStyle == SHADOW_STYLE_STROKE) {
+                onDrawShadow(canvas, mTextShadowPaint, canvasWidth, canvasHeight);
+            }
+            onDrawContent(canvas, textPaint, canvasWidth, canvasHeight);
         }
     }
 
@@ -54,7 +60,10 @@ public abstract class BaseDanmaku {
      * @param canvasWidth  画布宽度
      * @param canvasHeight 画布高度
      */
-    public abstract void onDraw(@NonNull Canvas canvas, @NonNull Paint textPaint, int canvasWidth, int canvasHeight);
+    public abstract void onDrawContent(@NonNull Canvas canvas, @NonNull Paint textPaint, int canvasWidth, int canvasHeight);
+
+
+    public abstract void onDrawShadow(@NonNull Canvas canvas, @NonNull Paint mTextShadowPaint, int canvasWidth, int canvasHeight);
 
     /**
      * 更新位置状态信息
@@ -69,20 +78,28 @@ public abstract class BaseDanmaku {
      */
     public abstract void updateShowType(int canvasWidth, int canvasHeight);
 
-    private void updatePaint(@NonNull Paint textPaint) {
+    private void updatePaint(@NonNull Paint textPaint, @NonNull Paint mTextShadowPaint) {
         try {
             if (getTextSize() > 0) {
                 textPaint.setTextSize(getTextSize());
+                mTextShadowPaint.setTextSize(getTextSize());
             }
             if (getTextColor() != 0) {
                 textPaint.setColor(getTextColor());
             }
-            if (getShadowWidth() > 0 && getShadowColor() != 0) {
-                textPaint.setShadowLayer(getShadowWidth(), 0, 0, getShadowColor());
+            if (shadowStyle == SHADOW_STYLE_LAYER) {
+                if (getShadowWidth() > 0 && getShadowColor() != 0) {
+                    textPaint.setShadowLayer(getShadowWidth(), 0, 0, getShadowColor());
+                }
             } else {
                 textPaint.clearShadowLayer();
+                if (getShadowWidth() > 0 && getShadowColor() != 0) {
+                    mTextShadowPaint.setColor(getShadowColor());
+                    mTextShadowPaint.setStrokeWidth(getShadowWidth());
+                }
             }
             textPaint.setAlpha((int) getAlpha());
+            mTextShadowPaint.setAlpha((int) getAlpha());
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -121,6 +138,8 @@ public abstract class BaseDanmaku {
     private int paddingTop;                     // 上面的内边距
 
     private int paddingBottom;                  // 底部的内边距
+
+    private int shadowStyle = 0;
 
     private boolean isInit;                     // 是否初始化完成
 
@@ -362,6 +381,15 @@ public abstract class BaseDanmaku {
 
     public BaseDanmaku setAlpha(float alpha) {
         this.alpha = alpha;
+        return this;
+    }
+
+    public int getShadowStyle() {
+        return shadowStyle;
+    }
+
+    public BaseDanmaku setShadowStyle(int shadowStyle) {
+        this.shadowStyle = shadowStyle;
         return this;
     }
 }

@@ -366,9 +366,9 @@ public class MainActivity extends AppCompatActivity {
             info.setText("太好看了, 喜欢")
                     .setOffset((10 + new Random().nextInt(30)) * getResources().getDisplayMetrics().density)
                     .setTextSize(getResources().getDisplayMetrics().density * 20)
-                    .setTextColor(Color.RED)
+//                    .setTextColor(Color.RED)
                     .setSpeed(2.6f)
-                    .setShadowColor(Color.YELLOW)
+//                    .setShadowColor(Color.YELLOW)
                     .setShadowWidth(3 * getResources().getDisplayMetrics().density)
                     .setPaddingBottom((int) (3 * getResources().getDisplayMetrics().density))
                     .setPaddingTop((int) (3 * getResources().getDisplayMetrics().density))
@@ -381,12 +381,13 @@ public class MainActivity extends AppCompatActivity {
 
     private void initDanmu4() {
         List<com.zwb.danmaku.model.BaseDanmaku> list = new ArrayList<>();
-        for (int i = 0; i < 250; i++) {
+        for (int i = 0; i < 25; i++) {
             com.zwb.danmaku.model.BaseDanmaku info = DanmakuFactory.create(com.zwb.danmaku.model.BaseDanmaku.DanmakuType.TYPE_SPECIAL);
             info.setText("太好看了, 喜欢")
                     .setTextSize(getResources().getDisplayMetrics().density * 16)
-                    .setTextColor(Color.RED)
-                    .setShadowColor(Color.YELLOW)
+//                    .setTextColor(Color.RED)
+//                    .setShadowColor(Color.YELLOW)
+                    .setShadowStyle(com.zwb.danmaku.model.BaseDanmaku.SHADOW_STYLE_STROKE)
                     .setShadowWidth(3 * getResources().getDisplayMetrics().density)
                     .setScrollX(new Random().nextInt((int) (getResources().getDisplayMetrics().widthPixels - getResources().getDisplayMetrics().density * 100)))
                     .setScrollY(new Random().nextInt((int) (getResources().getDisplayMetrics().density * 250)))

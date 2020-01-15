@@ -35,21 +35,21 @@ public class DrawHelper implements IDrawHelper, IScrollerDrawHelper {
     }
 
     @Override
-    public void onDrawPrepared(@NonNull Paint textPaint, int canvasWidth, int canvasHeight) {
-        getR2LHelper().onDrawPrepared(textPaint, canvasWidth, canvasHeight);
-        getL2RHelper().onDrawPrepared(textPaint, canvasWidth, canvasHeight);
-        getT2BHelper().onDrawPrepared(textPaint, canvasWidth, canvasHeight);
-        getB2THelper().onDrawPrepared(textPaint, canvasWidth, canvasHeight);
-        getSpecialHelper().onDrawPrepared(textPaint, canvasWidth, canvasHeight);
+    public void onDrawPrepared(@NonNull Paint textPaint, @NonNull Paint mTextShadowPaint, int canvasWidth, int canvasHeight) {
+        getR2LHelper().onDrawPrepared(textPaint, mTextShadowPaint, canvasWidth, canvasHeight);
+        getL2RHelper().onDrawPrepared(textPaint, mTextShadowPaint, canvasWidth, canvasHeight);
+        getT2BHelper().onDrawPrepared(textPaint, mTextShadowPaint, canvasWidth, canvasHeight);
+        getB2THelper().onDrawPrepared(textPaint, mTextShadowPaint, canvasWidth, canvasHeight);
+        getSpecialHelper().onDrawPrepared(textPaint, mTextShadowPaint, canvasWidth, canvasHeight);
     }
 
     @Override
-    public void onDraw(@NonNull Canvas canvas, @NonNull Paint textPaint, int canvasWidth, int canvasHeight) {
-        getR2LHelper().onDraw(canvas, textPaint, canvasWidth, canvasHeight);
-        getL2RHelper().onDraw(canvas, textPaint, canvasWidth, canvasHeight);
-        getT2BHelper().onDraw(canvas, textPaint, canvasWidth, canvasHeight);
-        getB2THelper().onDraw(canvas, textPaint, canvasWidth, canvasHeight);
-        getSpecialHelper().onDraw(canvas, textPaint, canvasWidth, canvasHeight);
+    public void onDraw(@NonNull Canvas canvas, @NonNull Paint textPaint, @NonNull Paint mTextShadowPaint, int canvasWidth, int canvasHeight) {
+        getR2LHelper().onDraw(canvas, textPaint, mTextShadowPaint, canvasWidth, canvasHeight);
+        getL2RHelper().onDraw(canvas, textPaint, mTextShadowPaint, canvasWidth, canvasHeight);
+        getT2BHelper().onDraw(canvas, textPaint, mTextShadowPaint, canvasWidth, canvasHeight);
+        getB2THelper().onDraw(canvas, textPaint, mTextShadowPaint, canvasWidth, canvasHeight);
+        getSpecialHelper().onDraw(canvas, textPaint, mTextShadowPaint, canvasWidth, canvasHeight);
     }
 
     @Override
@@ -59,6 +59,15 @@ public class DrawHelper implements IDrawHelper, IScrollerDrawHelper {
         getT2BHelper().setSpeed(speed);
         getB2THelper().setSpeed(speed);
         getSpecialHelper().setSpeed(speed);
+        return this;
+    }
+
+    public DrawHelper setBaseConfig(BaseConfig baseConfig) {
+        getR2LHelper().setBaseConfig(baseConfig);
+        getL2RHelper().setBaseConfig(baseConfig);
+        getT2BHelper().setBaseConfig(baseConfig);
+        getB2THelper().setBaseConfig(baseConfig);
+        getSpecialHelper().setBaseConfig(baseConfig);
         return this;
     }
 
