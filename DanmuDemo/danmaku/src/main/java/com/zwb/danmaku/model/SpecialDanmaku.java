@@ -4,8 +4,6 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.support.annotation.NonNull;
 
-import com.zwb.danmaku.DanmakuView;
-
 /**
  * @ author : zhouweibin
  * @ time: 2019/12/26 14:36.
@@ -14,7 +12,7 @@ import com.zwb.danmaku.DanmakuView;
  * 此类弹幕的速度只与显示时间有关，不要通过外部设置速度
  **/
 public class SpecialDanmaku extends BaseDanmaku {
-    private long totalShowTime;      //总显示的时间
+    private float totalShowTime;      //总显示的时间
 
     @Override
     public DanmakuType getType() {
@@ -41,7 +39,7 @@ public class SpecialDanmaku extends BaseDanmaku {
             totalShowTime = 0;
         } else {
             setShowState(ShowState.STATE_SHOWING);
-            totalShowTime += DanmakuView.REFRESH_TIME;
+            totalShowTime += 16.6;
         }
     }
 
@@ -55,7 +53,7 @@ public class SpecialDanmaku extends BaseDanmaku {
         if (totalShowTime >= getDuration() && getSpeed() == 0) {
             if (getDuration() > 0 && getDisappearDuration() > 0) {
                 // 显示时间一过，设置600毫秒之内消失
-                setSpeed((AlphaValue.MAX * 1.0f * DanmakuView.REFRESH_TIME / getDisappearDuration()));
+                setSpeed((AlphaValue.MAX * 16.6f / getDisappearDuration()));
             } else {
                 setSpeed(AlphaValue.MAX);
             }

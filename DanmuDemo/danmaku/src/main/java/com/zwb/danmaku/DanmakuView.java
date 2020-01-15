@@ -40,7 +40,7 @@ public class DanmakuView extends View {
     private int maxRepeatCount = -1;                                    // 最大重试次数 -1 表示无限循环
     private int repeatCount = 0;                                        // 最大重试次数 -1 表示无限循环
     private float mTrajectoryMargin = 20;                               // 轨道直接的间距
-    public static final long REFRESH_TIME = 17;                         // 每17毫秒刷新一次布局 必须大于16.6 小于这个数无意义，且需要时间累加的弹幕会显示异常
+    private static final long REFRESH_TIME = 14;                        // 每14毫秒刷新一次布局 接近16.6; 太小了增加处理负担，无意义
     private float den;                                                  // 像素密度
     private List<BaseDanmaku> mDanmukus = new ArrayList<>();            // 数据源
 
