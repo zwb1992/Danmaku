@@ -36,6 +36,8 @@ public abstract class BaseDanmaku {
     public static final int SHADOW_STYLE_LAYER = 1;             // 阴影类型--paint ShadowLayer
     public static final int SHADOW_STYLE_STROKE = 2;            // 阴影类型--paint Stroke
 
+    private Rect textRect = new Rect();
+
     public abstract DanmakuType getType();
 
     public void startDraw(@NonNull Canvas canvas, @NonNull Paint textPaint, @NonNull Paint mTextShadowPaint, int canvasWidth, int canvasHeight) {
@@ -352,9 +354,8 @@ public abstract class BaseDanmaku {
         if (getTextSize() > 0) {
             paint.setTextSize(getTextSize());
         }
-        Rect rect = new Rect();
-        paint.getTextBounds(getText(), 0, getText().length(), rect);
-        setTextWidth(rect.width()).setTextHeight(rect.height());
+        paint.getTextBounds(getText(), 0, getText().length(), textRect);
+        setTextWidth(textRect.width()).setTextHeight(textRect.height());
     }
 
     public long getDuration() {

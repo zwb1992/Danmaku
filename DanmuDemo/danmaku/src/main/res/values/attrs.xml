@@ -15,7 +15,6 @@
             <enum name="layer" value="1" />
             <enum name="stroke" value="2" />
         </attr>
-
     </declare-styleable>
 
 </resources>

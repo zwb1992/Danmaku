@@ -14,7 +14,7 @@ import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.View;
 
-import com.zwb.danmaku.helper.BaseConfig;
+import com.zwb.danmaku.model.BaseConfig;
 import com.zwb.danmaku.helper.DrawHelper;
 import com.zwb.danmaku.model.AlphaValue;
 import com.zwb.danmaku.model.BaseDanmaku;
@@ -43,10 +43,10 @@ public class DanmakuView extends View {
     private int maxTrajectoryCount = Integer.MAX_VALUE;                 // 最大弹道数量
     private int maxRepeatCount = -1;                                    // 最大重试次数 -1 表示无限循环
     private int repeatCount = 0;                                        // 最大重试次数 -1 表示无限循环
-    private float trajectoryMargin = 20;                               // 轨道直接的间距
-    private static final long REFRESH_TIME = 14;                        // 每14毫秒刷新一次布局 接近16.6; 太小了增加处理负担，无意义
+    private float trajectoryMargin = 20;                                // 轨道直接的间距
+    private static final long REFRESH_TIME = 13;                        // 每13毫秒刷新一次布局 接近16.6; 太小了增加处理负担，无意义
     private float den;                                                  // 像素密度
-    private List<BaseDanmaku> danmukus = new ArrayList<>();            // 数据源
+    private List<BaseDanmaku> danmukus = new ArrayList<>();             // 数据源
 
     // 特殊弹幕
     private long interval = 1000;                                       // 显示的时间间隔

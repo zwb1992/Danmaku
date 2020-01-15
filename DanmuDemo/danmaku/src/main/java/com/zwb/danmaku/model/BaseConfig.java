@@ -1,8 +1,6 @@
-package com.zwb.danmaku.helper;
+package com.zwb.danmaku.model;
 
 import android.graphics.Color;
-
-import com.zwb.danmaku.model.BaseDanmaku;
 
 /**
  * @ author : zhouweibin

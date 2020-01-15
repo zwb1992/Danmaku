@@ -4,6 +4,7 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.support.annotation.NonNull;
 
+import com.zwb.danmaku.model.BaseConfig;
 import com.zwb.danmaku.model.BaseDanmaku;
 
 import java.util.ArrayList;
