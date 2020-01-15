@@ -77,13 +77,12 @@ public abstract class BaseDanmaku {
             if (getTextColor() != 0) {
                 textPaint.setColor(getTextColor());
             }
-
             if (getShadowWidth() > 0 && getShadowColor() != 0) {
                 textPaint.setShadowLayer(getShadowWidth(), 0, 0, getShadowColor());
             } else {
                 textPaint.clearShadowLayer();
             }
-            textPaint.setAlpha(getAlpha());
+            textPaint.setAlpha((int) getAlpha());
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -127,7 +126,7 @@ public abstract class BaseDanmaku {
 
     private ShowState showState = ShowState.STATE_NEVER_SHOWED;
 
-    private int alpha = AlphaValue.MAX;                    // 透明度
+    private float alpha = AlphaValue.MAX;                    // 透明度
 
     /**
      * 针对定点弹幕
@@ -357,11 +356,11 @@ public abstract class BaseDanmaku {
         return this;
     }
 
-    public int getAlpha() {
+    public float getAlpha() {
         return alpha;
     }
 
-    public BaseDanmaku setAlpha(int alpha) {
+    public BaseDanmaku setAlpha(float alpha) {
         this.alpha = alpha;
         return this;
     }

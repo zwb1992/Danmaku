@@ -26,7 +26,7 @@ public class SpecialDanmaku extends BaseDanmaku {
         // 已经显示过的不需要更新位置
         if (getShowState() != ShowState.STATE_GONE) {
             checkSpeed();
-            setAlpha((int) (getAlpha() - getSpeed()));
+            setAlpha(getAlpha() - getSpeed());
         }
     }
 
