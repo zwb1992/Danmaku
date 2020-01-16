@@ -14,6 +14,7 @@ import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.View;
 
+import com.zwb.danmaku.helper.DrawState;
 import com.zwb.danmaku.model.BaseConfig;
 import com.zwb.danmaku.helper.DrawHelper;
 import com.zwb.danmaku.model.AlphaValue;
@@ -311,8 +312,9 @@ public class DanmakuView extends View {
                         sendStart();
                         if (mCurrentState == DanmakuState.START && textPaint != null
                                 && getMeasuredHeight() != 0 && getMeasuredWidth() != 0) {
-                            if (!isAllGone()) {
-                                if (!danmukus.isEmpty()) {
+                            int state = drawHelper.getState();
+                            if (drawHelper.getState() != DrawState.STATE_GONE) {
+                                if (state != DrawState.STATE_EMPTY) {
                                     getDrawHelper().onDrawPrepared(textPaint, textShadowPaint, getMeasuredWidth(), getMeasuredHeight());
                                     postInvalidate();
                                 }
@@ -334,20 +336,6 @@ public class DanmakuView extends View {
                 }
             }
         };
-    }
-
-    private synchronized boolean isAllGone() {
-        boolean flag = true;
-        if (danmukus.isEmpty()) {
-            return false;
-        }
-        for (BaseDanmaku danmaku : danmukus) {
-            if (danmaku.getShowState() != BaseDanmaku.ShowState.STATE_GONE) {
-                flag = false;
-                break;
-            }
-        }
-        return flag;
     }
 
     private synchronized void rePlay() {

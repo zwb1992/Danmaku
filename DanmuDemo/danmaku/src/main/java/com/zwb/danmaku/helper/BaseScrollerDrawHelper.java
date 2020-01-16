@@ -270,5 +270,26 @@ public abstract class BaseScrollerDrawHelper implements IDrawHelper, IScrollerDr
         }
         return list;
     }
+
+    @Override
+    public int getState() {
+        if (penddingDanmakus.isEmpty()) {
+            int goneCount = 0;
+            int showingCount = 0;
+            for (TrajectoryInfo trajectoryInfo : mTrajectoryInfos) {
+                goneCount += trajectoryInfo.getGoneDanmakus().size();
+                showingCount += trajectoryInfo.getShowingDanmakus().size();
+            }
+            if (goneCount == 0 && showingCount == 0) {
+                return DrawState.STATE_EMPTY;
+            } else if (goneCount > 0 && showingCount == 0) {
+                // 消失的列表大于0 要显示的列表等于0 说明已经显示完了
+                return DrawState.STATE_GONE;
+            } else {
+                return DrawState.STATE_SHOWING;
+            }
+        }
+        return DrawState.STATE_SHOWING;
+    }
 }
 

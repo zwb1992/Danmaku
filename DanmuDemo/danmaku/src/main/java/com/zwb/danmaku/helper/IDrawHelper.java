@@ -93,4 +93,12 @@ public interface IDrawHelper {
      * 清除画布
      */
     void clear();
+
+    /**
+     * 状态
+     *
+     * @return 0：代表弹幕清空了 1：代表全部消失了
+     */
+    int getState();
+
 }

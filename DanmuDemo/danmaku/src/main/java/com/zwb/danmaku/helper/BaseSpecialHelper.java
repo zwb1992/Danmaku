@@ -24,7 +24,7 @@ public class BaseSpecialHelper implements IDrawHelper, ISpecialDrawHelper {
     private int mCountLimit = 10;                                       // 显示的弹幕数量
 
     private long lastAddTime = 0;                                       // 上一次添加弹幕的时间
-    BaseConfig baseConfig;                                              // 弹幕基本配置
+    private BaseConfig baseConfig;                                              // 弹幕基本配置
 
     @Override
     public synchronized void onDrawPrepared(@NonNull Paint textPaint, @NonNull Paint mTextShadowPaint, int canvasWidth, int canvasHeight) {
@@ -53,7 +53,7 @@ public class BaseSpecialHelper implements IDrawHelper, ISpecialDrawHelper {
     }
 
     @Override
-    public IDrawHelper setSpeed(float speed) {
+    public BaseSpecialHelper setSpeed(float speed) {
         return this;
     }
 
@@ -64,23 +64,23 @@ public class BaseSpecialHelper implements IDrawHelper, ISpecialDrawHelper {
     }
 
     @Override
-    public IDrawHelper setDen(float den) {
+    public BaseSpecialHelper setDen(float den) {
         return this;
     }
 
     @Override
-    public IDrawHelper setOffScreenLimit(int limit) {
+    public BaseSpecialHelper setOffScreenLimit(int limit) {
         return this;
     }
 
     @Override
-    public ISpecialDrawHelper setInterval(long interval) {
+    public BaseSpecialHelper setInterval(long interval) {
         mInterval = interval;
         return this;
     }
 
     @Override
-    public ISpecialDrawHelper setCountLimit(int countLimit) {
+    public BaseSpecialHelper setCountLimit(int countLimit) {
         mCountLimit = countLimit;
         return this;
     }
@@ -126,5 +126,15 @@ public class BaseSpecialHelper implements IDrawHelper, ISpecialDrawHelper {
                 break;
             }
         }
+    }
+
+    @Override
+    public int getState() {
+        if (penddingDanmakus.isEmpty() && showingDanmakus.isEmpty() && !goneDanmakus.isEmpty()) {
+            return DrawState.STATE_GONE;
+        } else if (penddingDanmakus.isEmpty() && showingDanmakus.isEmpty()) {
+            return DrawState.STATE_EMPTY;
+        }
+        return DrawState.STATE_SHOWING;
     }
 }

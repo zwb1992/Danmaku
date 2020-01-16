@@ -13,8 +13,8 @@ public class BaseConfig {
     private int textColor = Color.WHITE;                               // 默认文字颜色
     private int textShadowColor = Color.TRANSPARENT;                   // 默认阴影颜色
     private int textShadowWidth = 0;                                   // 默认阴影宽度
-    private float speed;                                                // 默认速度
-    private int shadowStyle = BaseDanmaku.SHADOW_STYLE_LAYER;             // 阴影的类型
+    private float speed;                                               // 默认速度
+    private int shadowStyle = BaseDanmaku.SHADOW_STYLE_LAYER;          // 阴影的类型
 
     public int getTextSize() {
         return textSize;

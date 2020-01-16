@@ -26,246 +26,424 @@ public class DrawHelper implements IDrawHelper, IScrollerDrawHelper {
     private static final int DEFAULT_OFF_SCREEN_LIMIT = 2; // 允许离屏初始化两个弹幕 （针对每一条轨道）
 
     private int offScreenLimit = DEFAULT_OFF_SCREEN_LIMIT;
-
-    public DrawHelper() {
-        getR2LHelper().setOffScreenLimit(offScreenLimit);
-        getL2RHelper().setOffScreenLimit(offScreenLimit);
-        getT2BHelper().setOffScreenLimit(offScreenLimit);
-        getB2THelper().setOffScreenLimit(offScreenLimit);
-        getSpecialHelper().setOffScreenLimit(offScreenLimit);
-    }
+    private BaseConfig baseConfig;
+    private float den;
+    private float mTrajectoryMargin;
+    private int maxTrajectoryCount;
+    private long interval;
+    private int countLimit;
 
     @Override
     public void onDrawPrepared(@NonNull Paint textPaint, @NonNull Paint mTextShadowPaint, int canvasWidth, int canvasHeight) {
-        getR2LHelper().onDrawPrepared(textPaint, mTextShadowPaint, canvasWidth, canvasHeight);
-        getL2RHelper().onDrawPrepared(textPaint, mTextShadowPaint, canvasWidth, canvasHeight);
-        getT2BHelper().onDrawPrepared(textPaint, mTextShadowPaint, canvasWidth, canvasHeight);
-        getB2THelper().onDrawPrepared(textPaint, mTextShadowPaint, canvasWidth, canvasHeight);
-        getSpecialHelper().onDrawPrepared(textPaint, mTextShadowPaint, canvasWidth, canvasHeight);
+        if (r2LHelper != null) {
+            r2LHelper.onDrawPrepared(textPaint, mTextShadowPaint, canvasWidth, canvasHeight);
+        }
+        if (l2RHelper != null) {
+            l2RHelper.onDrawPrepared(textPaint, mTextShadowPaint, canvasWidth, canvasHeight);
+        }
+        if (t2BHelper != null) {
+            t2BHelper.onDrawPrepared(textPaint, mTextShadowPaint, canvasWidth, canvasHeight);
+        }
+        if (b2THelper != null) {
+            b2THelper.onDrawPrepared(textPaint, mTextShadowPaint, canvasWidth, canvasHeight);
+        }
+        if (specialHelper != null) {
+            specialHelper.onDrawPrepared(textPaint, mTextShadowPaint, canvasWidth, canvasHeight);
+        }
     }
 
     @Override
     public void onDraw(@NonNull Canvas canvas, @NonNull Paint textPaint, @NonNull Paint mTextShadowPaint, int canvasWidth, int canvasHeight) {
-        getR2LHelper().onDraw(canvas, textPaint, mTextShadowPaint, canvasWidth, canvasHeight);
-        getL2RHelper().onDraw(canvas, textPaint, mTextShadowPaint, canvasWidth, canvasHeight);
-        getT2BHelper().onDraw(canvas, textPaint, mTextShadowPaint, canvasWidth, canvasHeight);
-        getB2THelper().onDraw(canvas, textPaint, mTextShadowPaint, canvasWidth, canvasHeight);
-        getSpecialHelper().onDraw(canvas, textPaint, mTextShadowPaint, canvasWidth, canvasHeight);
+        if (r2LHelper != null) {
+            r2LHelper.onDraw(canvas, textPaint, mTextShadowPaint, canvasWidth, canvasHeight);
+        }
+        if (l2RHelper != null) {
+            l2RHelper.onDraw(canvas, textPaint, mTextShadowPaint, canvasWidth, canvasHeight);
+        }
+        if (t2BHelper != null) {
+            t2BHelper.onDraw(canvas, textPaint, mTextShadowPaint, canvasWidth, canvasHeight);
+        }
+        if (b2THelper != null) {
+            b2THelper.onDraw(canvas, textPaint, mTextShadowPaint, canvasWidth, canvasHeight);
+        }
+        if (specialHelper != null) {
+            specialHelper.onDraw(canvas, textPaint, mTextShadowPaint, canvasWidth, canvasHeight);
+        }
     }
 
     @Override
     public DrawHelper setSpeed(float speed) {
-        getR2LHelper().setSpeed(speed);
-        getL2RHelper().setSpeed(speed);
-        getT2BHelper().setSpeed(speed);
-        getB2THelper().setSpeed(speed);
-        getSpecialHelper().setSpeed(speed);
+        if (baseConfig != null) {
+            baseConfig.setSpeed(speed);
+            if (r2LHelper != null) {
+                r2LHelper.setBaseConfig(baseConfig);
+            }
+            if (l2RHelper != null) {
+                l2RHelper.setBaseConfig(baseConfig);
+            }
+            if (t2BHelper != null) {
+                t2BHelper.setBaseConfig(baseConfig);
+            }
+            if (b2THelper != null) {
+                b2THelper.setBaseConfig(baseConfig);
+            }
+            if (specialHelper != null) {
+                specialHelper.setBaseConfig(baseConfig);
+            }
+        }
         return this;
     }
 
     public DrawHelper setBaseConfig(BaseConfig baseConfig) {
-        getR2LHelper().setBaseConfig(baseConfig);
-        getL2RHelper().setBaseConfig(baseConfig);
-        getT2BHelper().setBaseConfig(baseConfig);
-        getB2THelper().setBaseConfig(baseConfig);
-        getSpecialHelper().setBaseConfig(baseConfig);
+        this.baseConfig = baseConfig;
+        if (r2LHelper != null) {
+            r2LHelper.setBaseConfig(baseConfig);
+        }
+        if (l2RHelper != null) {
+            l2RHelper.setBaseConfig(baseConfig);
+        }
+        if (t2BHelper != null) {
+            t2BHelper.setBaseConfig(baseConfig);
+        }
+        if (b2THelper != null) {
+            b2THelper.setBaseConfig(baseConfig);
+        }
+        if (specialHelper != null) {
+            specialHelper.setBaseConfig(baseConfig);
+        }
         return this;
     }
 
     @Override
     public DrawHelper setDen(float den) {
-        getR2LHelper().setDen(den);
-        getL2RHelper().setDen(den);
-        getT2BHelper().setDen(den);
-        getB2THelper().setDen(den);
-        getSpecialHelper().setDen(den);
+        this.den = den;
+        if (r2LHelper != null) {
+            r2LHelper.setDen(den);
+        }
+        if (l2RHelper != null) {
+            l2RHelper.setDen(den);
+        }
+        if (t2BHelper != null) {
+            t2BHelper.setDen(den);
+        }
+        if (b2THelper != null) {
+            b2THelper.setDen(den);
+        }
+        if (specialHelper != null) {
+            specialHelper.setDen(den);
+        }
         return this;
     }
 
     @Override
     public void setDanmakus(@NonNull List<BaseDanmaku> danmakus) {
         List<BaseDanmaku> r2LList = new ArrayList<>();
+        List<BaseDanmaku> l2RList = new ArrayList<>();
+        List<BaseDanmaku> t2BList = new ArrayList<>();
+        List<BaseDanmaku> b2TList = new ArrayList<>();
+        List<BaseDanmaku> specialList = new ArrayList<>();
         for (BaseDanmaku danmaku : danmakus) {
             if (danmaku.getType() == BaseDanmaku.DanmakuType.TYPE_SCROLL_RL) {
                 r2LList.add(danmaku);
-            }
-        }
-        getR2LHelper().setDanmakus(r2LList);
-
-        List<BaseDanmaku> l2RList = new ArrayList<>();
-        for (BaseDanmaku danmaku : danmakus) {
-            if (danmaku.getType() == BaseDanmaku.DanmakuType.TYPE_SCROLL_LR) {
+            } else if (danmaku.getType() == BaseDanmaku.DanmakuType.TYPE_SCROLL_LR) {
                 l2RList.add(danmaku);
-            }
-        }
-        getL2RHelper().setDanmakus(l2RList);
-
-        List<BaseDanmaku> t2BList = new ArrayList<>();
-        for (BaseDanmaku danmaku : danmakus) {
-            if (danmaku.getType() == BaseDanmaku.DanmakuType.TYPE_SCROLL_TB) {
+            } else if (danmaku.getType() == BaseDanmaku.DanmakuType.TYPE_SCROLL_TB) {
                 t2BList.add(danmaku);
-            }
-        }
-        getT2BHelper().setDanmakus(t2BList);
-
-        List<BaseDanmaku> b2TList = new ArrayList<>();
-        for (BaseDanmaku danmaku : danmakus) {
-            if (danmaku.getType() == BaseDanmaku.DanmakuType.TYPE_SCROLL_BT) {
+            } else if (danmaku.getType() == BaseDanmaku.DanmakuType.TYPE_SCROLL_BT) {
                 b2TList.add(danmaku);
-            }
-        }
-        getB2THelper().setDanmakus(b2TList);
-
-        List<BaseDanmaku> specialList = new ArrayList<>();
-        for (BaseDanmaku danmaku : danmakus) {
-            if (danmaku.getType() == BaseDanmaku.DanmakuType.TYPE_SPECIAL) {
+            } else if (danmaku.getType() == BaseDanmaku.DanmakuType.TYPE_SPECIAL) {
                 specialList.add(danmaku);
             }
         }
-        getSpecialHelper().setDanmakus(specialList);
+        if (!r2LList.isEmpty()) {
+            checkR2LHelper();
+            r2LHelper.setDanmakus(r2LList);
+        }
+
+        if (!l2RList.isEmpty()) {
+            checkL2RHelper();
+            l2RHelper.setDanmakus(l2RList);
+        }
+
+        if (!t2BList.isEmpty()) {
+            checkT2BHelper();
+            t2BHelper.setDanmakus(t2BList);
+        }
+
+        if (!b2TList.isEmpty()) {
+            checkB2THelper();
+            b2THelper.setDanmakus(b2TList);
+        }
+
+        if (!specialList.isEmpty()) {
+            checkSpecialHelper();
+            specialHelper.setDanmakus(specialList);
+        }
     }
 
     @Override
     public void addDanmaku(@NonNull BaseDanmaku danmaku) {
         if (danmaku.getType() == BaseDanmaku.DanmakuType.TYPE_SCROLL_RL) {
-            getR2LHelper().addDanmaku(danmaku);
+            checkR2LHelper();
+            r2LHelper.addDanmaku(danmaku);
         } else if (danmaku.getType() == BaseDanmaku.DanmakuType.TYPE_SCROLL_LR) {
-            getL2RHelper().addDanmaku(danmaku);
+            checkL2RHelper();
+            l2RHelper.addDanmaku(danmaku);
         } else if (danmaku.getType() == BaseDanmaku.DanmakuType.TYPE_SCROLL_TB) {
-            getT2BHelper().addDanmaku(danmaku);
+            checkT2BHelper();
+            t2BHelper.addDanmaku(danmaku);
         } else if (danmaku.getType() == BaseDanmaku.DanmakuType.TYPE_SCROLL_BT) {
-            getB2THelper().addDanmaku(danmaku);
+            checkB2THelper();
+            b2THelper.addDanmaku(danmaku);
         } else if (danmaku.getType() == BaseDanmaku.DanmakuType.TYPE_SPECIAL) {
-            getSpecialHelper().addDanmaku(danmaku);
+            checkSpecialHelper();
+            specialHelper.addDanmaku(danmaku);
         }
     }
 
     @Override
     public void addDanmakus(@NonNull List<BaseDanmaku> danmakus) {
         List<BaseDanmaku> r2LList = new ArrayList<>();
+        List<BaseDanmaku> l2RList = new ArrayList<>();
+        List<BaseDanmaku> t2BList = new ArrayList<>();
+        List<BaseDanmaku> b2TList = new ArrayList<>();
+        List<BaseDanmaku> specialList = new ArrayList<>();
         for (BaseDanmaku danmaku : danmakus) {
             if (danmaku.getType() == BaseDanmaku.DanmakuType.TYPE_SCROLL_RL) {
                 r2LList.add(danmaku);
-            }
-        }
-        getR2LHelper().addDanmakus(r2LList);
-
-        List<BaseDanmaku> l2RList = new ArrayList<>();
-        for (BaseDanmaku danmaku : danmakus) {
-            if (danmaku.getType() == BaseDanmaku.DanmakuType.TYPE_SCROLL_LR) {
+            } else if (danmaku.getType() == BaseDanmaku.DanmakuType.TYPE_SCROLL_LR) {
                 l2RList.add(danmaku);
-            }
-        }
-        getL2RHelper().addDanmakus(l2RList);
-
-        List<BaseDanmaku> t2BList = new ArrayList<>();
-        for (BaseDanmaku danmaku : danmakus) {
-            if (danmaku.getType() == BaseDanmaku.DanmakuType.TYPE_SCROLL_TB) {
+            } else if (danmaku.getType() == BaseDanmaku.DanmakuType.TYPE_SCROLL_TB) {
                 t2BList.add(danmaku);
-            }
-        }
-        getT2BHelper().addDanmakus(t2BList);
-
-        List<BaseDanmaku> b2TList = new ArrayList<>();
-        for (BaseDanmaku danmaku : danmakus) {
-            if (danmaku.getType() == BaseDanmaku.DanmakuType.TYPE_SCROLL_BT) {
+            } else if (danmaku.getType() == BaseDanmaku.DanmakuType.TYPE_SCROLL_BT) {
                 b2TList.add(danmaku);
-            }
-        }
-        getB2THelper().addDanmakus(b2TList);
-
-        List<BaseDanmaku> specialList = new ArrayList<>();
-        for (BaseDanmaku danmaku : danmakus) {
-            if (danmaku.getType() == BaseDanmaku.DanmakuType.TYPE_SPECIAL) {
+            } else if (danmaku.getType() == BaseDanmaku.DanmakuType.TYPE_SPECIAL) {
                 specialList.add(danmaku);
             }
         }
-        getSpecialHelper().addDanmakus(specialList);
+        if (!r2LList.isEmpty()) {
+            checkR2LHelper();
+            r2LHelper.addDanmakus(r2LList);
+        }
+
+        if (!l2RList.isEmpty()) {
+            checkL2RHelper();
+            l2RHelper.addDanmakus(l2RList);
+        }
+
+        if (!t2BList.isEmpty()) {
+            checkT2BHelper();
+            t2BHelper.addDanmakus(t2BList);
+        }
+
+        if (!b2TList.isEmpty()) {
+            checkB2THelper();
+            b2THelper.addDanmakus(b2TList);
+        }
+
+        if (!specialList.isEmpty()) {
+            checkSpecialHelper();
+            specialHelper.addDanmakus(specialList);
+        }
     }
 
     @Override
     public DrawHelper setOffScreenLimit(int offScreenLimit) {
         if (offScreenLimit > 0) {
             this.offScreenLimit = offScreenLimit;
-            getR2LHelper().setOffScreenLimit(offScreenLimit);
-            getL2RHelper().setOffScreenLimit(offScreenLimit);
-            getT2BHelper().setOffScreenLimit(offScreenLimit);
-            getB2THelper().setOffScreenLimit(offScreenLimit);
-            getSpecialHelper().setOffScreenLimit(offScreenLimit);
+            if (r2LHelper != null) {
+                r2LHelper.setOffScreenLimit(offScreenLimit);
+            }
+            if (l2RHelper != null) {
+                l2RHelper.setOffScreenLimit(offScreenLimit);
+            }
+            if (t2BHelper != null) {
+                t2BHelper.setOffScreenLimit(offScreenLimit);
+            }
+            if (b2THelper != null) {
+                b2THelper.setOffScreenLimit(offScreenLimit);
+            }
+            if (specialHelper != null) {
+                specialHelper.setOffScreenLimit(offScreenLimit);
+            }
         }
         return this;
     }
 
     @Override
     public DrawHelper setTrajectoryMargin(float mTrajectoryMargin) {
-        getR2LHelper().setTrajectoryMargin(mTrajectoryMargin);
-        getL2RHelper().setTrajectoryMargin(mTrajectoryMargin);
-        getT2BHelper().setTrajectoryMargin(mTrajectoryMargin);
-        getB2THelper().setTrajectoryMargin(mTrajectoryMargin);
+        this.mTrajectoryMargin = mTrajectoryMargin;
+        if (r2LHelper != null) {
+            r2LHelper.setTrajectoryMargin(mTrajectoryMargin);
+        }
+        if (l2RHelper != null) {
+            l2RHelper.setTrajectoryMargin(mTrajectoryMargin);
+        }
+        if (t2BHelper != null) {
+            t2BHelper.setTrajectoryMargin(mTrajectoryMargin);
+        }
+        if (b2THelper != null) {
+            b2THelper.setTrajectoryMargin(mTrajectoryMargin);
+        }
         return this;
     }
 
     @Override
     public DrawHelper setMaxTrajectoryCount(int maxTrajectoryCount) {
-        getR2LHelper().setMaxTrajectoryCount(maxTrajectoryCount);
-        getL2RHelper().setMaxTrajectoryCount(maxTrajectoryCount);
-        getT2BHelper().setMaxTrajectoryCount(maxTrajectoryCount);
-        getB2THelper().setMaxTrajectoryCount(maxTrajectoryCount);
+        this.maxTrajectoryCount = maxTrajectoryCount;
+        if (r2LHelper != null) {
+            r2LHelper.setMaxTrajectoryCount(maxTrajectoryCount);
+        }
+        if (l2RHelper != null) {
+            l2RHelper.setMaxTrajectoryCount(maxTrajectoryCount);
+        }
+        if (t2BHelper != null) {
+            t2BHelper.setMaxTrajectoryCount(maxTrajectoryCount);
+        }
+        if (b2THelper != null) {
+            b2THelper.setMaxTrajectoryCount(maxTrajectoryCount);
+        }
         return this;
     }
 
     public DrawHelper setInterval(long interval) {
-        getSpecialHelper().setInterval(interval);
+        this.interval = interval;
+        if (specialHelper != null) {
+            specialHelper.setInterval(interval);
+        }
         return this;
     }
 
     public DrawHelper setCountLimit(int countLimit) {
-        getSpecialHelper().setCountLimit(countLimit);
+        this.countLimit = countLimit;
+        if (specialHelper != null) {
+            specialHelper.setCountLimit(countLimit);
+        }
         return this;
     }
 
 
     @Override
     public void clear() {
-        getR2LHelper().clear();
-        getL2RHelper().clear();
-        getT2BHelper().clear();
-        getB2THelper().clear();
-        getSpecialHelper().clear();
+        if (r2LHelper != null) {
+            r2LHelper.clear();
+        }
+        if (l2RHelper != null) {
+            l2RHelper.clear();
+        }
+        if (t2BHelper != null) {
+            t2BHelper.clear();
+        }
+        if (b2THelper != null) {
+            b2THelper.clear();
+        }
+        if (specialHelper != null) {
+            specialHelper.clear();
+        }
     }
 
-    private R2LHelper getR2LHelper() {
+    @Override
+    public int getState() {
+        int state = 0;
+        int count = 0;
+        // 排除被清空的 只判断已经显示完的+1  正在显示的+2
+        if (r2LHelper != null) {
+            int tempState = r2LHelper.getState();
+            if (tempState != DrawState.STATE_EMPTY) {
+                count++;
+                state += tempState;
+            }
+        }
+        if (l2RHelper != null) {
+            int tempState = l2RHelper.getState();
+            if (tempState != DrawState.STATE_EMPTY) {
+                count++;
+                state += tempState;
+            }
+        }
+        if (t2BHelper != null) {
+            int tempState = t2BHelper.getState();
+            if (tempState != DrawState.STATE_EMPTY) {
+                count++;
+                state += tempState;
+            }
+        }
+        if (b2THelper != null) {
+            int tempState = b2THelper.getState();
+            if (tempState != DrawState.STATE_EMPTY) {
+                count++;
+                state += tempState;
+            }
+        }
+        if (specialHelper != null) {
+            int tempState = specialHelper.getState();
+            if (tempState != DrawState.STATE_EMPTY) {
+                count++;
+                state += tempState;
+            }
+        }
+        if (state == 0) {
+            return DrawState.STATE_EMPTY;
+        } else if (state == count) {
+            return DrawState.STATE_GONE;
+        } else {
+            return DrawState.STATE_SHOWING;
+        }
+    }
+
+
+    private void checkR2LHelper() {
         if (r2LHelper == null) {
             r2LHelper = new R2LHelper();
         }
-        return r2LHelper;
+        r2LHelper.setDen(den)
+                .setBaseConfig(baseConfig)
+                .setMaxTrajectoryCount(maxTrajectoryCount)
+                .setOffScreenLimit(offScreenLimit)
+                .setTrajectoryMargin(mTrajectoryMargin);
     }
 
-    private L2RHelper getL2RHelper() {
+    private void checkL2RHelper() {
         if (l2RHelper == null) {
             l2RHelper = new L2RHelper();
         }
-        return l2RHelper;
+        l2RHelper.setDen(den)
+                .setBaseConfig(baseConfig)
+                .setMaxTrajectoryCount(maxTrajectoryCount)
+                .setOffScreenLimit(offScreenLimit)
+                .setTrajectoryMargin(mTrajectoryMargin);
     }
 
-    private T2BHelper getT2BHelper() {
+    private void checkT2BHelper() {
         if (t2BHelper == null) {
             t2BHelper = new T2BHelper();
         }
-        return t2BHelper;
+        t2BHelper.setDen(den)
+                .setBaseConfig(baseConfig)
+                .setMaxTrajectoryCount(maxTrajectoryCount)
+                .setOffScreenLimit(offScreenLimit)
+                .setTrajectoryMargin(mTrajectoryMargin);
     }
 
-    private B2THelper getB2THelper() {
+    private void checkB2THelper() {
         if (b2THelper == null) {
             b2THelper = new B2THelper();
         }
-        return b2THelper;
+        b2THelper.setDen(den)
+                .setBaseConfig(baseConfig)
+                .setMaxTrajectoryCount(maxTrajectoryCount)
+                .setOffScreenLimit(offScreenLimit)
+                .setTrajectoryMargin(mTrajectoryMargin);
     }
 
-    public BaseSpecialHelper getSpecialHelper() {
+    private void checkSpecialHelper() {
         if (specialHelper == null) {
             specialHelper = new BaseSpecialHelper();
         }
-        return specialHelper;
+        specialHelper.setDen(den)
+                .setBaseConfig(baseConfig)
+                .setOffScreenLimit(offScreenLimit)
+                .setCountLimit(countLimit)
+                .setInterval(interval);
     }
 }
