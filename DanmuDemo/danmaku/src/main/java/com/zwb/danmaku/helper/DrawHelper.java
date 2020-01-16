@@ -15,7 +15,7 @@ import java.util.List;
  * @ time: 2019/12/27 10:38.
  * @ desc:
  **/
-public class DrawHelper implements IDrawHelper, IScrollerDrawHelper {
+public class DrawHelper implements IDrawHelper, IScrollerDrawHelper, ISpecialDrawHelper {
 
     private R2LHelper r2LHelper;
     private L2RHelper l2RHelper;
@@ -306,6 +306,7 @@ public class DrawHelper implements IDrawHelper, IScrollerDrawHelper {
         return this;
     }
 
+    @Override
     public DrawHelper setInterval(long interval) {
         this.interval = interval;
         if (specialHelper != null) {
@@ -314,6 +315,7 @@ public class DrawHelper implements IDrawHelper, IScrollerDrawHelper {
         return this;
     }
 
+    @Override
     public DrawHelper setCountLimit(int countLimit) {
         this.countLimit = countLimit;
         if (specialHelper != null) {
@@ -339,6 +341,25 @@ public class DrawHelper implements IDrawHelper, IScrollerDrawHelper {
         }
         if (specialHelper != null) {
             specialHelper.clear();
+        }
+    }
+
+    @Override
+    public void rePlay() {
+        if (r2LHelper != null) {
+            r2LHelper.rePlay();
+        }
+        if (l2RHelper != null) {
+            l2RHelper.rePlay();
+        }
+        if (t2BHelper != null) {
+            t2BHelper.rePlay();
+        }
+        if (b2THelper != null) {
+            b2THelper.rePlay();
+        }
+        if (specialHelper != null) {
+            specialHelper.rePlay();
         }
     }
 

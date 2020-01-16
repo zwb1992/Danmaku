@@ -17,7 +17,6 @@ import android.view.View;
 import com.zwb.danmaku.helper.DrawState;
 import com.zwb.danmaku.model.BaseConfig;
 import com.zwb.danmaku.helper.DrawHelper;
-import com.zwb.danmaku.model.AlphaValue;
 import com.zwb.danmaku.model.BaseDanmaku;
 
 import java.util.ArrayList;
@@ -321,11 +320,11 @@ public class DanmakuView extends View {
                             } else {
                                 if (maxRepeatCount < 0) {
                                     // 无限循环 重置显示状态
-                                    rePlay();
+                                    drawHelper.rePlay();
                                 } else {
                                     repeatCount++;
                                     if (repeatCount <= maxRepeatCount) {
-                                        rePlay();
+                                        drawHelper.rePlay();
                                     }
                                 }
                             }
@@ -336,19 +335,6 @@ public class DanmakuView extends View {
                 }
             }
         };
-    }
-
-    private synchronized void rePlay() {
-        // todo 待优化 重播任务放入helper当中
-        getDrawHelper().clear();
-        for (BaseDanmaku danmaku : danmukus) {
-            danmaku.setShowState(BaseDanmaku.ShowState.STATE_NEVER_SHOWED);
-            danmaku.setAlpha(AlphaValue.MAX);
-            if (danmaku.getType() == BaseDanmaku.DanmakuType.TYPE_SPECIAL) {
-                danmaku.setSpeed(0);
-            }
-        }
-        getDrawHelper().setDanmakus(danmukus);
     }
 
     private synchronized void sendStart() {

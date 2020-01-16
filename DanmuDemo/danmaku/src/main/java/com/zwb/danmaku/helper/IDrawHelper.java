@@ -101,4 +101,8 @@ public interface IDrawHelper {
      */
     int getState();
 
+    /**
+     * 重播
+     */
+    void rePlay();
 }

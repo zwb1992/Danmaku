@@ -4,6 +4,7 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.support.annotation.NonNull;
 
+import com.zwb.danmaku.model.AlphaValue;
 import com.zwb.danmaku.model.BaseConfig;
 import com.zwb.danmaku.model.BaseDanmaku;
 import com.zwb.danmaku.model.TrajectoryInfo;
@@ -26,6 +27,7 @@ public abstract class BaseScrollerDrawHelper implements IDrawHelper, IScrollerDr
     float mTrajectoryMargin;                                            // 轨道之间的间距
     private int offScreenLimit = Integer.MAX_VALUE;                     // 允许离屏初始化的弹幕数量
 
+    private List<BaseDanmaku> originDanmakus = new ArrayList<>();       // 原始数据
     private List<BaseDanmaku> penddingDanmakus = new ArrayList<>();     // 待处理的弹幕
     List<TrajectoryInfo> mTrajectoryInfos = new ArrayList<>();          // 需要展示的弹道
 
@@ -155,16 +157,19 @@ public abstract class BaseScrollerDrawHelper implements IDrawHelper, IScrollerDr
     @Override
     public synchronized void setDanmakus(@NonNull List<BaseDanmaku> danmakuList) {
         clear();
+        this.originDanmakus.addAll(danmakuList);
         this.penddingDanmakus.addAll(danmakuList);
     }
 
     @Override
     public synchronized void addDanmaku(@NonNull BaseDanmaku danmaku) {
+        this.originDanmakus.add(danmaku);
         this.penddingDanmakus.add(danmaku);
     }
 
     @Override
     public synchronized void addDanmakus(@NonNull List<BaseDanmaku> danmakus) {
+        this.originDanmakus.addAll(danmakus);
         this.penddingDanmakus.addAll(danmakus);
     }
 
@@ -184,6 +189,7 @@ public abstract class BaseScrollerDrawHelper implements IDrawHelper, IScrollerDr
 
     @Override
     public synchronized void clear() {
+        originDanmakus.clear();
         penddingDanmakus.clear();
         mTrajectoryInfos.clear();
     }
@@ -290,6 +296,17 @@ public abstract class BaseScrollerDrawHelper implements IDrawHelper, IScrollerDr
             }
         }
         return DrawState.STATE_SHOWING;
+    }
+
+    @Override
+    public synchronized void rePlay() {
+        penddingDanmakus.clear();
+        mTrajectoryInfos.clear();
+        for (BaseDanmaku danmaku : originDanmakus) {
+            danmaku.setShowState(BaseDanmaku.ShowState.STATE_NEVER_SHOWED);
+            danmaku.setAlpha(AlphaValue.MAX);
+        }
+        penddingDanmakus.addAll(originDanmakus);
     }
 }
 

@@ -4,6 +4,7 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.support.annotation.NonNull;
 
+import com.zwb.danmaku.model.AlphaValue;
 import com.zwb.danmaku.model.BaseConfig;
 import com.zwb.danmaku.model.BaseDanmaku;
 
@@ -17,6 +18,7 @@ import java.util.List;
  * @ desc: 特殊弹幕
  **/
 public class BaseSpecialHelper implements IDrawHelper, ISpecialDrawHelper {
+    private List<BaseDanmaku> originDanmakus = new ArrayList<>();       // 原始数据
     private List<BaseDanmaku> penddingDanmakus = new ArrayList<>();     // 待处理的弹幕
     private List<BaseDanmaku> showingDanmakus = new ArrayList<>();      // 正在显示或即将显示的弹幕
     private List<BaseDanmaku> goneDanmakus = new ArrayList<>();         // 已经显示过的弹幕（不再显示）
@@ -88,21 +90,25 @@ public class BaseSpecialHelper implements IDrawHelper, ISpecialDrawHelper {
     @Override
     public synchronized void setDanmakus(@NonNull List<BaseDanmaku> danmakus) {
         clear();
+        originDanmakus.addAll(danmakus);
         penddingDanmakus.addAll(danmakus);
     }
 
     @Override
     public synchronized void addDanmaku(@NonNull BaseDanmaku danmaku) {
+        originDanmakus.add(danmaku);
         penddingDanmakus.add(danmaku);
     }
 
     @Override
     public synchronized void addDanmakus(@NonNull List<BaseDanmaku> danmakus) {
+        originDanmakus.addAll(danmakus);
         penddingDanmakus.addAll(danmakus);
     }
 
     @Override
     public synchronized void clear() {
+        originDanmakus.clear();
         penddingDanmakus.clear();
         showingDanmakus.clear();
         goneDanmakus.clear();
@@ -136,5 +142,18 @@ public class BaseSpecialHelper implements IDrawHelper, ISpecialDrawHelper {
             return DrawState.STATE_EMPTY;
         }
         return DrawState.STATE_SHOWING;
+    }
+
+    @Override
+    public synchronized void rePlay() {
+        penddingDanmakus.clear();
+        showingDanmakus.clear();
+        goneDanmakus.clear();
+        for (BaseDanmaku danmaku : originDanmakus) {
+            danmaku.setShowState(BaseDanmaku.ShowState.STATE_NEVER_SHOWED);
+            danmaku.setAlpha(AlphaValue.MAX);
+            danmaku.setSpeed(0);
+        }
+        penddingDanmakus.addAll(originDanmakus);
     }
 }
