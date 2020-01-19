@@ -1,5 +1,6 @@
 package com.zwb.danmaku.helper;
 
+import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.support.annotation.NonNull;
@@ -19,21 +20,23 @@ public interface IDrawHelper {
     /**
      * 绘制之前准备
      *
+     * @param context          上下文对象
      * @param textPaint        文字画笔
      * @param mTextShadowPaint 阴影画笔
      * @param canvasWidth      画布宽度
      * @param canvasHeight     画布高度
      */
-    void onDrawPrepared(@NonNull Paint textPaint, @NonNull Paint mTextShadowPaint, int canvasWidth, int canvasHeight);
+    void onDrawPrepared(Context context, @NonNull Paint textPaint, @NonNull Paint mTextShadowPaint, int canvasWidth, int canvasHeight);
 
     /**
      * @param canvas           画布
      * @param textPaint        文字画笔
      * @param mTextShadowPaint 阴影画笔
+     * @param mBgPaint         背景画笔
      * @param canvasWidth      画布宽度
      * @param canvasHeight     画布高度
      */
-    void onDraw(@NonNull Canvas canvas, @NonNull Paint textPaint, @NonNull Paint mTextShadowPaint, int canvasWidth, int canvasHeight);
+    void onDraw(@NonNull Canvas canvas, @NonNull Paint textPaint, @NonNull Paint mTextShadowPaint, @NonNull Paint mBgPaint, int canvasWidth, int canvasHeight);
 
     /**
      * 设置变化速度

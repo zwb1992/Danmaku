@@ -1,5 +1,6 @@
 package com.zwb.danmaku.helper;
 
+import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.support.annotation.NonNull;
@@ -29,7 +30,7 @@ public class BaseSpecialHelper implements IDrawHelper, ISpecialDrawHelper {
     private BaseConfig baseConfig;                                              // 弹幕基本配置
 
     @Override
-    public synchronized void onDrawPrepared(@NonNull Paint textPaint, @NonNull Paint mTextShadowPaint, int canvasWidth, int canvasHeight) {
+    public synchronized void onDrawPrepared(Context context, @NonNull Paint textPaint, @NonNull Paint mTextShadowPaint, int canvasWidth, int canvasHeight) {
         // 符合间隔时间且待处理的弹幕不为空且显示的弹幕未达到上限
         if (System.currentTimeMillis() - lastAddTime > mInterval && !penddingDanmakus.isEmpty() && showingDanmakus.size() < mCountLimit) {
             BaseDanmaku danmaku = penddingDanmakus.remove(0);
@@ -39,6 +40,7 @@ public class BaseSpecialHelper implements IDrawHelper, ISpecialDrawHelper {
                 }
                 danmaku.initTextSize(textPaint);
             }
+            danmaku.preparedBg(context);
             danmaku.setInit(true);
             showingDanmakus.add(danmaku);
             lastAddTime = System.currentTimeMillis();
@@ -46,9 +48,9 @@ public class BaseSpecialHelper implements IDrawHelper, ISpecialDrawHelper {
     }
 
     @Override
-    public synchronized void onDraw(@NonNull Canvas canvas, @NonNull Paint textPaint, @NonNull Paint mTextShadowPaint, int canvasWidth, int canvasHeight) {
+    public synchronized void onDraw(@NonNull Canvas canvas, @NonNull Paint textPaint, @NonNull Paint mTextShadowPaint, @NonNull Paint mBgPaint, int canvasWidth, int canvasHeight) {
         for (BaseDanmaku info : showingDanmakus) {
-            info.startDraw(canvas, textPaint, mTextShadowPaint, canvasWidth, canvasHeight);
+            info.startDraw(canvas, textPaint, mTextShadowPaint, mBgPaint, canvasWidth, canvasHeight);
         }
         // 这行是为了确保剔除getShowingDanmakus不可显示的弹幕
         checkedGoneDanmaku();
@@ -126,6 +128,7 @@ public class BaseSpecialHelper implements IDrawHelper, ISpecialDrawHelper {
             BaseDanmaku danmaku = iterator.next();
             if (danmaku.isGone()) {
                 iterator.remove();
+                danmaku.release();
                 goneDanmakus.add(danmaku);
             } else {
                 // 第一个弹幕不是隐藏状态，后面的更不可能是了

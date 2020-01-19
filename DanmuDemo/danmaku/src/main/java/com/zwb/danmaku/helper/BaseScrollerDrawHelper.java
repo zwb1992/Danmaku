@@ -1,5 +1,6 @@
 package com.zwb.danmaku.helper;
 
+import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.support.annotation.NonNull;
@@ -34,7 +35,7 @@ public abstract class BaseScrollerDrawHelper implements IDrawHelper, IScrollerDr
     private BaseConfig baseConfig;                                      // 弹幕基本配置
 
     @Override
-    public synchronized void onDrawPrepared(@NonNull Paint textPaint, @NonNull Paint mTextShadowPaint, int canvasWidth, int canvasHeight) {
+    public synchronized void onDrawPrepared(Context context, @NonNull Paint textPaint, @NonNull Paint mTextShadowPaint, int canvasWidth, int canvasHeight) {
         this.canvasHeight = canvasHeight;
         this.canvasWidth = canvasWidth;
         // 还有待处理的弹幕，准备加入轨道
@@ -56,6 +57,7 @@ public abstract class BaseScrollerDrawHelper implements IDrawHelper, IScrollerDr
                         danmaku.initTextSize(textPaint);
                     }
                     initPosition(danmaku, trajectoryInfo, canvasWidth, canvasHeight);
+                    danmaku.preparedBg(context);
                     danmaku.setInit(true);
                     danmaku.setShowState(BaseDanmaku.ShowState.STATE_NEVER_SHOWED);
                     trajectoryInfo.getShowingDanmakus().add(danmaku);
@@ -116,12 +118,12 @@ public abstract class BaseScrollerDrawHelper implements IDrawHelper, IScrollerDr
     protected abstract void initPosition(BaseDanmaku danmaku, TrajectoryInfo trajectoryInfo, int canvasWidth, int canvasHeight);
 
     @Override
-    public synchronized void onDraw(@NonNull Canvas canvas, @NonNull Paint textPaint, @NonNull Paint mTextShadowPaint, int canvasWidth, int canvasHeight) {
+    public synchronized void onDraw(@NonNull Canvas canvas, @NonNull Paint textPaint, @NonNull Paint mTextShadowPaint, @NonNull Paint mBgPaint, int canvasWidth, int canvasHeight) {
         this.canvasHeight = canvasHeight;
         this.canvasWidth = canvasWidth;
         for (TrajectoryInfo trajectoryInfo : mTrajectoryInfos) {
             for (BaseDanmaku info : trajectoryInfo.getShowingDanmakus()) {
-                info.startDraw(canvas, textPaint, mTextShadowPaint, canvasWidth, canvasHeight);
+                info.startDraw(canvas, textPaint, mTextShadowPaint, mBgPaint, canvasWidth, canvasHeight);
             }
             // 这行是为了确保剔除getShowingDanmakus不可显示的弹幕
             trajectoryInfo.checkedGoneDanmaku();

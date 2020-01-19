@@ -32,10 +32,24 @@ public class MainActivity extends AppCompatActivity {
     private com.zwb.danmaku.DanmakuView danmu3;
     private com.zwb.danmaku.DanmakuView danmu4;
 
+    private List<Integer> danmakuStyle = new ArrayList<>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        danmakuStyle.add(R.drawable.ic_danmu_style_bg_vip);
+        danmakuStyle.add(R.drawable.ic_danmu_style_bubble_2);
+        danmakuStyle.add(R.drawable.ic_danmu_style_bubble_3);
+        danmakuStyle.add(R.drawable.ic_danmu_style_bubble_4);
+        danmakuStyle.add(R.drawable.ic_danmu_style_bubble_5);
+        danmakuStyle.add(R.drawable.ic_danmu_style_bubble_6);
+        danmakuStyle.add(R.drawable.ic_danmu_style_bubble_7);
+        danmakuStyle.add(R.drawable.ic_danmu_style_bubble_8);
+        danmakuStyle.add(R.drawable.ic_danmu_style_bubble_9);
+        danmakuStyle.add(R.drawable.ic_danmu_style_bubble_10);
+        danmakuStyle.add(R.drawable.ic_danmu_style_bubble_11);
+        danmakuStyle.add(R.drawable.ic_danmu_style_bubble_12);
         mDanmakuView = findViewById(R.id.danmu);
         danmu = findViewById(R.id.danmu2);
         danmu3 = findViewById(R.id.danmu3);
@@ -75,6 +89,7 @@ public class MainActivity extends AppCompatActivity {
                         .setTextSize(getResources().getDisplayMetrics().density * 20)
                         .setTextColor(getResources().getColor(R.color.white))
                         .setSpeed(3)
+                        .setBackgroundId(R.mipmap.ic_launcher)
                         .setShadowColor(getResources().getColor(R.color.gray))
                         .setShadowWidth(3 * getResources().getDisplayMetrics().density)
                         .setPaddingBottom((int) (3 * getResources().getDisplayMetrics().density))
@@ -348,12 +363,14 @@ public class MainActivity extends AppCompatActivity {
                     .setTextSize(getResources().getDisplayMetrics().density * 20)
                     .setTextColor(getResources().getColor(R.color.white))
                     .setSpeed(2.6f)
+                    .setBackgroundId(R.mipmap.ic_launcher)
                     .setShadowColor(getResources().getColor(R.color.gray))
                     .setShadowWidth(3 * getResources().getDisplayMetrics().density)
                     .setPaddingBottom((int) (3 * getResources().getDisplayMetrics().density))
                     .setPaddingTop((int) (3 * getResources().getDisplayMetrics().density))
                     .setPaddingLeft((int) (6 * getResources().getDisplayMetrics().density))
-                    .setPaddingRight((int) (6 * getResources().getDisplayMetrics().density));
+                    .setPaddingRight((int) (6 * getResources().getDisplayMetrics().density))
+            ;
             list.add(info);
         }
         danmu.setDanmukus(list);
@@ -368,6 +385,8 @@ public class MainActivity extends AppCompatActivity {
                     .setTextSize(getResources().getDisplayMetrics().density * 20)
 //                    .setTextColor(Color.RED)
                     .setSpeed(2.6f)
+                    .setBackgroundId(R.mipmap.ic_launcher)
+                    .setShadowStyle(com.zwb.danmaku.model.BaseDanmaku.SHADOW_STYLE_LAYER)
 //                    .setShadowColor(Color.YELLOW)
                     .setShadowWidth(3 * getResources().getDisplayMetrics().density)
                     .setPaddingBottom((int) (3 * getResources().getDisplayMetrics().density))
@@ -387,12 +406,19 @@ public class MainActivity extends AppCompatActivity {
                     .setTextSize(getResources().getDisplayMetrics().density * 16)
 //                    .setTextColor(Color.RED)
 //                    .setShadowColor(Color.YELLOW)
-                    .setShadowStyle(com.zwb.danmaku.model.BaseDanmaku.SHADOW_STYLE_STROKE)
+//                    .setShadowStyle(com.zwb.danmaku.model.BaseDanmaku.SHADOW_STYLE_STROKE)
                     .setShadowWidth(3 * getResources().getDisplayMetrics().density)
                     .setScrollX(new Random().nextInt((int) (getResources().getDisplayMetrics().widthPixels - getResources().getDisplayMetrics().density * 100)))
                     .setScrollY(new Random().nextInt((int) (getResources().getDisplayMetrics().density * 250)))
                     .setDisappearDuration(600)
-                    .setDuration(4000);// 显示4秒钟
+                    .setShadowStyle(com.zwb.danmaku.model.BaseDanmaku.SHADOW_STYLE_LAYER)
+                    .setDuration(4000)// 显示4秒钟
+                    .setBackgroundId(danmakuStyle.get(new Random().nextInt(12)))
+//                    .setBackgroundId(R.drawable.shape_corner_4_7f666666)
+                    .setPaddingBottom((int) (3 * getResources().getDisplayMetrics().density))
+                    .setPaddingTop((int) (3 * getResources().getDisplayMetrics().density))
+                    .setPaddingLeft((int) (6 * getResources().getDisplayMetrics().density))
+                    .setPaddingRight((int) (6 * getResources().getDisplayMetrics().density));
             list.add(info);
         }
         danmu4.setDanmukus(list);

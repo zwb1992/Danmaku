@@ -107,6 +107,7 @@ public class TrajectoryInfo {
             BaseDanmaku danmaku = iterator.next();
             if (danmaku.isGone()) {
                 iterator.remove();
+                danmaku.release();
                 goneDanmakus.add(danmaku);
             } else {
                 // 第一个弹幕不是隐藏状态，后面的更不可能是了

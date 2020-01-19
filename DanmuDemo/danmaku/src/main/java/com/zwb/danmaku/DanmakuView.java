@@ -31,6 +31,7 @@ public class DanmakuView extends View {
 
     private Paint textPaint;                                           // 文字画笔
     private Paint textShadowPaint;                                     // 文字阴影画笔
+    private Paint bgPaint;                                             // 背景画笔
     private int textSize = 24;                                         // 默认文字大小
     private int textColor = Color.WHITE;                               // 默认文字颜色
     private int textShadowColor = Color.TRANSPARENT;                   // 默认阴影颜色
@@ -110,6 +111,8 @@ public class DanmakuView extends View {
         textPaint.setDither(true);
         textPaint.setAntiAlias(true);
 
+        bgPaint = new Paint(textPaint);
+
         textShadowPaint = new Paint(textPaint);
         textShadowPaint.setStyle(Paint.Style.STROKE);
 
@@ -133,7 +136,7 @@ public class DanmakuView extends View {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
         if (getMeasuredHeight() != 0 && getMeasuredWidth() != 0) {
-            getDrawHelper().onDraw(canvas, textPaint, textShadowPaint, getMeasuredWidth(), getMeasuredHeight());
+            getDrawHelper().onDraw(canvas, textPaint, textShadowPaint, bgPaint, getMeasuredWidth(), getMeasuredHeight());
         }
     }
 
@@ -314,7 +317,7 @@ public class DanmakuView extends View {
                             int state = drawHelper.getState();
                             if (drawHelper.getState() != DrawState.STATE_GONE) {
                                 if (state != DrawState.STATE_EMPTY) {
-                                    getDrawHelper().onDrawPrepared(textPaint, textShadowPaint, getMeasuredWidth(), getMeasuredHeight());
+                                    getDrawHelper().onDrawPrepared(getContext(), textPaint, textShadowPaint, getMeasuredWidth(), getMeasuredHeight());
                                     postInvalidate();
                                 }
                             } else {

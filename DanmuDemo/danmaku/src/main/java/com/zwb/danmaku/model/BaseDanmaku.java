@@ -1,10 +1,16 @@
 package com.zwb.danmaku.model;
 
+import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.graphics.RectF;
+import android.support.annotation.DrawableRes;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
+
+import com.zwb.danmaku.utils.BitmapUtils;
 
 /**
  * @ author : zhouweibin
@@ -37,75 +43,6 @@ public abstract class BaseDanmaku {
     public static final int SHADOW_STYLE_STROKE = 2;            // 阴影类型--paint Stroke
 
     private Rect textRect = new Rect();
-
-    public abstract DanmakuType getType();
-
-    public void startDraw(@NonNull Canvas canvas, @NonNull Paint textPaint, @NonNull Paint mTextShadowPaint, int canvasWidth, int canvasHeight) {
-        if (!isInit()) {
-            return;
-        }
-        updatePosition();
-        updateShowType(canvasWidth, canvasHeight);
-        // 只绘制可见的
-        if (isVisible()) {
-            updatePaint(textPaint, mTextShadowPaint);
-            if (shadowStyle == SHADOW_STYLE_STROKE) {
-                onDrawShadow(canvas, mTextShadowPaint, canvasWidth, canvasHeight);
-            }
-            onDrawContent(canvas, textPaint, canvasWidth, canvasHeight);
-        }
-    }
-
-    /**
-     * @param canvas       画布
-     * @param textPaint    文字画笔
-     * @param canvasWidth  画布宽度
-     * @param canvasHeight 画布高度
-     */
-    public abstract void onDrawContent(@NonNull Canvas canvas, @NonNull Paint textPaint, int canvasWidth, int canvasHeight);
-
-
-    public abstract void onDrawShadow(@NonNull Canvas canvas, @NonNull Paint mTextShadowPaint, int canvasWidth, int canvasHeight);
-
-    /**
-     * 更新位置状态信息
-     */
-    public abstract void updatePosition();
-
-    /**
-     * 更新显示状态
-     *
-     * @param canvasWidth  画布宽度
-     * @param canvasHeight 画布高度
-     */
-    public abstract void updateShowType(int canvasWidth, int canvasHeight);
-
-    private void updatePaint(@NonNull Paint textPaint, @NonNull Paint mTextShadowPaint) {
-        try {
-            if (getTextSize() > 0) {
-                textPaint.setTextSize(getTextSize());
-                mTextShadowPaint.setTextSize(getTextSize());
-            }
-            if (getTextColor() != 0) {
-                textPaint.setColor(getTextColor());
-            }
-            if (shadowStyle == SHADOW_STYLE_LAYER) {
-                if (getShadowWidth() > 0 && getShadowColor() != 0) {
-                    textPaint.setShadowLayer(getShadowWidth(), 0, 0, getShadowColor());
-                }
-            } else {
-                textPaint.clearShadowLayer();
-                if (getShadowWidth() > 0 && getShadowColor() != 0) {
-                    mTextShadowPaint.setColor(getShadowColor());
-                    mTextShadowPaint.setStrokeWidth(getShadowWidth());
-                }
-            }
-            textPaint.setAlpha((int) getAlpha());
-            mTextShadowPaint.setAlpha((int) getAlpha());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
 
     private String text;                        // 弹幕内容
 
@@ -141,13 +78,19 @@ public abstract class BaseDanmaku {
 
     private int paddingBottom;                  // 底部的内边距
 
-    private int shadowStyle = 0;
+    private int shadowStyle = 0;                // 阴影类型
 
     private boolean isInit;                     // 是否初始化完成
 
     private ShowState showState = ShowState.STATE_NEVER_SHOWED;
 
-    private float alpha = AlphaValue.MAX;                    // 透明度
+    private float alpha = AlphaValue.MAX;        // 透明度
+
+    @DrawableRes
+    private int backgroundId;                   // 背景资源id
+    private Bitmap backgroundBitmap;            // 背景图片
+    private Rect bgSrcRect = new Rect();                     // 背景图片源范围
+    private RectF bgDestRect = new RectF();                   // 背景图片输出范围
 
     /**
      * 针对定点弹幕
@@ -246,7 +189,7 @@ public abstract class BaseDanmaku {
     }
 
     public float getHeight() {
-        return getTextHeight() + getPaddingBottom() + getPaddingTop() + +getShadowWidth() * 2;
+        return getTextHeight() + getPaddingBottom() + getPaddingTop() + getShadowWidth() * 2;
     }
 
 
@@ -347,17 +290,6 @@ public abstract class BaseDanmaku {
         return this;
     }
 
-    public void initTextSize(Paint paint) {
-        if (TextUtils.isEmpty(getText()) || paint == null) {
-            return;
-        }
-        if (getTextSize() > 0) {
-            paint.setTextSize(getTextSize());
-        }
-        paint.getTextBounds(getText(), 0, getText().length(), textRect);
-        setTextWidth(textRect.width()).setTextHeight(textRect.height());
-    }
-
     public long getDuration() {
         return duration;
     }
@@ -392,5 +324,134 @@ public abstract class BaseDanmaku {
     public BaseDanmaku setShadowStyle(int shadowStyle) {
         this.shadowStyle = shadowStyle;
         return this;
+    }
+
+    public int getBackgroundId() {
+        return backgroundId;
+    }
+
+    public BaseDanmaku setBackgroundId(@DrawableRes int backgroundId) {
+        this.backgroundId = backgroundId;
+        return this;
+    }
+
+    public Bitmap getBackgroundBitmap() {
+        return backgroundBitmap;
+    }
+
+    public abstract DanmakuType getType();
+
+    public void startDraw(@NonNull Canvas canvas, @NonNull Paint textPaint, @NonNull Paint mTextShadowPaint, @NonNull Paint mBgPaint, int canvasWidth, int canvasHeight) {
+        if (!isInit()) {
+            return;
+        }
+        updatePosition();
+        updateShowType(canvasWidth, canvasHeight);
+        // 只绘制可见的
+        if (isVisible()) {
+            updatePaint(textPaint, mTextShadowPaint, mBgPaint);
+            onDrawBackGround(canvas, mBgPaint, canvasWidth, canvasHeight);
+            if (shadowStyle == SHADOW_STYLE_STROKE) {
+                onDrawShadow(canvas, mTextShadowPaint, canvasWidth, canvasHeight);
+            }
+            onDrawContent(canvas, textPaint, canvasWidth, canvasHeight);
+        }
+    }
+
+    /**
+     * @param canvas       画布
+     * @param textPaint    文字画笔
+     * @param canvasWidth  画布宽度
+     * @param canvasHeight 画布高度
+     */
+    public abstract void onDrawContent(@NonNull Canvas canvas, @NonNull Paint textPaint, int canvasWidth, int canvasHeight);
+
+
+    public abstract void onDrawShadow(@NonNull Canvas canvas, @NonNull Paint mTextShadowPaint, int canvasWidth, int canvasHeight);
+
+
+    public void onDrawBackGround(@NonNull Canvas canvas, @NonNull Paint mBackGroundPaint, int canvasWidth, int canvasHeight) {
+        if (getBackgroundBitmap() != null) {
+            bgDestRect.set(getScrollX() - getShadowWidth(), getScrollY(), getScrollX() + getWidth() - getShadowWidth(), getScrollY() + getHeight());
+            canvas.drawBitmap(getBackgroundBitmap(), bgSrcRect, bgDestRect, mBackGroundPaint);
+        }
+    }
+
+    /**
+     * 更新位置状态信息
+     */
+    public abstract void updatePosition();
+
+    /**
+     * 更新显示状态
+     *
+     * @param canvasWidth  画布宽度
+     * @param canvasHeight 画布高度
+     */
+    public abstract void updateShowType(int canvasWidth, int canvasHeight);
+
+    private void updatePaint(@NonNull Paint textPaint, @NonNull Paint mTextShadowPaint, @NonNull Paint mBgPaint) {
+        try {
+            if (getTextSize() > 0) {
+                textPaint.setTextSize(getTextSize());
+                mTextShadowPaint.setTextSize(getTextSize());
+            }
+            if (getTextColor() != 0) {
+                textPaint.setColor(getTextColor());
+            }
+            if (shadowStyle == SHADOW_STYLE_LAYER) {
+                if (getShadowWidth() > 0 && getShadowColor() != 0) {
+                    textPaint.setShadowLayer(getShadowWidth(), 0, 0, getShadowColor());
+                }
+            } else {
+                textPaint.clearShadowLayer();
+                if (getShadowWidth() > 0 && getShadowColor() != 0) {
+                    mTextShadowPaint.setColor(getShadowColor());
+                    mTextShadowPaint.setStrokeWidth(getShadowWidth());
+                }
+            }
+            textPaint.setAlpha((int) getAlpha());
+            mTextShadowPaint.setAlpha((int) getAlpha());
+            mBgPaint.setAlpha((int) getAlpha());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void initTextSize(Paint paint) {
+        if (TextUtils.isEmpty(getText()) || paint == null) {
+            return;
+        }
+        if (getTextSize() > 0) {
+            paint.setTextSize(getTextSize());
+        }
+        paint.getTextBounds(getText(), 0, getText().length(), textRect);
+        setTextWidth(textRect.width()).setTextHeight(textRect.height());
+    }
+
+    /**
+     * 准备背景图片
+     *
+     * @param context 上下文
+     */
+    public void preparedBg(Context context) {
+        try {
+            if (context != null && getBackgroundId() != 0 && backgroundBitmap == null) {
+                backgroundBitmap = BitmapUtils.getBitmapByResId(context, getBackgroundId());
+                bgSrcRect.set(0, 0, backgroundBitmap.getWidth(), backgroundBitmap.getHeight());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * 释放资源--当不可见的时候
+     */
+    public void release() {
+        if (backgroundBitmap != null && !backgroundBitmap.isRecycled()) {
+            backgroundBitmap.recycle();
+            backgroundBitmap = null;
+        }
     }
 }

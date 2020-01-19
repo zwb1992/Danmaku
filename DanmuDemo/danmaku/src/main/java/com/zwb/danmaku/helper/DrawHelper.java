@@ -1,5 +1,6 @@
 package com.zwb.danmaku.helper;
 
+import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.support.annotation.NonNull;
@@ -34,40 +35,40 @@ public class DrawHelper implements IDrawHelper, IScrollerDrawHelper, ISpecialDra
     private int countLimit;
 
     @Override
-    public void onDrawPrepared(@NonNull Paint textPaint, @NonNull Paint mTextShadowPaint, int canvasWidth, int canvasHeight) {
+    public void onDrawPrepared(Context context, @NonNull Paint textPaint, @NonNull Paint mTextShadowPaint, int canvasWidth, int canvasHeight) {
         if (r2LHelper != null) {
-            r2LHelper.onDrawPrepared(textPaint, mTextShadowPaint, canvasWidth, canvasHeight);
+            r2LHelper.onDrawPrepared(context, textPaint, mTextShadowPaint, canvasWidth, canvasHeight);
         }
         if (l2RHelper != null) {
-            l2RHelper.onDrawPrepared(textPaint, mTextShadowPaint, canvasWidth, canvasHeight);
+            l2RHelper.onDrawPrepared(context, textPaint, mTextShadowPaint, canvasWidth, canvasHeight);
         }
         if (t2BHelper != null) {
-            t2BHelper.onDrawPrepared(textPaint, mTextShadowPaint, canvasWidth, canvasHeight);
+            t2BHelper.onDrawPrepared(context, textPaint, mTextShadowPaint, canvasWidth, canvasHeight);
         }
         if (b2THelper != null) {
-            b2THelper.onDrawPrepared(textPaint, mTextShadowPaint, canvasWidth, canvasHeight);
+            b2THelper.onDrawPrepared(context, textPaint, mTextShadowPaint, canvasWidth, canvasHeight);
         }
         if (specialHelper != null) {
-            specialHelper.onDrawPrepared(textPaint, mTextShadowPaint, canvasWidth, canvasHeight);
+            specialHelper.onDrawPrepared(context, textPaint, mTextShadowPaint, canvasWidth, canvasHeight);
         }
     }
 
     @Override
-    public void onDraw(@NonNull Canvas canvas, @NonNull Paint textPaint, @NonNull Paint mTextShadowPaint, int canvasWidth, int canvasHeight) {
+    public void onDraw(@NonNull Canvas canvas, @NonNull Paint textPaint, @NonNull Paint mTextShadowPaint, @NonNull Paint mBgPaint, int canvasWidth, int canvasHeight) {
         if (r2LHelper != null) {
-            r2LHelper.onDraw(canvas, textPaint, mTextShadowPaint, canvasWidth, canvasHeight);
+            r2LHelper.onDraw(canvas, textPaint, mTextShadowPaint, mBgPaint, canvasWidth, canvasHeight);
         }
         if (l2RHelper != null) {
-            l2RHelper.onDraw(canvas, textPaint, mTextShadowPaint, canvasWidth, canvasHeight);
+            l2RHelper.onDraw(canvas, textPaint, mTextShadowPaint, mBgPaint, canvasWidth, canvasHeight);
         }
         if (t2BHelper != null) {
-            t2BHelper.onDraw(canvas, textPaint, mTextShadowPaint, canvasWidth, canvasHeight);
+            t2BHelper.onDraw(canvas, textPaint, mTextShadowPaint, mBgPaint, canvasWidth, canvasHeight);
         }
         if (b2THelper != null) {
-            b2THelper.onDraw(canvas, textPaint, mTextShadowPaint, canvasWidth, canvasHeight);
+            b2THelper.onDraw(canvas, textPaint, mTextShadowPaint, mBgPaint, canvasWidth, canvasHeight);
         }
         if (specialHelper != null) {
-            specialHelper.onDraw(canvas, textPaint, mTextShadowPaint, canvasWidth, canvasHeight);
+            specialHelper.onDraw(canvas, textPaint, mTextShadowPaint, mBgPaint, canvasWidth, canvasHeight);
         }
     }
 
