@@ -79,7 +79,6 @@ public class BitmapUtils {
      */
     public static Bitmap getBitmapByResId(Context context, int drawableRes, int targetW, int targetH) {
         Drawable drawable = context.getResources().getDrawable(drawableRes);
-        drawable.setDither(true);
         Canvas canvas = new Canvas();
         // 为0的情况是xml配置的shape加载的drawable 直接设置目标大小
         int width = drawable.getIntrinsicWidth() > 0 ? drawable.getIntrinsicWidth() : targetW;

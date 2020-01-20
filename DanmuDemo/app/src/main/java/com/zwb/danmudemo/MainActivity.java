@@ -364,6 +364,7 @@ public class MainActivity extends AppCompatActivity {
                     .setTextColor(getResources().getColor(R.color.white))
                     .setSpeed(2.6f)
                     .setBackgroundId(R.mipmap.ic_launcher)
+                    .setBackgroundId(danmakuStyle.get(new Random().nextInt(12)))
                     .setShadowColor(getResources().getColor(R.color.gray))
                     .setShadowWidth(3 * getResources().getDisplayMetrics().density)
                     .setPaddingBottom((3 * getResources().getDisplayMetrics().density))
@@ -386,6 +387,7 @@ public class MainActivity extends AppCompatActivity {
 //                    .setTextColor(Color.RED)
                     .setSpeed(2.6f)
                     .setBackgroundId(R.mipmap.ic_launcher)
+                    .setBackgroundId(danmakuStyle.get(new Random().nextInt(12)))
                     .setShadowStyle(com.zwb.danmaku.model.BaseDanmaku.SHADOW_STYLE_LAYER)
 //                    .setShadowColor(Color.YELLOW)
                     .setShadowWidth(3 * getResources().getDisplayMetrics().density)
@@ -403,7 +405,7 @@ public class MainActivity extends AppCompatActivity {
         for (int i = 0; i < 25; i++) {
             com.zwb.danmaku.model.BaseDanmaku info = DanmakuFactory.create(com.zwb.danmaku.model.BaseDanmaku.DanmakuType.TYPE_SPECIAL);
             info.setText("太好看了, 喜欢")
-                    .setTextSize(getResources().getDisplayMetrics().density * 26)
+                    .setTextSize(getResources().getDisplayMetrics().density * 16)
 //                    .setTextColor(Color.RED)
 //                    .setShadowColor(Color.YELLOW)
 //                    .setShadowStyle(com.zwb.danmaku.model.BaseDanmaku.SHADOW_STYLE_STROKE)
