@@ -366,10 +366,10 @@ public class MainActivity extends AppCompatActivity {
                     .setBackgroundId(R.mipmap.ic_launcher)
                     .setShadowColor(getResources().getColor(R.color.gray))
                     .setShadowWidth(3 * getResources().getDisplayMetrics().density)
-                    .setPaddingBottom((int) (3 * getResources().getDisplayMetrics().density))
-                    .setPaddingTop((int) (3 * getResources().getDisplayMetrics().density))
-                    .setPaddingLeft((int) (6 * getResources().getDisplayMetrics().density))
-                    .setPaddingRight((int) (6 * getResources().getDisplayMetrics().density))
+                    .setPaddingBottom((3 * getResources().getDisplayMetrics().density))
+                    .setPaddingTop((3 * getResources().getDisplayMetrics().density))
+                    .setPaddingLeft((6 * getResources().getDisplayMetrics().density))
+                    .setPaddingRight((6 * getResources().getDisplayMetrics().density))
             ;
             list.add(info);
         }
@@ -389,10 +389,10 @@ public class MainActivity extends AppCompatActivity {
                     .setShadowStyle(com.zwb.danmaku.model.BaseDanmaku.SHADOW_STYLE_LAYER)
 //                    .setShadowColor(Color.YELLOW)
                     .setShadowWidth(3 * getResources().getDisplayMetrics().density)
-                    .setPaddingBottom((int) (3 * getResources().getDisplayMetrics().density))
-                    .setPaddingTop((int) (3 * getResources().getDisplayMetrics().density))
-                    .setPaddingLeft((int) (6 * getResources().getDisplayMetrics().density))
-                    .setPaddingRight((int) (6 * getResources().getDisplayMetrics().density));
+                    .setPaddingBottom((3 * getResources().getDisplayMetrics().density))
+                    .setPaddingTop((3 * getResources().getDisplayMetrics().density))
+                    .setPaddingLeft((6 * getResources().getDisplayMetrics().density))
+                    .setPaddingRight((6 * getResources().getDisplayMetrics().density));
             list.add(info);
         }
         danmu3.setDanmukus(list);
@@ -403,7 +403,7 @@ public class MainActivity extends AppCompatActivity {
         for (int i = 0; i < 25; i++) {
             com.zwb.danmaku.model.BaseDanmaku info = DanmakuFactory.create(com.zwb.danmaku.model.BaseDanmaku.DanmakuType.TYPE_SPECIAL);
             info.setText("太好看了, 喜欢")
-                    .setTextSize(getResources().getDisplayMetrics().density * 16)
+                    .setTextSize(getResources().getDisplayMetrics().density * 26)
 //                    .setTextColor(Color.RED)
 //                    .setShadowColor(Color.YELLOW)
 //                    .setShadowStyle(com.zwb.danmaku.model.BaseDanmaku.SHADOW_STYLE_STROKE)
@@ -413,12 +413,13 @@ public class MainActivity extends AppCompatActivity {
                     .setDisappearDuration(600)
                     .setShadowStyle(com.zwb.danmaku.model.BaseDanmaku.SHADOW_STYLE_LAYER)
                     .setDuration(4000)// 显示4秒钟
-                    .setBackgroundId(danmakuStyle.get(new Random().nextInt(12)))
-//                    .setBackgroundId(R.drawable.shape_corner_4_7f666666)
-                    .setPaddingBottom((int) (3 * getResources().getDisplayMetrics().density))
-                    .setPaddingTop((int) (3 * getResources().getDisplayMetrics().density))
-                    .setPaddingLeft((int) (6 * getResources().getDisplayMetrics().density))
-                    .setPaddingRight((int) (6 * getResources().getDisplayMetrics().density));
+//                    .setBackgroundId(danmakuStyle.get(new Random().nextInt(12)))
+                    .setBackgroundId(R.drawable.shape_corner_4_7f666666)
+//                    .setBackgroundId(R.mipmap.ic_launcher)
+                    .setPaddingBottom((3 * getResources().getDisplayMetrics().density))
+                    .setPaddingTop((3 * getResources().getDisplayMetrics().density))
+                    .setPaddingLeft((6 * getResources().getDisplayMetrics().density))
+                    .setPaddingRight((6 * getResources().getDisplayMetrics().density));
             list.add(info);
         }
         danmu4.setDanmukus(list);

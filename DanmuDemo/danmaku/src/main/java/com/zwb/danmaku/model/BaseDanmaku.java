@@ -70,13 +70,13 @@ public abstract class BaseDanmaku {
 
     private int shadowColor;                    // 阴影的颜色
 
-    private int paddingLeft;                    // 左边的内边距
+    private float paddingLeft;                    // 左边的内边距
 
-    private int paddingRight;                   // 右边的内边距
+    private float paddingRight;                   // 右边的内边距
 
-    private int paddingTop;                     // 上面的内边距
+    private float paddingTop;                     // 上面的内边距
 
-    private int paddingBottom;                  // 底部的内边距
+    private float paddingBottom;                  // 底部的内边距
 
     private int shadowStyle = 0;                // 阴影类型
 
@@ -224,38 +224,38 @@ public abstract class BaseDanmaku {
         return this;
     }
 
-    public int getPaddingLeft() {
+    public float getPaddingLeft() {
         return paddingLeft;
     }
 
-    public BaseDanmaku setPaddingLeft(int paddingLeft) {
+    public BaseDanmaku setPaddingLeft(float paddingLeft) {
         this.paddingLeft = paddingLeft;
         return this;
     }
 
-    public int getPaddingRight() {
+    public float getPaddingRight() {
         return paddingRight;
     }
 
-    public BaseDanmaku setPaddingRight(int paddingRight) {
+    public BaseDanmaku setPaddingRight(float paddingRight) {
         this.paddingRight = paddingRight;
         return this;
     }
 
-    public int getPaddingTop() {
+    public float getPaddingTop() {
         return paddingTop;
     }
 
-    public BaseDanmaku setPaddingTop(int paddingTop) {
+    public BaseDanmaku setPaddingTop(float paddingTop) {
         this.paddingTop = paddingTop;
         return this;
     }
 
-    public int getPaddingBottom() {
+    public float getPaddingBottom() {
         return paddingBottom;
     }
 
-    public BaseDanmaku setPaddingBottom(int paddingBottom) {
+    public BaseDanmaku setPaddingBottom(float paddingBottom) {
         this.paddingBottom = paddingBottom;
         return this;
     }
@@ -437,7 +437,7 @@ public abstract class BaseDanmaku {
     public void preparedBg(Context context) {
         try {
             if (context != null && getBackgroundId() != 0 && backgroundBitmap == null) {
-                backgroundBitmap = BitmapUtils.getBitmapByResId(context, getBackgroundId());
+                backgroundBitmap = BitmapUtils.getBackgroundForDanmaku(context, getBackgroundId(), (int) getWidth(), (int) getHeight());
                 bgSrcRect.set(0, 0, backgroundBitmap.getWidth(), backgroundBitmap.getHeight());
             }
         } catch (Exception e) {
