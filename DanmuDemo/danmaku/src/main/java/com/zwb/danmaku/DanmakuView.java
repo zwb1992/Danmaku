@@ -36,6 +36,8 @@ public class DanmakuView extends View {
     private int textColor = Color.WHITE;                               // 默认文字颜色
     private int textShadowColor = Color.TRANSPARENT;                   // 默认阴影颜色
     private int textShadowWidth = 0;                                   // 默认阴影宽度
+    private int lineSpacingExtra = 0;                                  // 文字之间的上下距离（多行的情况下）
+    private int maxWidth = -1;                                         // 弹幕的最大宽度 -1代表不限制大小
     private int shadowStyle = BaseDanmaku.SHADOW_STYLE_LAYER;          // 阴影类型
 
     private DanmakuState mPendingState = DanmakuState.STOP;             // 弹幕预状态
@@ -97,6 +99,8 @@ public class DanmakuView extends View {
             textSize = a.getDimensionPixelOffset(R.styleable.DanmakuView_danmaku_textSize, (int) (den * textSize));
             textShadowWidth = a.getDimensionPixelOffset(R.styleable.DanmakuView_danmaku_textShadowWidth, (int) (textShadowWidth * den));
             trajectoryMargin = a.getDimensionPixelOffset(R.styleable.DanmakuView_danmaku_trajectoryMargin, (int) (trajectoryMargin * den));
+            lineSpacingExtra = a.getDimensionPixelOffset(R.styleable.DanmakuView_danmaku_lineSpacingExtra, (int) (lineSpacingExtra * den));
+            maxWidth = a.getDimensionPixelOffset(R.styleable.DanmakuView_danmaku_maxWidth, maxWidth);
             maxTrajectoryCount = a.getInteger(R.styleable.DanmakuView_danmaku_trajectoryCount, 2);// 先默认只有两个弹道
             maxRepeatCount = a.getInteger(R.styleable.DanmakuView_danmaku_repeatCount, -1);// -1表示无限循环
             interval = a.getInteger(R.styleable.DanmakuView_danmaku_interval, 1000);// 下一个特殊弹幕显示的间隔时间
@@ -122,7 +126,9 @@ public class DanmakuView extends View {
                 .setTextShadowColor(textShadowColor)
                 .setTextShadowWidth(textShadowWidth)
                 .setTextSize(textSize)
-                .setShadowStyle(shadowStyle);
+                .setShadowStyle(shadowStyle)
+                .setMaxWidth(maxWidth)
+                .setLineSpacingExtra(lineSpacingExtra);
 
         getDrawHelper().setDen(den)
                 .setBaseConfig(baseConfig)

@@ -54,7 +54,7 @@ public abstract class BaseScrollerDrawHelper implements IDrawHelper, IScrollerDr
                         if (baseConfig != null) {
                             baseConfig.checkDanmakuConfig(danmaku, false);
                         }
-                        danmaku.initTextSize(textPaint);
+                        danmaku.initSize(textPaint);
                     }
                     initPosition(danmaku, trajectoryInfo, canvasWidth, canvasHeight);
                     danmaku.preparedBg(context);

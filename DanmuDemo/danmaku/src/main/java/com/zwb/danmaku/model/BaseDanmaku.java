@@ -40,63 +40,70 @@ public abstract class BaseDanmaku {
     }
 
     public static final int SHADOW_STYLE_LAYER = 1;             // 阴影类型--paint ShadowLayer
-    public static final int SHADOW_STYLE_STROKE = 2;            // 阴影类型--paint Stroke
+    private static final int SHADOW_STYLE_STROKE = 2;            // 阴影类型--paint Stroke
 
     private Rect textRect = new Rect();
 
-    private String text;                        // 弹幕内容
+    private String text;                                        // 弹幕内容
 
-    private float textSize;                     // 弹幕字体大小
+    private float textSize;                                     // 弹幕字体大小
 
-    private int textColor;                       // 弹幕字体颜色
+    private int textColor;                                      // 弹幕字体颜色
 
-    private float scrollX = 0;                  // x轴的偏移量 随着时间的推移不断变化
+    private float scrollX = 0;                                  // x轴的偏移量 随着时间的推移不断变化
 
-    private float scrollY = 0;                  // y轴的偏移量 随着时间的推移不断变化
+    private float scrollY = 0;                                  // y轴的偏移量 随着时间的推移不断变化
 
-    private float originScrollX = 0;            // x轴的原始偏移量
+    private float originScrollX = 0;                            // x轴的原始偏移量
 
-    private float originScrollY = 0;            // y轴的原始偏移量
+    private float originScrollY = 0;                            // y轴的原始偏移量
 
-    private float speed = 0;                    // 移动的速度（渐变速度）
+    private float speed = 0;                                    // 移动的速度（渐变速度）
 
-    private int textHeight;                     // 弹幕文字的高
+    private int textHeight;                                     // 弹幕文字的高
 
-    private int textWidth;                      // 弹幕文字的宽
+    private int textWidth;                                      // 弹幕文字的宽
 
-    private float offset = 0;                  // 初始位置的偏移量
+    private float offset = 0;                                   // 初始位置的偏移量
 
-    private float shadowWidth;                  // 阴影的宽度
+    private float shadowWidth;                                  // 阴影的宽度
 
-    private int shadowColor;                    // 阴影的颜色
+    private int shadowColor;                                    // 阴影的颜色
 
-    private float paddingLeft;                    // 左边的内边距
+    private float paddingLeft;                                  // 左边的内边距
 
-    private float paddingRight;                   // 右边的内边距
+    private float paddingRight;                                 // 右边的内边距
 
-    private float paddingTop;                     // 上面的内边距
+    private float paddingTop;                                   // 上面的内边距
 
-    private float paddingBottom;                  // 底部的内边距
+    private float paddingBottom;                                // 底部的内边距
 
-    private int shadowStyle = 0;                // 阴影类型
+    private int shadowStyle = 0;                                // 阴影类型
 
-    private boolean isInit;                     // 是否初始化完成
+    private boolean isInit;                                     // 是否完成初始化
 
-    private ShowState showState = ShowState.STATE_NEVER_SHOWED;
+    private int lineSpacingExtra = 0;                           // 文字之间的上下距离（多行的情况下）
 
-    private float alpha = AlphaValue.MAX;        // 透明度
+    private int maxWidth = -1;                                  // 弹幕的最大宽度 -1代表不限制大小
+
+    private float alpha = AlphaValue.MAX;                       // 透明度
+
+    private ShowState showState = ShowState.STATE_NEVER_SHOWED; // 弹幕显示状态
 
     @DrawableRes
-    private int backgroundId;                   // 背景资源id
-    private Bitmap backgroundBitmap;            // 背景图片
-    private Rect bgSrcRect = new Rect();                     // 背景图片源范围
-    private RectF bgDestRect = new RectF();                   // 背景图片输出范围
+    private int backgroundId;                                   // 背景资源id
+    private Bitmap backgroundBitmap;                            // 背景图片
+    private Rect bgSrcRect = new Rect();                        // 背景图片源范围
+    private RectF bgDestRect = new RectF();                     // 背景图片输出范围
 
     /**
      * 针对定点弹幕
      */
     private long duration;                      // 在屏幕显示停留的时间
     private long disappearDuration;             // 从显示到消失的时间--方便做动画   0的话就是直接消失
+
+    private String[] texts;                     // 弹幕分割多行的数据
+    private static final String DANMAKU_BR_CHAR = "\n";
 
     public String getText() {
         return text;
@@ -189,7 +196,11 @@ public abstract class BaseDanmaku {
     }
 
     public float getHeight() {
-        return getTextHeight() + getPaddingBottom() + getPaddingTop() + getShadowWidth() * 2;
+        float height = getTextHeight() + getPaddingBottom() + getPaddingTop() + getShadowWidth() * 2;
+        if (texts != null) {
+            height = getTextHeight() * texts.length + (texts.length - 1) * lineSpacingExtra + getPaddingBottom() + getPaddingTop() + getShadowWidth() * 2;
+        }
+        return height;
     }
 
 
@@ -326,6 +337,26 @@ public abstract class BaseDanmaku {
         return this;
     }
 
+    public int getLineSpacingExtra() {
+        return lineSpacingExtra;
+    }
+
+    public void setLineSpacingExtra(int lineSpacingExtra) {
+        this.lineSpacingExtra = lineSpacingExtra;
+    }
+
+    public int getMaxWidth() {
+        return maxWidth;
+    }
+
+    public void setMaxWidth(int maxWidth) {
+        this.maxWidth = maxWidth;
+    }
+
+    public String[] getTexts() {
+        return texts;
+    }
+
     public int getBackgroundId() {
         return backgroundId;
     }
@@ -364,10 +395,30 @@ public abstract class BaseDanmaku {
      * @param canvasWidth  画布宽度
      * @param canvasHeight 画布高度
      */
-    public abstract void onDrawContent(@NonNull Canvas canvas, @NonNull Paint textPaint, int canvasWidth, int canvasHeight);
+    public void onDrawContent(@NonNull Canvas canvas, @NonNull Paint textPaint, int canvasWidth, int canvasHeight) {
+        if (getTexts() == null) {
+            canvas.drawText(getText(), getScrollX() + getPaddingLeft(), getScrollY() + getPaddingTop() + getTextHeight(), textPaint);
+        } else {
+            float offsetY = 0;
+            for (String content : getTexts()) {
+                canvas.drawText(content, getScrollX() + getPaddingLeft(), getScrollY() + getPaddingTop() + getTextHeight() + offsetY, textPaint);
+                offsetY += getTextHeight() + getLineSpacingExtra();
+            }
+        }
+    }
 
 
-    public abstract void onDrawShadow(@NonNull Canvas canvas, @NonNull Paint mTextShadowPaint, int canvasWidth, int canvasHeight);
+    public void onDrawShadow(@NonNull Canvas canvas, @NonNull Paint mTextShadowPaint, int canvasWidth, int canvasHeight) {
+        if (getTexts() == null) {
+            canvas.drawText(getText(), getScrollX() + getPaddingLeft(), getScrollY() + getPaddingTop() + getTextHeight(), mTextShadowPaint);
+        } else {
+            float offsetY = 0;
+            for (String content : getTexts()) {
+                canvas.drawText(content, getScrollX() + getPaddingLeft(), getScrollY() + getPaddingTop() + getTextHeight() + offsetY, mTextShadowPaint);
+                offsetY += getTextHeight() + getLineSpacingExtra();
+            }
+        }
+    }
 
 
     public void onDrawBackGround(@NonNull Canvas canvas, @NonNull Paint mBackGroundPaint, int canvasWidth, int canvasHeight) {
@@ -418,15 +469,86 @@ public abstract class BaseDanmaku {
         }
     }
 
-    public void initTextSize(Paint paint) {
+    public void initSize(Paint paint) {
         if (TextUtils.isEmpty(getText()) || paint == null) {
             return;
         }
         if (getTextSize() > 0) {
             paint.setTextSize(getTextSize());
         }
-        paint.getTextBounds(getText(), 0, getText().length(), textRect);
-        setTextWidth(textRect.width()).setTextHeight(textRect.height());
+        checkSplitText(paint);
+        if (texts == null) {
+            paint.getTextBounds(getText(), 0, getText().length(), textRect);
+            setTextWidth(textRect.width()).setTextHeight(textRect.height());
+        } else {
+            int width = 0;
+            int height = 0;
+            for (String t : texts) {
+                paint.getTextBounds(t, 0, t.length(), textRect);
+                if (textRect.width() > width) {
+                    width = textRect.width();
+                }
+                if (textRect.height() > height) {
+                    height = textRect.height();
+                }
+            }
+            setTextWidth(width).setTextHeight(height);
+        }
+    }
+
+    /**
+     * 检测是否需要分割字符串
+     */
+    private void checkSplitText(Paint paint) {
+        texts = text.split(DANMAKU_BR_CHAR);
+        // 不限制宽度就直接返回
+        if (getMaxWidth() - getPaddingRight() - getPaddingRight() < 0) {
+            return;
+        }
+        if (texts == null) {
+            texts = splitText(getText(), paint).split(DANMAKU_BR_CHAR);
+        } else {
+            texts = splitTexts(texts, paint).split(DANMAKU_BR_CHAR);
+        }
+    }
+
+    private String splitTexts(String[] texts, Paint paint) {
+        StringBuilder sbNewText = new StringBuilder();
+        for (String rawTextLine : texts) {
+            if (!TextUtils.isEmpty(rawTextLine)) {
+                if (paint.measureText(rawTextLine) <= getMaxWidth() - getPaddingRight() - getPaddingRight()) {
+                    //如果整行宽度在控件可用宽度之内，就不处理了
+                    sbNewText.append(rawTextLine);
+                } else {
+                    sbNewText.append(splitText(rawTextLine, paint));
+                }
+                sbNewText.append(DANMAKU_BR_CHAR);
+            }
+        }
+        //把结尾多余的\n去掉
+        if (!sbNewText.toString().endsWith(DANMAKU_BR_CHAR)) {
+            sbNewText.deleteCharAt(sbNewText.length() - 1);
+        }
+
+        return sbNewText.toString();
+    }
+
+    private String splitText(String text, Paint paint) {
+        StringBuilder sbNewText = new StringBuilder();
+        //如果整行宽度超过控件可用宽度，则按字符测量，在超过可用宽度的前一个字符处手动换行
+        float lineWidth = 0;
+        for (int cnt = 0; cnt != text.length(); ++cnt) {
+            char ch = text.charAt(cnt);
+            lineWidth += paint.measureText(String.valueOf(ch));
+            if (lineWidth <= getMaxWidth() - getPaddingRight() - getPaddingRight()) {
+                sbNewText.append(ch);
+            } else {
+                sbNewText.append(DANMAKU_BR_CHAR);
+                lineWidth = 0;
+                --cnt;
+            }
+        }
+        return sbNewText.toString();
     }
 
     /**

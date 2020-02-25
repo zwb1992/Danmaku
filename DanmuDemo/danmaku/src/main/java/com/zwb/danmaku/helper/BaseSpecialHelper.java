@@ -38,7 +38,7 @@ public class BaseSpecialHelper implements IDrawHelper, ISpecialDrawHelper {
                 if (baseConfig != null) {
                     baseConfig.checkDanmakuConfig(danmaku, true);
                 }
-                danmaku.initTextSize(textPaint);
+                danmaku.initSize(textPaint);
             }
             danmaku.preparedBg(context);
             danmaku.setInit(true);

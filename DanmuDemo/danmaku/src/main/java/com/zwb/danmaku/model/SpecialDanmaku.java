@@ -1,9 +1,5 @@
 package com.zwb.danmaku.model;
 
-import android.graphics.Canvas;
-import android.graphics.Paint;
-import android.support.annotation.NonNull;
-
 /**
  * @ author : zhouweibin
  * @ time: 2019/12/26 14:36.
@@ -41,16 +37,6 @@ public class SpecialDanmaku extends BaseDanmaku {
             setShowState(ShowState.STATE_SHOWING);
             totalShowTime += 16.6;
         }
-    }
-
-    @Override
-    public void onDrawContent(@NonNull Canvas canvas, @NonNull Paint textPaint, int canvasWidth, int canvasHeight) {
-        canvas.drawText(getText(), getScrollX() + getPaddingLeft(), getScrollY() + getPaddingTop() + getTextHeight(), textPaint);
-    }
-
-    @Override
-    public void onDrawShadow(@NonNull Canvas canvas, @NonNull Paint mTextShadowPaint, int canvasWidth, int canvasHeight) {
-        canvas.drawText(getText(), getScrollX() + getPaddingLeft(), getScrollY() + getPaddingTop() + getTextHeight(), mTextShadowPaint);
     }
 
     private void checkSpeed() {

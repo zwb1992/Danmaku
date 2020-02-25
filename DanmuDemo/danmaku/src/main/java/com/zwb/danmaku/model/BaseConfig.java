@@ -15,6 +15,9 @@ public class BaseConfig {
     private int textShadowWidth = 0;                                   // 默认阴影宽度
     private float speed;                                               // 默认速度
     private int shadowStyle = BaseDanmaku.SHADOW_STYLE_LAYER;          // 阴影的类型
+    private int lineSpacingExtra = 0;                                  // 文字之间的上下距离（多行的情况下）
+    private int maxWidth = -1;                                         // 弹幕的最大宽度 -1代表不限制大小
+
 
     public int getTextSize() {
         return textSize;
@@ -70,6 +73,24 @@ public class BaseConfig {
         return this;
     }
 
+    public int getLineSpacingExtra() {
+        return lineSpacingExtra;
+    }
+
+    public BaseConfig setLineSpacingExtra(int lineSpacingExtra) {
+        this.lineSpacingExtra = lineSpacingExtra;
+        return this;
+    }
+
+    public int getMaxWidth() {
+        return maxWidth;
+    }
+
+    public BaseConfig setMaxWidth(int maxWidth) {
+        this.maxWidth = maxWidth;
+        return this;
+    }
+
     /**
      * 检测弹幕的基本配置
      *
@@ -95,6 +116,12 @@ public class BaseConfig {
             }
             if (danmaku.getShadowStyle() <= 0 && shadowStyle > 0) {
                 danmaku.setShadowStyle(shadowStyle);
+            }
+            if (danmaku.getMaxWidth() <= 0) {
+                danmaku.setMaxWidth(maxWidth);
+            }
+            if (danmaku.getLineSpacingExtra() <= 0) {
+                danmaku.setLineSpacingExtra(lineSpacingExtra);
             }
         }
     }

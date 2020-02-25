@@ -358,9 +358,9 @@ public class MainActivity extends AppCompatActivity {
         List<com.zwb.danmaku.model.BaseDanmaku> list = new ArrayList<>();
         for (int i = 0; i < 20; i++) {
             com.zwb.danmaku.model.BaseDanmaku info = DanmakuFactory.create(com.zwb.danmaku.model.BaseDanmaku.DanmakuType.TYPE_SCROLL_LR);
-            info.setText("太好看了, 喜欢")
+            info.setText("太好看了,喜欢")
                     .setOffset((10 + new Random().nextInt(30)) * getResources().getDisplayMetrics().density)
-                    .setTextSize(getResources().getDisplayMetrics().density * 20)
+                    .setTextSize(getResources().getDisplayMetrics().density * 14)
                     .setTextColor(getResources().getColor(R.color.white))
                     .setSpeed(2.6f)
                     .setBackgroundId(R.mipmap.ic_launcher)
@@ -381,9 +381,9 @@ public class MainActivity extends AppCompatActivity {
         List<com.zwb.danmaku.model.BaseDanmaku> list = new ArrayList<>();
         for (int i = 0; i < 25; i++) {
             com.zwb.danmaku.model.BaseDanmaku info = DanmakuFactory.create(com.zwb.danmaku.model.BaseDanmaku.DanmakuType.TYPE_SCROLL_BT);
-            info.setText("太好看了, 喜欢")
+            info.setText("太好看了,喜欢")
                     .setOffset((10 + new Random().nextInt(30)) * getResources().getDisplayMetrics().density)
-                    .setTextSize(getResources().getDisplayMetrics().density * 20)
+                    .setTextSize(getResources().getDisplayMetrics().density * 16)
 //                    .setTextColor(Color.RED)
                     .setSpeed(2.6f)
                     .setBackgroundId(R.mipmap.ic_launcher)
@@ -404,7 +404,7 @@ public class MainActivity extends AppCompatActivity {
         List<com.zwb.danmaku.model.BaseDanmaku> list = new ArrayList<>();
         for (int i = 0; i < 25; i++) {
             com.zwb.danmaku.model.BaseDanmaku info = DanmakuFactory.create(com.zwb.danmaku.model.BaseDanmaku.DanmakuType.TYPE_SPECIAL);
-            info.setText("太好看了, 喜欢")
+            info.setText("太好看了,喜欢")
                     .setTextSize(getResources().getDisplayMetrics().density * 16)
 //                    .setTextColor(Color.RED)
 //                    .setShadowColor(Color.YELLOW)
