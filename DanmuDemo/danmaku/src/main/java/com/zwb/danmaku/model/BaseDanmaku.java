@@ -105,6 +105,8 @@ public abstract class BaseDanmaku {
     private String[] texts;                     // 弹幕分割多行的数据
     private static final String DANMAKU_BR_CHAR = "\n";
 
+    private Object tag;                                         // 给弹幕设置标记
+
     public String getText() {
         return text;
     }
@@ -368,6 +370,14 @@ public abstract class BaseDanmaku {
 
     public Bitmap getBackgroundBitmap() {
         return backgroundBitmap;
+    }
+
+    public Object getTag() {
+        return tag;
+    }
+
+    public void setTag(Object tag) {
+        this.tag = tag;
     }
 
     public abstract DanmakuType getType();

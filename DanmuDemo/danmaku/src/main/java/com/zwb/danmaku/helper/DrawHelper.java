@@ -73,6 +73,26 @@ public class DrawHelper implements IDrawHelper, IScrollerDrawHelper, ISpecialDra
     }
 
     @Override
+    public BaseDanmaku getMatchedDamaku(float x, float y) {
+        if (specialHelper != null && specialHelper.getMatchedDamaku(x, y) != null) {
+            return specialHelper.getMatchedDamaku(x, y);
+        }
+        if (b2THelper != null && b2THelper.getMatchedDamaku(x, y) != null) {
+            return b2THelper.getMatchedDamaku(x, y);
+        }
+        if (t2BHelper != null && t2BHelper.getMatchedDamaku(x, y) != null) {
+            return t2BHelper.getMatchedDamaku(x, y);
+        }
+        if (l2RHelper != null && l2RHelper.getMatchedDamaku(x, y) != null) {
+            return l2RHelper.getMatchedDamaku(x, y);
+        }
+        if (r2LHelper != null && r2LHelper.getMatchedDamaku(x, y) != null) {
+            return r2LHelper.getMatchedDamaku(x, y);
+        }
+        return null;
+    }
+
+    @Override
     public DrawHelper setSpeed(float speed) {
         if (baseConfig != null) {
             baseConfig.setSpeed(speed);

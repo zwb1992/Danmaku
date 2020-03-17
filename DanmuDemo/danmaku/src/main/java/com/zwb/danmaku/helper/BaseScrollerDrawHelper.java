@@ -310,5 +310,25 @@ public abstract class BaseScrollerDrawHelper implements IDrawHelper, IScrollerDr
         }
         penddingDanmakus.addAll(originDanmakus);
     }
+
+    @Override
+    public BaseDanmaku getMatchedDamaku(float x, float y) {
+        if (mTrajectoryInfos != null) {
+            for (TrajectoryInfo trajectoryInfo : mTrajectoryInfos) {
+                if (!trajectoryInfo.getShowingDanmakus().isEmpty()) {
+                    for (BaseDanmaku danmaku : trajectoryInfo.getShowingDanmakus()) {
+                        if (danmaku.getShowState() == BaseDanmaku.ShowState.STATE_SHOWING) {
+                            if (x >= danmaku.getScrollX() && x <= danmaku.getScrollX() + danmaku.getWidth()
+                                    && y >= danmaku.getScrollY() && y <= danmaku.getScrollY() + danmaku.getHeight()) {
+                                return danmaku;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        return null;
+    }
 }
 

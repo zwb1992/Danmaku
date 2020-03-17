@@ -12,8 +12,10 @@ import android.os.Looper;
 import android.os.Message;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
+import android.view.MotionEvent;
 import android.view.View;
 
+import com.zwb.danmaku.helper.DanmakuTouchHelper;
 import com.zwb.danmaku.helper.DrawState;
 import com.zwb.danmaku.model.BaseConfig;
 import com.zwb.danmaku.helper.DrawHelper;
@@ -27,7 +29,7 @@ import java.util.List;
  * @ time: 2019/12/24 10:09.
  * @ desc: 弹幕
  **/
-public class DanmakuView extends View {
+public class DanmakuView extends View implements IDanmakuView {
 
     private Paint textPaint;                                           // 文字画笔
     private Paint textShadowPaint;                                     // 文字阴影画笔
@@ -63,7 +65,10 @@ public class DanmakuView extends View {
     private Handler drawHandler;
     private final static int HANDLER_WHAT_START_DRAW = 0X11;
     private final static int HANDLER_WHAT_STOP_DRAW = 0X12;
+    private IDanmakuView.OnDanmakuClickListener onDanmakuClickListener;
+    private DanmakuTouchHelper mTouchHelper;
 
+    @Override
     public DrawHelper getDrawHelper() {
         if (drawHelper == null) {
             drawHelper = new DrawHelper();
@@ -136,6 +141,8 @@ public class DanmakuView extends View {
                 .setMaxTrajectoryCount(maxTrajectoryCount)
                 .setInterval(interval)
                 .setCountLimit(countLimit);
+
+        mTouchHelper = new DanmakuTouchHelper(this);
     }
 
     @Override
@@ -147,11 +154,7 @@ public class DanmakuView extends View {
     }
 
 
-    /**
-     * 设置弹道的数量
-     *
-     * @param maxTrajectoryCount 弹道的数量
-     */
+    @Override
     public DanmakuView setMaxTrajectoryCount(int maxTrajectoryCount) {
         if (maxTrajectoryCount > 0) {
             this.maxTrajectoryCount = maxTrajectoryCount;
@@ -160,16 +163,13 @@ public class DanmakuView extends View {
         return this;
     }
 
-    /**
-     * 设置最大重试次数
-     *
-     * @param maxRepeatCount
-     */
+    @Override
     public DanmakuView setMaxRepeatCount(int maxRepeatCount) {
         this.maxRepeatCount = maxRepeatCount;
         return this;
     }
 
+    @Override
     public DanmakuView setInterval(long interval) {
         if (interval > 0) {
             this.interval = interval;
@@ -178,6 +178,7 @@ public class DanmakuView extends View {
         return this;
     }
 
+    @Override
     public DanmakuView setCountLimit(int countLimit) {
         if (countLimit > 0) {
             this.countLimit = countLimit;
@@ -186,15 +187,12 @@ public class DanmakuView extends View {
         return this;
     }
 
+    @Override
     public void setShadowStyle(int shadowStyle) {
         this.shadowStyle = this.shadowStyle;
     }
 
-    /**
-     * 设置需要展示的弹幕
-     *
-     * @param danmukus 弹幕列表
-     */
+    @Override
     public synchronized void setDanmukus(List<BaseDanmaku> danmukus) {
         if (danmukus != null) {
             this.danmukus.clear();
@@ -204,6 +202,7 @@ public class DanmakuView extends View {
         }
     }
 
+    @Override
     public synchronized void addDanmuku(BaseDanmaku info) {
         if (info != null) {
             danmukus.add(info);
@@ -211,6 +210,7 @@ public class DanmakuView extends View {
         }
     }
 
+    @Override
     public synchronized void addDanmukus(List<BaseDanmaku> danmukus) {
         if (danmukus != null && !danmukus.isEmpty()) {
             this.danmukus.addAll(danmukus);
@@ -218,23 +218,26 @@ public class DanmakuView extends View {
         }
     }
 
+    @Override
     public void stop() {
         mPendingState = DanmakuState.STOP;
         pause();
     }
 
-
+    @Override
     public void start() {
         mPendingState = DanmakuState.START;
         resume();
     }
 
+    @Override
     public void pause() {
         mCurrentState = DanmakuState.STOP;
         sendStop();
         quitHandlerThread();
     }
 
+    @Override
     public void resume() {
         if (!isAttach || !isVisible) {
             return;
@@ -247,6 +250,25 @@ public class DanmakuView extends View {
         }
     }
 
+    /**
+     * 是否正在播放
+     *
+     * @return false
+     */
+    public boolean isPlaying() {
+        return mCurrentState == DanmakuState.START;
+    }
+
+    /**
+     * 获取当前的播放状态
+     *
+     * @return state
+     */
+    public DanmakuState getState() {
+        return mCurrentState;
+    }
+
+    @Override
     public synchronized void clear() {
         repeatCount = 0;
         mPendingState = DanmakuState.STOP;
@@ -255,6 +277,16 @@ public class DanmakuView extends View {
         danmukus.clear();
         getDrawHelper().clear();
         invalidate();
+    }
+
+    @Override
+    public void setOnDanmakuClickListener(OnDanmakuClickListener listener) {
+        onDanmakuClickListener = listener;
+    }
+
+    @Override
+    public OnDanmakuClickListener getOnDanmakuClickListener() {
+        return onDanmakuClickListener;
     }
 
     @Override
@@ -360,5 +392,21 @@ public class DanmakuView extends View {
             drawHandler.removeMessages(HANDLER_WHAT_STOP_DRAW);
             drawHandler.sendEmptyMessage(HANDLER_WHAT_STOP_DRAW);
         }
+    }
+
+    @Override
+    public BaseDanmaku getMatchedDamaku(float x, float y) {
+        if (getDrawHelper() != null) {
+            return getDrawHelper().getMatchedDamaku(x, y);
+        }
+        return null;
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        if (mTouchHelper.onTouchEvent(event)) {
+            return true;
+        }
+        return super.onTouchEvent(event);
     }
 }

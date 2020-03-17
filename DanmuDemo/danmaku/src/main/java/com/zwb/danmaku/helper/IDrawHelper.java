@@ -93,6 +93,15 @@ public interface IDrawHelper {
     void addDanmakus(@NonNull List<BaseDanmaku> danmakus);
 
     /**
+     * 获取命中的弹幕 点击的时候
+     *
+     * @param x x轴坐标
+     * @param y y轴坐标
+     * @return null
+     */
+    BaseDanmaku getMatchedDamaku(float x, float y);
+
+    /**
      * 清除画布
      */
     void clear();
