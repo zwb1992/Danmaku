@@ -431,7 +431,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void addDanmaku(boolean islive) {
         //创建一个弹幕对象，这里后面的属性是设置滚动方向的！
-        BaseDanmaku danmaku = mContext.mDanmakuFactory.createDanmaku(BaseDanmaku.TYPE_FIX_TOP);
+        BaseDanmaku danmaku = mContext.mDanmakuFactory.createDanmaku(BaseDanmaku.TYPE_SCROLL_RL);
         if (danmaku == null || mDanmakuView == null) {
             return;
         }

@@ -105,13 +105,13 @@ public interface IDanmakuView {
     void clear();
 
     /**
-     * 获取命中的弹幕 点击的时候
+     * 获取手势触摸命中的弹幕
      *
      * @param x x轴坐标
      * @param y y轴坐标
      * @return null
      */
-    BaseDanmaku getMatchedDamaku(float x, float y);
+    BaseDanmaku getTouchMatchedDamaku(float x, float y);
 
 
     // ------------- Click Listener -------------------

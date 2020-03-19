@@ -395,7 +395,7 @@ public class DanmakuView extends View implements IDanmakuView {
     }
 
     @Override
-    public BaseDanmaku getMatchedDamaku(float x, float y) {
+    public BaseDanmaku getTouchMatchedDamaku(float x, float y) {
         if (getDrawHelper() != null) {
             return getDrawHelper().getMatchedDamaku(x, y);
         }

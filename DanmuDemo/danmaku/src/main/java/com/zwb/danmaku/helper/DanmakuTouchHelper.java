@@ -26,7 +26,7 @@ public class DanmakuTouchHelper {
                     if (onDanmakuClickListener.onDown(event.getX(), event.getY())) {
                         return true;
                     }
-                    BaseDanmaku danmaku = danmakuView.getMatchedDamaku(event.getX(), event.getY());
+                    BaseDanmaku danmaku = danmakuView.getTouchMatchedDamaku(event.getX(), event.getY());
                     if (danmaku != null) {
                         return true;
                     }
@@ -37,7 +37,7 @@ public class DanmakuTouchHelper {
 
         @Override
         public boolean onSingleTapConfirmed(MotionEvent event) {
-            BaseDanmaku danmaku = danmakuView.getMatchedDamaku(event.getX(), event.getY());
+            BaseDanmaku danmaku = danmakuView.getTouchMatchedDamaku(event.getX(), event.getY());
             boolean isEventConsumed = false;
             if (null != danmaku) {
                 isEventConsumed = performDanmakuClick(danmaku, false);
@@ -54,7 +54,7 @@ public class DanmakuTouchHelper {
             if (onDanmakuClickListener == null) {
                 return;
             }
-            BaseDanmaku danmaku = danmakuView.getMatchedDamaku(event.getX(), event.getY());
+            BaseDanmaku danmaku = danmakuView.getTouchMatchedDamaku(event.getX(), event.getY());
             if (null != danmaku) {
                 performDanmakuClick(danmaku, true);
             }
