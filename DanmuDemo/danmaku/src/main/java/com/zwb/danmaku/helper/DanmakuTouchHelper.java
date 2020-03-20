@@ -23,11 +23,11 @@ public class DanmakuTouchHelper {
                 IDanmakuView.OnDanmakuClickListener onDanmakuClickListener = danmakuView.getOnDanmakuClickListener();
                 if (onDanmakuClickListener != null) {
                     // 事件被弹幕控件消费 不能透传下去
-                    if (onDanmakuClickListener.onDown(event.getX(), event.getY())) {
+                    if (onDanmakuClickListener.onDownView(event.getX(), event.getY())) {
                         return true;
                     }
                     BaseDanmaku danmaku = danmakuView.getTouchMatchedDamaku(event.getX(), event.getY());
-                    if (danmaku != null) {
+                    if (danmaku != null && onDanmakuClickListener.onDownDanmaku(event.getX(), event.getY())) {
                         return true;
                     }
                 }
@@ -37,13 +37,22 @@ public class DanmakuTouchHelper {
 
         @Override
         public boolean onSingleTapConfirmed(MotionEvent event) {
+            IDanmakuView.OnDanmakuClickListener onDanmakuClickListener = danmakuView.getOnDanmakuClickListener();
+            if (onDanmakuClickListener == null) {
+                return false;
+            }
+            // 事件只被弹幕控件消费
+            if (onDanmakuClickListener.onDownView(event.getX(), event.getY())) {
+                return performViewClick(false);
+            }
+            // 事件不被弹幕控件中的item消费
+            if (!onDanmakuClickListener.onDownDanmaku(event.getX(), event.getY())) {
+                return false;
+            }
             BaseDanmaku danmaku = danmakuView.getTouchMatchedDamaku(event.getX(), event.getY());
             boolean isEventConsumed = false;
             if (null != danmaku) {
                 isEventConsumed = performDanmakuClick(danmaku, false);
-            }
-            if (!isEventConsumed) {
-                isEventConsumed = performViewClick();
             }
             return isEventConsumed;
         }
@@ -52,6 +61,15 @@ public class DanmakuTouchHelper {
         public void onLongPress(MotionEvent event) {
             IDanmakuView.OnDanmakuClickListener onDanmakuClickListener = danmakuView.getOnDanmakuClickListener();
             if (onDanmakuClickListener == null) {
+                return;
+            }
+            // 事件只被弹幕控件消费
+            if (onDanmakuClickListener.onDownView(event.getX(), event.getY())) {
+                performViewClick(true);
+                return;
+            }
+            // 事件不被弹幕控件中的item消费
+            if (!onDanmakuClickListener.onDownDanmaku(event.getX(), event.getY())) {
                 return;
             }
             BaseDanmaku danmaku = danmakuView.getTouchMatchedDamaku(event.getX(), event.getY());
@@ -78,10 +96,14 @@ public class DanmakuTouchHelper {
         return false;
     }
 
-    private boolean performViewClick() {
+    private boolean performViewClick(boolean isLongClick) {
         IDanmakuView.OnDanmakuClickListener onDanmakuClickListener = danmakuView.getOnDanmakuClickListener();
         if (onDanmakuClickListener != null) {
-            return onDanmakuClickListener.onViewClick(danmakuView);
+            if (!isLongClick) {
+                return onDanmakuClickListener.onViewClick(danmakuView);
+            } else {
+                return onDanmakuClickListener.onViewLongClick(danmakuView);
+            }
         }
         return false;
     }

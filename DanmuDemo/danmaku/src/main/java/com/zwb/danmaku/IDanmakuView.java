@@ -141,13 +141,30 @@ public interface IDanmakuView {
         boolean onViewClick(IDanmakuView view);
 
         /**
-         * 点击弹幕事件
+         * 弹幕长按事件
+         *
+         * @param view 弹幕控件
+         * @return 是否拦截事件
+         */
+        boolean onViewLongClick(IDanmakuView view);
+
+        /**
+         * 点击弹幕事件--整个控件
          *
          * @param x x轴坐标
          * @param y y轴坐标
-         * @return 是否消费down事件 false
+         * @return 是否消费down事件 false 事件由某一个弹幕控件消费
          */
-        boolean onDown(float x, float y);
+        boolean onDownView(float x, float y);
+
+        /**
+         * 点击弹幕事件--控件上的某个弹幕
+         *
+         * @param x x轴坐标
+         * @param y y轴坐标
+         * @return 是否消费down事件 false   事件由某一个弹幕item消费
+         */
+        boolean onDownDanmaku(float x, float y);
     }
 
     void setOnDanmakuClickListener(OnDanmakuClickListener listener);

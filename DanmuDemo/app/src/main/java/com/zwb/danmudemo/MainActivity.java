@@ -250,6 +250,16 @@ public class MainActivity extends AppCompatActivity {
         danmu4.setOnDanmakuClickListener(new SimpleDanmakuClickListener() {
 
             @Override
+            public boolean onDownDanmaku(float x, float y) {
+                return true;
+            }
+
+            @Override
+            public boolean onDownView(float x, float y) {
+                return false;
+            }
+
+            @Override
             public boolean onDanmakuClick(com.zwb.danmaku.model.BaseDanmaku danmakus) {
                 Toast.makeText(MainActivity.this, "点击的弹幕：" + danmakus.getText(), Toast.LENGTH_SHORT).show();
                 if (danmu4.isPlaying()) {
@@ -257,7 +267,7 @@ public class MainActivity extends AppCompatActivity {
                 } else {
                     danmu4.resume();
                 }
-                return true;
+                return false;
             }
 
             @Override
@@ -268,17 +278,19 @@ public class MainActivity extends AppCompatActivity {
                 } else {
                     danmu4.resume();
                 }
-                return true;
+                return false;
             }
 
             @Override
             public boolean onViewClick(com.zwb.danmaku.IDanmakuView view) {
+                Toast.makeText(MainActivity.this, "弹幕的点击事件", Toast.LENGTH_SHORT).show();
                 return false;
             }
 
             @Override
-            public boolean onDown(float x, float y) {
-                return false;
+            public boolean onViewLongClick(com.zwb.danmaku.IDanmakuView view) {
+                Toast.makeText(MainActivity.this, "弹幕的长按事件", Toast.LENGTH_SHORT).show();
+                return super.onViewLongClick(view);
             }
         });
         initDanmu();
@@ -364,21 +376,23 @@ public class MainActivity extends AppCompatActivity {
             mDanmakuView.prepare(defaultDanmakuParser, mContext);
             mDanmakuView.enableDanmakuDrawingCache(true);
             mDanmakuView.setOnDanmakuClickListener(new IDanmakuView.OnDanmakuClickListener() {
+
+
                 @Override
                 public boolean onDanmakuClick(IDanmakus danmakus) {
                     Toast.makeText(MainActivity.this, danmakus.first().text, Toast.LENGTH_SHORT).show();
-                    return true;
+                    return false;
                 }
 
                 @Override
                 public boolean onDanmakuLongClick(IDanmakus danmakus) {
                     Toast.makeText(MainActivity.this, danmakus.first().text, Toast.LENGTH_SHORT).show();
-                    return true;
+                    return false;
                 }
 
                 @Override
                 public boolean onViewClick(IDanmakuView view) {
-                    return true;
+                    return false;
                 }
             });
         }

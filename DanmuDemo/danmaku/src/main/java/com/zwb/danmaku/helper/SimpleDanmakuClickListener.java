@@ -25,7 +25,17 @@ public class SimpleDanmakuClickListener implements IDanmakuView.OnDanmakuClickLi
     }
 
     @Override
-    public boolean onDown(float x, float y) {
+    public boolean onViewLongClick(IDanmakuView view) {
+        return false;
+    }
+
+    @Override
+    public boolean onDownView(float x, float y) {
+        return false;
+    }
+
+    @Override
+    public boolean onDownDanmaku(float x, float y) {
         return false;
     }
 }
