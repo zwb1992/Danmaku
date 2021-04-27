@@ -56,6 +56,7 @@ public class MainActivity extends AppCompatActivity {
         mDanmakuView = findViewById(R.id.danmu);
         danmu = findViewById(R.id.danmu2);
         danmu3 = findViewById(R.id.danmu3);
+        danmu3.setOffScreenLimit(1);
         danmu4 = findViewById(R.id.danmu4);
         btAdd = findViewById(R.id.btAdd);
         btAdd2 = findViewById(R.id.btAdd2);
@@ -127,17 +128,18 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 com.zwb.danmaku.model.BaseDanmaku info = DanmakuFactory.create(com.zwb.danmaku.model.BaseDanmaku.DanmakuType.TYPE_SCROLL_RL);
                 info.setText("霸气霸气")
-                        .setOffset((10 + new Random().nextInt(30)) * getResources().getDisplayMetrics().density)
+//                        .setOffset((10 + new Random().nextInt(30)) * getResources().getDisplayMetrics().density)
+                        .setOffset(20 * getResources().getDisplayMetrics().density)
                         .setTextSize(getResources().getDisplayMetrics().density * 26)
                         .setTextColor(Color.RED)
-                        .setSpeed(1)
+                        .setSpeed(2.6f)
                         .setShadowColor(Color.YELLOW)
                         .setShadowWidth(3 * getResources().getDisplayMetrics().density)
                         .setPaddingBottom((int) (3 * getResources().getDisplayMetrics().density))
                         .setPaddingTop((int) (3 * getResources().getDisplayMetrics().density))
                         .setPaddingLeft((int) (6 * getResources().getDisplayMetrics().density))
                         .setPaddingRight((int) (6 * getResources().getDisplayMetrics().density));
-                danmu3.addDanmuku(info);
+                danmu3.addDanmuku(info, true);
             }
         });
         btData3.setOnClickListener(new View.OnClickListener() {
@@ -498,9 +500,11 @@ public class MainActivity extends AppCompatActivity {
     private void initDanmu3() {
         List<com.zwb.danmaku.model.BaseDanmaku> list = new ArrayList<>();
         for (int i = 0; i < 25; i++) {
-            com.zwb.danmaku.model.BaseDanmaku info = DanmakuFactory.create(com.zwb.danmaku.model.BaseDanmaku.DanmakuType.TYPE_SCROLL_BT);
+//            com.zwb.danmaku.model.BaseDanmaku info = DanmakuFactory.create(com.zwb.danmaku.model.BaseDanmaku.DanmakuType.TYPE_SCROLL_BT);
+            com.zwb.danmaku.model.BaseDanmaku info = DanmakuFactory.create(com.zwb.danmaku.model.BaseDanmaku.DanmakuType.TYPE_SCROLL_RL);
             info.setText("太好看了,喜欢")
-                    .setOffset((10 + new Random().nextInt(30)) * getResources().getDisplayMetrics().density)
+//                    .setOffset((10 + new Random().nextInt(30)) * getResources().getDisplayMetrics().density)
+                    .setOffset(20 * getResources().getDisplayMetrics().density)
                     .setTextSize(getResources().getDisplayMetrics().density * 16)
 //                    .setTextColor(Color.RED)
                     .setSpeed(2.6f)

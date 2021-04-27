@@ -90,7 +90,6 @@
             android:layout_height="150dp"
             android:layout_marginTop="10dp"
             android:background="@color/white"
-            app:danmaku_maxWidth="80dp"
             app:danmaku_repeatCount="-1"
             app:danmaku_shadowStyle="stroke"
             app:danmaku_speed="2"
@@ -98,7 +97,7 @@
             app:danmaku_textShadowColor="@color/gray"
             app:danmaku_textShadowWidth="1dp"
             app:danmaku_textSize="21sp"
-            app:danmaku_trajectoryCount="3"
+            app:danmaku_trajectoryCount="1"
             app:danmaku_trajectoryMargin="14dp" />
 
         <LinearLayout

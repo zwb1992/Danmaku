@@ -28,6 +28,14 @@ public interface IDanmakuView {
     DanmakuView setMaxTrajectoryCount(int maxTrajectoryCount);
 
     /**
+     * 设置屏幕外初始化的弹幕数量
+     *
+     * @param offScreenLimit
+     * @return
+     */
+    DanmakuView setOffScreenLimit(int offScreenLimit);
+
+    /**
      * 设置最大循环播放次数
      *
      * @param maxRepeatCount 次数
@@ -71,6 +79,14 @@ public interface IDanmakuView {
      * @param info 弹幕信息
      */
     void addDanmuku(BaseDanmaku info);
+
+    /**
+     * 添加显示的弹幕
+     *
+     * @param info     弹幕信息
+     * @param addFirst 添加在最前面--屏幕外即将显示的那个（未初始化的那个）
+     */
+    void addDanmuku(BaseDanmaku info, boolean addFirst);
 
     /**
      * 添加显示的弹幕列表

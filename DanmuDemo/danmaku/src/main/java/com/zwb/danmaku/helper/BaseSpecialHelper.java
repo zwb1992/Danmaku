@@ -98,8 +98,28 @@ public class BaseSpecialHelper implements IDrawHelper, ISpecialDrawHelper {
 
     @Override
     public synchronized void addDanmaku(@NonNull BaseDanmaku danmaku) {
-        originDanmakus.add(danmaku);
-        penddingDanmakus.add(danmaku);
+        addDanmaku(danmaku, false);
+    }
+
+    @Override
+    public void addDanmaku(@NonNull BaseDanmaku danmaku, boolean addFirst) {
+        if (addFirst) {
+            // 当前弹幕全部显示完了，添加在最后面
+            if (penddingDanmakus.isEmpty()) {
+                addDanmaku(danmaku);
+            } else {
+                // 将弹幕插入到指定的位置
+                BaseDanmaku bean = penddingDanmakus.get(0);
+                penddingDanmakus.add(0, danmaku);
+                int index = originDanmakus.indexOf(bean);
+                if (index >= 0) {
+                    originDanmakus.add(index, danmaku);
+                }
+            }
+        } else {
+            this.originDanmakus.add(danmaku);
+            this.penddingDanmakus.add(danmaku);
+        }
     }
 
     @Override

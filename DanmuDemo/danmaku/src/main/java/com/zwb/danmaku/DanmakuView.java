@@ -164,6 +164,12 @@ public class DanmakuView extends View implements IDanmakuView {
     }
 
     @Override
+    public DanmakuView setOffScreenLimit(int offScreenLimit) {
+        getDrawHelper().setOffScreenLimit(offScreenLimit);
+        return this;
+    }
+
+    @Override
     public DanmakuView setMaxRepeatCount(int maxRepeatCount) {
         this.maxRepeatCount = maxRepeatCount;
         return this;
@@ -207,6 +213,14 @@ public class DanmakuView extends View implements IDanmakuView {
         if (info != null) {
             danmukus.add(info);
             getDrawHelper().addDanmaku(info);
+        }
+    }
+
+    @Override
+    public void addDanmuku(BaseDanmaku info, boolean addFirst) {
+        if (info != null) {
+            danmukus.add(info);
+            getDrawHelper().addDanmaku(info, addFirst);
         }
     }
 

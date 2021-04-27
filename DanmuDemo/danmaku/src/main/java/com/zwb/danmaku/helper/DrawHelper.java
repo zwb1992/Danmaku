@@ -204,21 +204,26 @@ public class DrawHelper implements IDrawHelper, IScrollerDrawHelper, ISpecialDra
 
     @Override
     public void addDanmaku(@NonNull BaseDanmaku danmaku) {
+        addDanmaku(danmaku, false);
+    }
+
+    @Override
+    public void addDanmaku(@NonNull BaseDanmaku danmaku, boolean addFirst) {
         if (danmaku.getType() == BaseDanmaku.DanmakuType.TYPE_SCROLL_RL) {
             checkR2LHelper();
-            r2LHelper.addDanmaku(danmaku);
+            r2LHelper.addDanmaku(danmaku, addFirst);
         } else if (danmaku.getType() == BaseDanmaku.DanmakuType.TYPE_SCROLL_LR) {
             checkL2RHelper();
-            l2RHelper.addDanmaku(danmaku);
+            l2RHelper.addDanmaku(danmaku, addFirst);
         } else if (danmaku.getType() == BaseDanmaku.DanmakuType.TYPE_SCROLL_TB) {
             checkT2BHelper();
-            t2BHelper.addDanmaku(danmaku);
+            t2BHelper.addDanmaku(danmaku, addFirst);
         } else if (danmaku.getType() == BaseDanmaku.DanmakuType.TYPE_SCROLL_BT) {
             checkB2THelper();
-            b2THelper.addDanmaku(danmaku);
+            b2THelper.addDanmaku(danmaku, addFirst);
         } else if (danmaku.getType() == BaseDanmaku.DanmakuType.TYPE_SPECIAL) {
             checkSpecialHelper();
-            specialHelper.addDanmaku(danmaku);
+            specialHelper.addDanmaku(danmaku, addFirst);
         }
     }
 

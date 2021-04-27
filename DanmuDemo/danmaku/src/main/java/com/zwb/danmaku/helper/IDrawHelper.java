@@ -86,6 +86,14 @@ public interface IDrawHelper {
     void addDanmaku(@NonNull BaseDanmaku danmaku);
 
     /**
+     * 添加一个新的的弹幕
+     *
+     * @param danmaku  弹幕
+     * @param addFirst 添加在最前面--屏幕外即将显示的那个（未初始化的那个）
+     */
+    void addDanmaku(@NonNull BaseDanmaku danmaku, boolean addFirst);
+
+    /**
      * 添加一个新的的弹幕列表
      *
      * @param danmakus 弹幕列表
