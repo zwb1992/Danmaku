@@ -27,7 +27,8 @@ public abstract class BaseDanmaku {
         TYPE_SCROLL_LR,         // 从左向右
         TYPE_SCROLL_TB,         // 从上向下
         TYPE_SCROLL_BT,         // 从下向上
-        TYPE_SPECIAL            // 特殊弹幕
+        TYPE_SPECIAL,           // 特殊弹幕
+        TYPE_MARQUEE            // 跑马灯弹幕
     }
 
     /**
@@ -42,7 +43,7 @@ public abstract class BaseDanmaku {
     public static final int SHADOW_STYLE_LAYER = 1;             // 阴影类型--paint ShadowLayer
     private static final int SHADOW_STYLE_STROKE = 2;            // 阴影类型--paint Stroke
 
-    private Rect textRect = new Rect();
+    private Rect textRect = new Rect();                         // 文字绘制的范围
 
     private String text;                                        // 弹幕内容
 
@@ -93,8 +94,8 @@ public abstract class BaseDanmaku {
     @DrawableRes
     private int backgroundId;                                   // 背景资源id
     private Bitmap backgroundBitmap;                            // 背景图片
-    private Rect bgSrcRect = new Rect();                        // 背景图片源范围
-    private RectF bgDestRect = new RectF();                     // 背景图片输出范围
+    protected Rect bgSrcRect = new Rect();                      // 背景图片源范围
+    protected RectF bgDestRect = new RectF();                   // 背景图片输出范围
 
     /**
      * 针对定点弹幕
@@ -406,6 +407,7 @@ public abstract class BaseDanmaku {
      * @param canvasHeight 画布高度
      */
     public void onDrawContent(@NonNull Canvas canvas, @NonNull Paint textPaint, int canvasWidth, int canvasHeight) {
+        textPaint.setTextAlign(Paint.Align.LEFT);
         if (getTexts() == null) {
             canvas.drawText(getText(), getScrollX() + getPaddingLeft(), getScrollY() + getPaddingTop() + getTextHeight(), textPaint);
         } else {
@@ -419,6 +421,7 @@ public abstract class BaseDanmaku {
 
 
     public void onDrawShadow(@NonNull Canvas canvas, @NonNull Paint mTextShadowPaint, int canvasWidth, int canvasHeight) {
+        mTextShadowPaint.setTextAlign(Paint.Align.LEFT);
         if (getTexts() == null) {
             canvas.drawText(getText(), getScrollX() + getPaddingLeft(), getScrollY() + getPaddingTop() + getTextHeight(), mTextShadowPaint);
         } else {

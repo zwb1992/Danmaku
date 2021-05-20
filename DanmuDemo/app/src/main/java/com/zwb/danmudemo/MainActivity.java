@@ -30,10 +30,12 @@ public class MainActivity extends AppCompatActivity {
     private DanmakuContext mContext;
     private Button btAdd, btAdd2, btStart2, btStop2, btClear2, btAdd3, btStart3, btStop3, btClear3, btData3;
     private Button btAdd4, btStart4, btStop4, btClear4, btData4;
+    private Button btAdd5, btStart5, btStop5, btClear5, btData5;
 
     private com.zwb.danmaku.DanmakuView danmu;
     private com.zwb.danmaku.DanmakuView danmu3;
     private com.zwb.danmaku.DanmakuView danmu4;
+    private com.zwb.danmaku.DanmakuView danmu5;
 
     private List<Integer> danmakuStyle = new ArrayList<>();
 
@@ -58,6 +60,7 @@ public class MainActivity extends AppCompatActivity {
         danmu3 = findViewById(R.id.danmu3);
         danmu3.setOffScreenLimit(1);
         danmu4 = findViewById(R.id.danmu4);
+        danmu5 = findViewById(R.id.danmu5);
         btAdd = findViewById(R.id.btAdd);
         btAdd2 = findViewById(R.id.btAdd2);
         btStart2 = findViewById(R.id.btStart2);
@@ -75,6 +78,12 @@ public class MainActivity extends AppCompatActivity {
         btStop4 = findViewById(R.id.btStop4);
         btClear4 = findViewById(R.id.btClear4);
         btData4 = findViewById(R.id.btData4);
+
+        btAdd5 = findViewById(R.id.btAdd5);
+        btStart5 = findViewById(R.id.btStart5);
+        btStop5 = findViewById(R.id.btStop5);
+        btClear5 = findViewById(R.id.btClear5);
+        btData5 = findViewById(R.id.btData5);
 
         btAdd.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -205,6 +214,44 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 danmu4.clear();
+            }
+        });
+
+        btAdd5.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                com.zwb.danmaku.model.BaseDanmaku info = DanmakuFactory.create(com.zwb.danmaku.model.BaseDanmaku.DanmakuType.TYPE_MARQUEE);
+                info.setText("别错~过哦\uD83D\uDC47")
+                        .setTextSize(getResources().getDisplayMetrics().density * 20)
+                        .setOffset(20 * getResources().getDisplayMetrics().density)
+                        .setTextColor(Color.RED)
+                        .setShadowColor(Color.YELLOW)
+                        .setShadowWidth(3 * getResources().getDisplayMetrics().density);
+                danmu5.addDanmuku(info);
+            }
+        });
+        btData5.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                initDanmu5();
+            }
+        });
+        btStart5.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                danmu5.start();
+            }
+        });
+        btStop5.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                danmu5.stop();
+            }
+        });
+        btClear5.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                danmu5.clear();
             }
         });
 
@@ -547,5 +594,41 @@ public class MainActivity extends AppCompatActivity {
             list.add(info);
         }
         danmu4.setDanmukus(list);
+    }
+
+    private void initDanmu5() {
+        List<com.zwb.danmaku.model.BaseDanmaku> list = new ArrayList<>();
+        for (int i = 0; i < 5; i++) {
+            com.zwb.danmaku.model.BaseDanmaku info = DanmakuFactory.create(com.zwb.danmaku.model.BaseDanmaku.DanmakuType.TYPE_MARQUEE);
+            info.setText("别错~过哦\uD83D\uDC47" + i)
+                    .setTextSize(getResources().getDisplayMetrics().density * 16)
+//                    .setTextColor(Color.RED)
+//                    .setShadowColor(Color.YELLOW)
+//                    .setShadowWidth(3 * getResources().getDisplayMetrics().density)
+                    .setOffset(20 * getResources().getDisplayMetrics().density)
+                    .setShadowStyle(com.zwb.danmaku.model.BaseDanmaku.SHADOW_STYLE_LAYER)
+                    .setBackgroundId(danmakuStyle.get(new Random().nextInt(12)))
+                    .setPaddingBottom((3 * getResources().getDisplayMetrics().density))
+                    .setPaddingTop((3 * getResources().getDisplayMetrics().density))
+                    .setPaddingLeft((6 * getResources().getDisplayMetrics().density))
+                    .setPaddingRight((6 * getResources().getDisplayMetrics().density));
+            list.add(info);
+
+            info = DanmakuFactory.create(com.zwb.danmaku.model.BaseDanmaku.DanmakuType.TYPE_MARQUEE);
+            info.setText("俺都看见电脑课" + i)
+                    .setTextSize(getResources().getDisplayMetrics().density * 16)
+//                    .setTextColor(Color.RED)
+//                    .setShadowColor(Color.YELLOW)
+//                    .setShadowWidth(3 * getResources().getDisplayMetrics().density)
+                    .setOffset(20 * getResources().getDisplayMetrics().density)
+                    .setShadowStyle(com.zwb.danmaku.model.BaseDanmaku.SHADOW_STYLE_LAYER)
+                    .setBackgroundId(danmakuStyle.get(new Random().nextInt(12)))
+                    .setPaddingBottom((3 * getResources().getDisplayMetrics().density))
+                    .setPaddingTop((3 * getResources().getDisplayMetrics().density))
+                    .setPaddingLeft((6 * getResources().getDisplayMetrics().density))
+                    .setPaddingRight((6 * getResources().getDisplayMetrics().density));
+            list.add(info);
+        }
+        danmu5.setDanmukus(list);
     }
 }

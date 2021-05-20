@@ -23,6 +23,7 @@ public class DrawHelper implements IDrawHelper, IScrollerDrawHelper, ISpecialDra
     private T2BHelper t2BHelper;
     private B2THelper b2THelper;
     private BaseSpecialHelper specialHelper;
+    private BaseMarqueeDrawHelper marqueeDrawHelper;
 
     private static final int DEFAULT_OFF_SCREEN_LIMIT = 2; // 允许离屏初始化两个弹幕 （针对每一条轨道）
 
@@ -51,6 +52,9 @@ public class DrawHelper implements IDrawHelper, IScrollerDrawHelper, ISpecialDra
         if (specialHelper != null) {
             specialHelper.onDrawPrepared(context, textPaint, mTextShadowPaint, canvasWidth, canvasHeight);
         }
+        if (marqueeDrawHelper != null) {
+            marqueeDrawHelper.onDrawPrepared(context, textPaint, mTextShadowPaint, canvasWidth, canvasHeight);
+        }
     }
 
     @Override
@@ -70,6 +74,9 @@ public class DrawHelper implements IDrawHelper, IScrollerDrawHelper, ISpecialDra
         if (specialHelper != null) {
             specialHelper.onDraw(canvas, textPaint, mTextShadowPaint, mBgPaint, canvasWidth, canvasHeight);
         }
+        if (marqueeDrawHelper != null) {
+            marqueeDrawHelper.onDraw(canvas, textPaint, mTextShadowPaint, mBgPaint, canvasWidth, canvasHeight);
+        }
     }
 
     @Override
@@ -88,6 +95,9 @@ public class DrawHelper implements IDrawHelper, IScrollerDrawHelper, ISpecialDra
         }
         if (r2LHelper != null && r2LHelper.getMatchedDamaku(x, y) != null) {
             return r2LHelper.getMatchedDamaku(x, y);
+        }
+        if (marqueeDrawHelper != null && marqueeDrawHelper.getMatchedDamaku(x, y) != null) {
+            return marqueeDrawHelper.getMatchedDamaku(x, y);
         }
         return null;
     }
@@ -111,6 +121,9 @@ public class DrawHelper implements IDrawHelper, IScrollerDrawHelper, ISpecialDra
             if (specialHelper != null) {
                 specialHelper.setBaseConfig(baseConfig);
             }
+            if (marqueeDrawHelper != null) {
+                marqueeDrawHelper.setBaseConfig(baseConfig);
+            }
         }
         return this;
     }
@@ -131,6 +144,9 @@ public class DrawHelper implements IDrawHelper, IScrollerDrawHelper, ISpecialDra
         }
         if (specialHelper != null) {
             specialHelper.setBaseConfig(baseConfig);
+        }
+        if (marqueeDrawHelper != null) {
+            marqueeDrawHelper.setBaseConfig(baseConfig);
         }
         return this;
     }
@@ -153,6 +169,9 @@ public class DrawHelper implements IDrawHelper, IScrollerDrawHelper, ISpecialDra
         if (specialHelper != null) {
             specialHelper.setDen(den);
         }
+        if (marqueeDrawHelper != null) {
+            marqueeDrawHelper.setDen(den);
+        }
         return this;
     }
 
@@ -163,6 +182,7 @@ public class DrawHelper implements IDrawHelper, IScrollerDrawHelper, ISpecialDra
         List<BaseDanmaku> t2BList = new ArrayList<>();
         List<BaseDanmaku> b2TList = new ArrayList<>();
         List<BaseDanmaku> specialList = new ArrayList<>();
+        List<BaseDanmaku> marqueeList = new ArrayList<>();
         for (BaseDanmaku danmaku : danmakus) {
             if (danmaku.getType() == BaseDanmaku.DanmakuType.TYPE_SCROLL_RL) {
                 r2LList.add(danmaku);
@@ -174,6 +194,8 @@ public class DrawHelper implements IDrawHelper, IScrollerDrawHelper, ISpecialDra
                 b2TList.add(danmaku);
             } else if (danmaku.getType() == BaseDanmaku.DanmakuType.TYPE_SPECIAL) {
                 specialList.add(danmaku);
+            } else if (danmaku.getType() == BaseDanmaku.DanmakuType.TYPE_MARQUEE) {
+                marqueeList.add(danmaku);
             }
         }
         if (!r2LList.isEmpty()) {
@@ -200,6 +222,10 @@ public class DrawHelper implements IDrawHelper, IScrollerDrawHelper, ISpecialDra
             checkSpecialHelper();
             specialHelper.setDanmakus(specialList);
         }
+        if (!marqueeList.isEmpty()) {
+            checkMarqueeHelper();
+            marqueeDrawHelper.setDanmakus(marqueeList);
+        }
     }
 
     @Override
@@ -224,6 +250,9 @@ public class DrawHelper implements IDrawHelper, IScrollerDrawHelper, ISpecialDra
         } else if (danmaku.getType() == BaseDanmaku.DanmakuType.TYPE_SPECIAL) {
             checkSpecialHelper();
             specialHelper.addDanmaku(danmaku, addFirst);
+        } else if (danmaku.getType() == BaseDanmaku.DanmakuType.TYPE_MARQUEE) {
+            checkMarqueeHelper();
+            marqueeDrawHelper.addDanmaku(danmaku, addFirst);
         }
     }
 
@@ -234,6 +263,7 @@ public class DrawHelper implements IDrawHelper, IScrollerDrawHelper, ISpecialDra
         List<BaseDanmaku> t2BList = new ArrayList<>();
         List<BaseDanmaku> b2TList = new ArrayList<>();
         List<BaseDanmaku> specialList = new ArrayList<>();
+        List<BaseDanmaku> marqueeList = new ArrayList<>();
         for (BaseDanmaku danmaku : danmakus) {
             if (danmaku.getType() == BaseDanmaku.DanmakuType.TYPE_SCROLL_RL) {
                 r2LList.add(danmaku);
@@ -245,6 +275,8 @@ public class DrawHelper implements IDrawHelper, IScrollerDrawHelper, ISpecialDra
                 b2TList.add(danmaku);
             } else if (danmaku.getType() == BaseDanmaku.DanmakuType.TYPE_SPECIAL) {
                 specialList.add(danmaku);
+            } else if (danmaku.getType() == BaseDanmaku.DanmakuType.TYPE_MARQUEE) {
+                marqueeList.add(danmaku);
             }
         }
         if (!r2LList.isEmpty()) {
@@ -271,6 +303,10 @@ public class DrawHelper implements IDrawHelper, IScrollerDrawHelper, ISpecialDra
             checkSpecialHelper();
             specialHelper.addDanmakus(specialList);
         }
+        if (!marqueeList.isEmpty()) {
+            checkMarqueeHelper();
+            marqueeDrawHelper.addDanmakus(marqueeList);
+        }
     }
 
     @Override
@@ -291,6 +327,9 @@ public class DrawHelper implements IDrawHelper, IScrollerDrawHelper, ISpecialDra
             }
             if (specialHelper != null) {
                 specialHelper.setOffScreenLimit(offScreenLimit);
+            }
+            if (marqueeDrawHelper != null) {
+                marqueeDrawHelper.setOffScreenLimit(offScreenLimit);
             }
         }
         return this;
@@ -368,6 +407,9 @@ public class DrawHelper implements IDrawHelper, IScrollerDrawHelper, ISpecialDra
         if (specialHelper != null) {
             specialHelper.clear();
         }
+        if (marqueeDrawHelper != null) {
+            marqueeDrawHelper.clear();
+        }
     }
 
     @Override
@@ -386,6 +428,9 @@ public class DrawHelper implements IDrawHelper, IScrollerDrawHelper, ISpecialDra
         }
         if (specialHelper != null) {
             specialHelper.rePlay();
+        }
+        if (marqueeDrawHelper != null) {
+            marqueeDrawHelper.rePlay();
         }
     }
 
@@ -424,6 +469,13 @@ public class DrawHelper implements IDrawHelper, IScrollerDrawHelper, ISpecialDra
         }
         if (specialHelper != null) {
             int tempState = specialHelper.getState();
+            if (tempState != DrawState.STATE_EMPTY) {
+                count++;
+                state += tempState;
+            }
+        }
+        if (marqueeDrawHelper != null) {
+            int tempState = marqueeDrawHelper.getState();
             if (tempState != DrawState.STATE_EMPTY) {
                 count++;
                 state += tempState;
@@ -492,5 +544,14 @@ public class DrawHelper implements IDrawHelper, IScrollerDrawHelper, ISpecialDra
                 .setOffScreenLimit(offScreenLimit)
                 .setCountLimit(countLimit)
                 .setInterval(interval);
+    }
+
+    private void checkMarqueeHelper() {
+        if (marqueeDrawHelper == null) {
+            marqueeDrawHelper = new MarqueeDrawHelper();
+        }
+        marqueeDrawHelper.setDen(den)
+                .setBaseConfig(baseConfig)
+                .setOffScreenLimit(offScreenLimit);
     }
 }
