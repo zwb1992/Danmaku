@@ -4,6 +4,7 @@
         <attr name="danmaku_textSize" format="dimension" />
         <attr name="danmaku_textColor" format="color" />
         <attr name="danmaku_textShadowColor" format="color" />
+        <attr name="danmaku_canvasColor" format="color" />
         <attr name="danmaku_textShadowWidth" format="dimension" />
         <attr name="danmaku_trajectoryMargin" format="dimension" />
         <attr name="danmaku_lineSpacingExtra" format="dimension" />

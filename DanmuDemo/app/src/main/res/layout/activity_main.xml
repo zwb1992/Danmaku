@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     tools:context=".MainActivity">
 
     <LinearLayout
@@ -276,9 +277,83 @@
                 android:text="清空弹幕" />
         </LinearLayout>
 
-        <View
+        <TextView
             android:layout_width="match_parent"
-            android:layout_height="1800dp" />
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="surFaceView实现" />
+
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="150dp"
+                android:background="@color/colorPrimary" />
+
+            <com.zwb.danmaku.DanmakuSurfaceView
+                android:id="@+id/danmu6"
+                android:layout_width="match_parent"
+                android:layout_height="150dp"
+                app:danmaku_canvasColor="@color/colorPrimary"
+                app:danmaku_repeatCount="-1"
+                app:danmaku_shadowStyle="stroke"
+                app:danmaku_speed="2"
+                app:danmaku_textColor="@color/white"
+                app:danmaku_textShadowColor="@color/gray"
+                app:danmaku_textShadowWidth="1dp"
+                app:danmaku_textSize="21sp"
+                app:danmaku_trajectoryCount="1"
+                app:danmaku_trajectoryMargin="14dp" />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="奥克斯的骄傲了空间大力士" />
+        </FrameLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/btAdd6"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="添加弹幕" />
+
+            <Button
+                android:id="@+id/btData6"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="弹幕list" />
+
+            <Button
+                android:id="@+id/btStart6"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="启动弹幕" />
+
+            <Button
+                android:id="@+id/btStop6"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="停止弹幕" />
+
+            <Button
+                android:id="@+id/btClear6"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="清空弹幕" />
+        </LinearLayout>
     </LinearLayout>
 
 

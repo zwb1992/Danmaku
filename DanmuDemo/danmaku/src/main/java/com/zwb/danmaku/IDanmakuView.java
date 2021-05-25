@@ -25,7 +25,7 @@ public interface IDanmakuView {
      * @param maxTrajectoryCount 数量
      * @return 弹幕
      */
-    DanmakuView setMaxTrajectoryCount(int maxTrajectoryCount);
+    IDanmakuView setMaxTrajectoryCount(int maxTrajectoryCount);
 
     /**
      * 设置屏幕外初始化的弹幕数量
@@ -33,7 +33,7 @@ public interface IDanmakuView {
      * @param offScreenLimit
      * @return
      */
-    DanmakuView setOffScreenLimit(int offScreenLimit);
+    IDanmakuView setOffScreenLimit(int offScreenLimit);
 
     /**
      * 设置最大循环播放次数
@@ -41,7 +41,7 @@ public interface IDanmakuView {
      * @param maxRepeatCount 次数
      * @return 弹幕
      */
-    DanmakuView setMaxRepeatCount(int maxRepeatCount);
+    IDanmakuView setMaxRepeatCount(int maxRepeatCount);
 
     /**
      * 设置特殊弹幕显示时间
@@ -49,7 +49,7 @@ public interface IDanmakuView {
      * @param interval 显示的时间间隔
      * @return 弹幕
      */
-    DanmakuView setInterval(long interval);
+    IDanmakuView setInterval(long interval);
 
     /**
      * 设置特殊弹幕显示数量
@@ -57,7 +57,7 @@ public interface IDanmakuView {
      * @param countLimit 显示的弹幕数量
      * @return 弹幕
      */
-    DanmakuView setCountLimit(int countLimit);
+    IDanmakuView setCountLimit(int countLimit);
 
     /**
      * 设置阴影样式
