@@ -20,6 +20,14 @@ public interface IDanmakuView {
     DrawHelper getDrawHelper();
 
     /**
+     * 设置画布是否透明
+     *
+     * @param isTransparent 是否透明
+     * @return 弹幕
+     */
+    IDanmakuView setCanvasTransparent(boolean isTransparent);
+
+    /**
      * 设置最大弹道数量
      *
      * @param maxTrajectoryCount 数量

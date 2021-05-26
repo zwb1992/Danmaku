@@ -18,5 +18,6 @@
             <enum name="layer" value="1" />
             <enum name="stroke" value="2" />
         </attr>
+        <attr name="danmaku_isCanvasTransparent" format="boolean" />
     </declare-styleable>
 </resources>

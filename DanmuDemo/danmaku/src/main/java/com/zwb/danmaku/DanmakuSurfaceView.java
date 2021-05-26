@@ -7,6 +7,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PixelFormat;
+import android.graphics.PorterDuff;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Looper;
@@ -56,6 +57,7 @@ public class DanmakuSurfaceView extends SurfaceView implements IDanmakuView, Sur
     private static final long REFRESH_TIME = 12;                        // 每13毫秒刷新一次布局 接近16.6; 太小了增加处理负担，无意义
     private float den;                                                  // 像素密度
     private List<BaseDanmaku> danmukus = new ArrayList<>();             // 数据源
+    private boolean isCanvasTransparent; // 画布是否透明
 
     // 特殊弹幕
     private long interval = 1000;                                       // 显示的时间间隔
@@ -119,6 +121,7 @@ public class DanmakuSurfaceView extends SurfaceView implements IDanmakuView, Sur
             countLimit = a.getInteger(R.styleable.DanmakuView_danmaku_countLimit, 10);// 特殊弹幕允许在屏幕上显示的总数量
             speed = a.getFloat(R.styleable.DanmakuView_danmaku_speed, speed * den);
             shadowStyle = a.getInt(R.styleable.DanmakuView_danmaku_shadowStyle, shadowStyle);
+            isCanvasTransparent = a.getBoolean(R.styleable.DanmakuView_danmaku_isCanvasTransparent, isCanvasTransparent);
         } finally {
             a.recycle();
         }
@@ -157,7 +160,9 @@ public class DanmakuSurfaceView extends SurfaceView implements IDanmakuView, Sur
         setWillNotDraw(true);
         mSurfaceHolder = getHolder();
         mSurfaceHolder.addCallback(this);
-        mSurfaceHolder.setFormat(PixelFormat.TRANSPARENT);
+        setZOrderOnTop(isCanvasTransparent);
+        mSurfaceHolder.setFormat(isCanvasTransparent ? PixelFormat.TRANSLUCENT : PixelFormat.TRANSPARENT);
+
     }
 
     private void doDraw() {
@@ -166,10 +171,26 @@ public class DanmakuSurfaceView extends SurfaceView implements IDanmakuView, Sur
         }
         Canvas mCanvas = mSurfaceHolder.lockCanvas();
         if (getMeasuredHeight() != 0 && getMeasuredWidth() != 0 && mCanvas != null) {
-            mCanvas.drawColor(canvasColor);
+            if (!isCanvasTransparent) {
+                mCanvas.drawColor(canvasColor);
+            } else {
+                mCanvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
+            }
             getDrawHelper().onDraw(mCanvas, textPaint, textShadowPaint, bgPaint, getMeasuredWidth(), getMeasuredHeight());
             mSurfaceHolder.unlockCanvasAndPost(mCanvas);
         }
+    }
+
+    @Override
+    public IDanmakuView setCanvasTransparent(boolean isTransparent) {
+        this.isCanvasTransparent = isTransparent;
+        // 是否绘制在最顶层 在它上面的view均显示在canvas的绘制的内容下面
+        setZOrderOnTop(isTransparent);
+        if (mSurfaceHolder != null) {
+            mSurfaceHolder.setFormat(isTransparent ? PixelFormat.TRANSLUCENT : PixelFormat.TRANSPARENT);
+        }
+        doDraw();
+        return this;
     }
 
     @Override

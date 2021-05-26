@@ -233,6 +233,11 @@ public class DanmakuView extends View implements IDanmakuView {
     }
 
     @Override
+    public IDanmakuView setCanvasTransparent(boolean isTransparent) {
+        return this;
+    }
+
+    @Override
     public void stop() {
         mPendingState = DanmakuState.STOP;
         pause();
